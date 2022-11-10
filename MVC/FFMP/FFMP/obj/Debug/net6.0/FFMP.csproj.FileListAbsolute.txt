@@ -1,0 +1,8 @@
+C:\Users\Juho_\OneDrive\Asiakirjat\Koodihommat\Projekti3\MVC\FFMP\FFMP\obj\Debug\net6.0\FFMP.csproj.AssemblyReference.cache
+C:\Users\Juho_\OneDrive\Asiakirjat\Koodihommat\Projekti3\MVC\FFMP\FFMP\obj\Debug\net6.0\FFMP.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Juho_\OneDrive\Asiakirjat\Koodihommat\Projekti3\MVC\FFMP\FFMP\obj\Debug\net6.0\FFMP.AssemblyInfoInputs.cache
+C:\Users\Juho_\OneDrive\Asiakirjat\Koodihommat\Projekti3\MVC\FFMP\FFMP\obj\Debug\net6.0\FFMP.AssemblyInfo.cs
+C:\Users\Juho_\OneDrive\Asiakirjat\Koodihommat\Projekti3\MVC\FFMP\FFMP\obj\Debug\net6.0\FFMP.csproj.CoreCompileInputs.cache
+C:\Users\Juho_\OneDrive\Asiakirjat\Koodihommat\Projekti3\MVC\FFMP\FFMP\obj\Debug\net6.0\FFMP.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Juho_\OneDrive\Asiakirjat\Koodihommat\Projekti3\MVC\FFMP\FFMP\obj\Debug\net6.0\FFMP.RazorAssemblyInfo.cache
+C:\Users\Juho_\OneDrive\Asiakirjat\Koodihommat\Projekti3\MVC\FFMP\FFMP\obj\Debug\net6.0\FFMP.RazorAssemblyInfo.cs
