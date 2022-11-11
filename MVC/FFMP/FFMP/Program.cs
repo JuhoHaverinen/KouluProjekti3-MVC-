@@ -1,9 +1,12 @@
-
+using FFMP.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = "Server=project-3-mysql-server.mysql.database.azure.com;User ID=stremberg_s;Password=1Database1;Database=project_3;";
+var serverVersion = ServerVersion.AutoDetect(connectionString);
 
-builder.Services.AddDbContext<FFMPContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("FFMPContext")));
+builder.Services.AddDbContext<project_3Context>(options =>
+options.UseMySql(connectionString, serverVersion));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
