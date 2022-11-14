@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FFMP.Data;
+using System.Security.Cryptography;
 
 namespace FFMP.Controllers
 {
@@ -16,6 +17,25 @@ namespace FFMP.Controllers
         public UsersController(project_3Context context)
         {
             _context = context;
+        }
+
+        public IActionResult IndexUsers()
+        {
+            return View();
+        }
+
+        // LoginCheck
+        public async Task<IActionResult> Login(string login, string password)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Login == login && u.Password == password);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            if (user.Admin == true)
+                return View("user");
+            else
+                return View("index");
         }
 
         // GET: Users

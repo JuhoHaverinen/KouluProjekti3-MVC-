@@ -19,6 +19,10 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Juho_/OneDrive/Asiakirjat/Koodihommat/Projekti3/MVC/FFMP/FFMP/Views/Home/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Juho_/OneDrive/Asiakirjat/Koodihommat/Projekti3/MVC/FFMP/FFMP/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -47,8 +51,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Juho_/OneDrive/Asiakirjat/Koodihommat/Projekti3/MVC/FFMP/FFMP/Views/Users/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcSW5kZXguY3NodG1s
+[C:/Users/Juho_/OneDrive/Asiakirjat/Koodihommat/Projekti3/MVC/FFMP/FFMP/Views/Users/IndexUsers.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlcnNcSW5kZXhVc2Vycy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Juho_/OneDrive/Asiakirjat/Koodihommat/Projekti3/MVC/FFMP/FFMP/Views/_ViewImports.cshtml]
