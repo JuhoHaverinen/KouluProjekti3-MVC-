@@ -19,8 +19,13 @@ namespace FFMP.Controllers
             _context = context;
         }
 
+        public IActionResult Login()
+        {
+            return View();
+        }
 
         // LoginCheck
+        [HttpPost]
         public async Task<IActionResult> Login(string login, string password)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Login == login && u.Password == password);
@@ -29,7 +34,7 @@ namespace FFMP.Controllers
                 return NotFound();
             }
             if (user.Admin == true)
-                return View("user");
+                return View("create");
             else
                 return View("index");
         }
