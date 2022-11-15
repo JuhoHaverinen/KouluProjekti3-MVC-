@@ -19,10 +19,6 @@ namespace FFMP.Controllers
             _context = context;
         }
 
-        public IActionResult IndexUsers()
-        {
-            return View();
-        }
 
         // LoginCheck
         public async Task<IActionResult> Login(string login, string password)
@@ -39,7 +35,7 @@ namespace FFMP.Controllers
         }
 
         // GET: Users
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> IndexUsers()
         {
               return View(await _context.Users.ToListAsync());
         }
