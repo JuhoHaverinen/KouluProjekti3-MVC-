@@ -168,7 +168,7 @@ ENGINE = InnoDB;
 -- Table `Project_3`.`Requirement_result`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Project_3`.`Requirement_result` (
-  `requirement_id` VARCHAR(45) NOT NULL,
+  `requirement_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `auditing_logs_id` INT UNSIGNED NOT NULL,
   `description` VARCHAR(400) NOT NULL,
   `must` TINYINT(1) NOT NULL,

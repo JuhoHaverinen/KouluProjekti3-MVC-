@@ -48,7 +48,7 @@ namespace FFMP.Data
 
                 entity.HasIndex(e => e.TargetGroupId, "fk_Auditing_Target_group1_idx");
 
-                entity.HasIndex(e => e.Maker, "fk_Auditing_User1_idx");
+                entity.HasIndex(e => e.UserLogin, "fk_Auditing_User1_idx");
 
                 entity.Property(e => e.AuditingId)
                     .HasColumnType("int(10) unsigned")
@@ -63,21 +63,21 @@ namespace FFMP.Data
                     .HasMaxLength(400)
                     .HasColumnName("description");
 
-                entity.Property(e => e.Maker)
+                entity.Property(e => e.UserLogin)
                     .HasMaxLength(45)
-                    .HasColumnName("maker");
+                    .HasColumnName("user_login");
 
                 entity.Property(e => e.TargetGroupId)
                     .HasColumnType("int(10) unsigned")
                     .HasColumnName("target_group_id");
 
-                entity.HasOne(d => d.MakerNavigation)
+                entity.HasOne(d => d.UserLoginNavigation)
                     .WithMany(p => p.AuditingForms)
-                    .HasForeignKey(d => d.Maker)
+                    .HasForeignKey(d => d.UserLogin)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_Auditing_User1");
 
-                entity.HasOne(d => d.TargetGroup)
+                entity.HasOne(d => d.TargetGroupIdNavigation)
                     .WithMany(p => p.AuditingForms)
                     .HasForeignKey(d => d.TargetGroupId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -88,9 +88,9 @@ namespace FFMP.Data
             {
                 entity.ToTable("auditing_logs");
 
-                entity.HasIndex(e => e.Object, "fk_Auditing_logs_Object1_idx");
+                entity.HasIndex(e => e.ObjectId, "fk_Auditing_logs_Object1_idx");
 
-                entity.HasIndex(e => e.Maker, "fk_Auditing_logs_User1_idx");
+                entity.HasIndex(e => e.UserLogin, "fk_Auditing_logs_User1_idx");
 
                 entity.Property(e => e.Id)
                     .HasColumnType("int(10) unsigned")
@@ -104,27 +104,27 @@ namespace FFMP.Data
                     .HasMaxLength(400)
                     .HasColumnName("description");
 
-                entity.Property(e => e.Maker)
+                entity.Property(e => e.UserLogin)
                     .HasMaxLength(45)
-                    .HasColumnName("maker");
+                    .HasColumnName("user_login");
 
-                entity.Property(e => e.Object)
+                entity.Property(e => e.ObjectId)
                     .HasMaxLength(45)
-                    .HasColumnName("object");
+                    .HasColumnName("object_id");
 
                 entity.Property(e => e.Result)
                     .HasMaxLength(45)
                     .HasColumnName("result");
 
-                entity.HasOne(d => d.MakerNavigation)
+                entity.HasOne(d => d.UserLoginNavigation)
                     .WithMany(p => p.AuditingLogs)
-                    .HasForeignKey(d => d.Maker)
+                    .HasForeignKey(d => d.UserLogin)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_Auditing_logs_User1");
 
-                entity.HasOne(d => d.ObjectNavigation)
+                entity.HasOne(d => d.ObjectIdNavigation)
                     .WithMany(p => p.AuditingLogs)
-                    .HasForeignKey(d => d.Object)
+                    .HasForeignKey(d => d.ObjectId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_Auditing_logs_Object1");
             });
@@ -138,7 +138,7 @@ namespace FFMP.Data
 
                 entity.HasIndex(e => e.ObjectId, "fk_Inspection_Object1_idx");
 
-                entity.HasIndex(e => e.Maker, "fk_Inspection_User1_idx");
+                entity.HasIndex(e => e.UserLogin, "fk_Inspection_User1_idx");
 
                 entity.Property(e => e.Timestamp)
                     .HasColumnType("timestamp")
@@ -147,9 +147,9 @@ namespace FFMP.Data
 
                 entity.Property(e => e.ChangeOfState).HasColumnName("change_of_state");
 
-                entity.Property(e => e.Maker)
+                entity.Property(e => e.UserLogin)
                     .HasMaxLength(45)
-                    .HasColumnName("maker");
+                    .HasColumnName("user_login");
 
                 entity.Property(e => e.ObjectId)
                     .HasMaxLength(45)
@@ -163,13 +163,13 @@ namespace FFMP.Data
                     .HasMaxLength(100)
                     .HasColumnName("reason");
 
-                entity.HasOne(d => d.MakerNavigation)
+                entity.HasOne(d => d.UserLoginNavigation)
                     .WithMany(p => p.Inspections)
-                    .HasForeignKey(d => d.Maker)
+                    .HasForeignKey(d => d.UserLogin)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_Inspection_User1");
 
-                entity.HasOne(d => d.Object)
+                entity.HasOne(d => d.ObjectIdNavigation)
                     .WithMany(p => p.Inspections)
                     .HasForeignKey(d => d.ObjectId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -182,10 +182,10 @@ namespace FFMP.Data
 
                 entity.HasIndex(e => e.TargetGroupId, "fk_Object_Target_group1_idx");
 
-                entity.HasIndex(e => e.Creator, "fk_Object_User_idx");
+                entity.HasIndex(e => e.UserLogin, "fk_Object_User_idx");
 
                 entity.Property(e => e.Id)
-                    .HasMaxLength(45)
+                    .HasColumnType("int(10) unsigned")
                     .HasColumnName("id");
 
                 entity.Property(e => e.Created)
@@ -193,7 +193,7 @@ namespace FFMP.Data
                     .HasColumnName("created")
                     .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                entity.Property(e => e.Creator)
+                entity.Property(e => e.UserLogin)
                     .HasMaxLength(45)
                     .HasColumnName("creator");
 
@@ -218,10 +218,6 @@ namespace FFMP.Data
                     .HasColumnName("state")
                     .HasDefaultValueSql("'1'");
 
-                entity.Property(e => e.TargetGroup)
-                    .HasMaxLength(45)
-                    .HasColumnName("target_group");
-
                 entity.Property(e => e.TargetGroupId)
                     .HasColumnType("int(10) unsigned")
                     .HasColumnName("Target_group_id");
@@ -230,9 +226,9 @@ namespace FFMP.Data
                     .HasMaxLength(45)
                     .HasColumnName("type");
 
-                entity.HasOne(d => d.CreatorNavigation)
+                entity.HasOne(d => d.UserLoginNavigation)
                     .WithMany(p => p.Objects)
-                    .HasForeignKey(d => d.Creator)
+                    .HasForeignKey(d => d.UserLogin)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_Object_User");
 
@@ -266,7 +262,7 @@ namespace FFMP.Data
 
                 entity.Property(e => e.Must).HasColumnName("must");
 
-                entity.HasOne(d => d.AuditingAuditing)
+                entity.HasOne(d => d.AuditingAuditingIdNavigation)
                     .WithMany(p => p.Requirements)
                     .HasForeignKey(d => d.AuditingAuditingId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -298,7 +294,7 @@ namespace FFMP.Data
 
                 entity.Property(e => e.Result).HasColumnName("result");
 
-                entity.HasOne(d => d.AuditingLogs)
+                entity.HasOne(d => d.AuditingLogsNavigation)
                     .WithMany(p => p.RequirementResults)
                     .HasForeignKey(d => d.AuditingLogsId)
                     .OnDelete(DeleteBehavior.ClientSetNull)

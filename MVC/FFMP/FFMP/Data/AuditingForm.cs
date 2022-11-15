@@ -11,13 +11,13 @@ namespace FFMP.Data
         }
 
         public uint AuditingId { get; set; }
-        public string Maker { get; set; } = null!;
+        public string UserLogin { get; set; } = null!;
         public uint TargetGroupId { get; set; }
         public DateTime Created { get; set; }
         public string Description { get; set; } = null!;
 
-        public virtual User MakerNavigation { get; set; } = null!;
-        public virtual TargetGroup TargetGroup { get; set; } = null!;
+        public virtual User UserLoginNavigation { get; set; } = null!;
+        public virtual TargetGroup TargetGroupIdNavigation { get; set; } = null!;
         public virtual ICollection<Requirement> Requirements { get; set; }
     }
 }

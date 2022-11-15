@@ -11,14 +11,14 @@ namespace FFMP.Data
         }
 
         public uint Id { get; set; }
-        public string Maker { get; set; } = null!;
-        public string Object { get; set; } = null!;
+        public string UserLogin { get; set; } = null!;
+        public uint ObjectId { get; set; }
         public DateTime? Created { get; set; }
         public string? Description { get; set; }
         public string? Result { get; set; }
 
-        public virtual User MakerNavigation { get; set; } = null!;
-        public virtual Object ObjectNavigation { get; set; } = null!;
+        public virtual User UserLoginNavigation { get; set; } = null!;
+        public virtual Object ObjectIdNavigation { get; set; } = null!;
         public virtual ICollection<RequirementResult> RequirementResults { get; set; }
     }
 }

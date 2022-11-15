@@ -10,6 +10,6 @@ namespace FFMP.Data
         public string Description { get; set; } = null!;
         public bool Must { get; set; }
 
-        public virtual AuditingForm AuditingAuditing { get; set; } = null!;
+        public virtual AuditingForm AuditingAuditingIdNavigation { get; set; } = null!;
     }
 }
