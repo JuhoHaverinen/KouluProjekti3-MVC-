@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FFMP.Data;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace FFMP.Controllers
 {
@@ -24,28 +25,29 @@ namespace FFMP.Controllers
             return View();
         }
 
-        // LoginCheck
+        // LOGIN CHECK
         [HttpPost]
         public async Task<IActionResult> Login(string login, string password)
         {
+            var hashPassword = HashSh1($"{password}");
 
-            var getEncryptedPassword = _context.Users.FromSqlInterpolated($"select * from user where password = SHA('{password}')").AsEnumerable().SingleOrDefault();
-            Console.WriteLine("ENCRYPTED PASSWORD: " + getEncryptedPassword);
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Login == login && u.Password == getEncryptedPassword.ToString());
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Login == login && u.Password == hashPassword!);
             if (user == null)
             {
-                return NotFound();
+                return View("Login");
             }
             if (user.Admin == true)
-                return View("create");
+                return View("AdminLanding/Index");
+            else if (user.Admin == false)
+                return View("UserLanding/Index");
             else
-                return View("index");
+                return View("Login");
         }
 
         // GET: Users
         public async Task<IActionResult> IndexUsers()
         {
-              return View(await _context.Users.ToListAsync());
+            return View(await _context.Users.ToListAsync());
         }
 
         // GET: Users/Details/5
@@ -171,14 +173,39 @@ namespace FFMP.Controllers
             {
                 _context.Users.Remove(user);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool UserExists(string id)
         {
-          return _context.Users.Any(e => e.Login == id);
+            return _context.Users.Any(e => e.Login == id);
+        }
+
+
+        // UTILS ------------------------------------->
+        static string HashSh1(string input)
+        {
+            using (SHA1Managed sha1 = new SHA1Managed())
+            {
+                var hashSh1 = sha1.ComputeHash(Encoding.UTF8.GetBytes(input));
+
+                // declare stringbuilder
+                var sb = new StringBuilder(hashSh1.Length * 2);
+
+                // computing hashSh1
+                foreach (byte b in hashSh1)
+                {
+                    // "x2"
+                    sb.Append(b.ToString("X2").ToLower());
+                }
+
+                // final output
+                //Console.WriteLine(string.Format("The SHA1 hash of {0} is: {1}", input, sb.ToString()));
+
+                return sb.ToString();
+            }
         }
     }
 }

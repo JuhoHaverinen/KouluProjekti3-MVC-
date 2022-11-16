@@ -22,4 +22,12 @@
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql.NetTopologySuite" Version="6.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Views\Users\AdminLanding\" />
+    <None Remove="Views\Users\UserLanding\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Users\AdminLanding\" />
+    <Folder Include="Views\Users\UserLanding\" />
+  </ItemGroup>
 </Project>
