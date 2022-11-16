@@ -28,7 +28,10 @@ namespace FFMP.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string login, string password)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Login == login && u.Password == password);
+
+            var getEncryptedPassword = _context.Users.FromSqlInterpolated($"select * from user where password = SHA('{password}')").AsEnumerable().SingleOrDefault();
+            Console.WriteLine("ENCRYPTED PASSWORD: " + getEncryptedPassword);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Login == login && u.Password == getEncryptedPassword.ToString());
             if (user == null)
             {
                 return NotFound();

@@ -19,7 +19,7 @@ namespace FFMP.Data
         public virtual DbSet<AuditingForm> AuditingForms { get; set; } = null!;
         public virtual DbSet<AuditingLog> AuditingLogs { get; set; } = null!;
         public virtual DbSet<Inspection> Inspections { get; set; } = null!;
-        public virtual DbSet<Object> Objects { get; set; } = null!;
+        public virtual DbSet<ObjectToCheck> Objects { get; set; } = null!;
         public virtual DbSet<Requirement> Requirements { get; set; } = null!;
         public virtual DbSet<RequirementResult> RequirementResults { get; set; } = null!;
         public virtual DbSet<TargetGroup> TargetGroups { get; set; } = null!;
@@ -176,7 +176,7 @@ namespace FFMP.Data
                     .HasConstraintName("fk_Inspection_Object1");
             });
 
-            modelBuilder.Entity<Object>(entity =>
+            modelBuilder.Entity<ObjectToCheck>(entity =>
             {
                 entity.ToTable("object");
 

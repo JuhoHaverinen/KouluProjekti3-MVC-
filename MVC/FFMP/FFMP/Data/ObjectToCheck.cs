@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace FFMP.Data
 {
-    public partial class Object
+    public partial class ObjectToCheck
     {
-        public Object()
+        public ObjectToCheck()
         {
             AuditingLogs = new HashSet<AuditingLog>();
             Inspections = new HashSet<Inspection>();

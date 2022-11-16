@@ -13,6 +13,6 @@ namespace FFMP.Data
         public bool? ChangeOfState { get; set; }
 
         public virtual User UserLoginNavigation { get; set; } = null!;
-        public virtual Object ObjectIdNavigation { get; set; } = null!;
+        public virtual ObjectToCheck ObjectIdNavigation { get; set; } = null!;
     }
 }
