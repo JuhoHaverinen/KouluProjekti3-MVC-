@@ -79,10 +79,12 @@ namespace FFMP.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Login,Password,Created,LastLogin,Admin,Active")] User user)
+        public async Task<IActionResult> Create([Bind($"Name,Login,Password,Created,LastLogin,Admin,Active")] User user)
         {
             if (ModelState.IsValid)
             {
+                user.Password = HashSh1(user.Password);
+
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
