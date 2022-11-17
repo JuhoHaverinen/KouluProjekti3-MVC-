@@ -52,8 +52,14 @@
                 @* <td>@Html.DisplayFor(modelItem => item.Password)</td> *@
                 <td>@Html.DisplayFor(modelItem => item.Created)</td>
                 <td>@Html.DisplayFor(modelItem => item.LastLogin)</td>
-                <td>@Html.DisplayFor(modelItem => item.Admin)</td>
-                <td>@Html.DisplayFor(modelItem => item.Active)</td>
+                @*<td>@Html.DisplayFor(modelItem => item.Admin)</td>*@
+                <td>@if(item.Admin == true){@Html.Raw("True")}
+                    else if(item.Admin == false){@Html.Raw("False")}
+                </td>
+                <td>@if(item.Active == true){@Html.Raw("True")}
+                    else if(item.Active == false){@Html.Raw("False")}
+                </td>
+                @*<td>@Html.DisplayFor(modelItem => item.Active)</td>*@
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Login">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Login">Details</a> |
