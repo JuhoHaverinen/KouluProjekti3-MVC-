@@ -30,7 +30,4 @@
     <Folder Include="Views\Users\AdminLanding\" />
     <Folder Include="Views\Users\UserLanding\" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Remove="Views\Users\Edit.cshtml" />
-  </ItemGroup>
 </Project>

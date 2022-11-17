@@ -34,7 +34,9 @@ namespace FFMP.Controllers
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Login == login && u.Password == hashPassword!);
             if (user == null)
             {
+                ViewBag.Message = "Wrong username or password";
                 return View("Login");
+
             }
             if (user.Admin == true)
                 return View("AdminLanding/Index");
@@ -87,7 +89,7 @@ namespace FFMP.Controllers
 
                 _context.Add(user);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(IndexUsers));
             }
             return View(user);
         }
@@ -138,7 +140,7 @@ namespace FFMP.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(IndexUsers));
             }
             return View(user);
         }
@@ -177,7 +179,7 @@ namespace FFMP.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(IndexUsers));
         }
 
         private bool UserExists(string id)
