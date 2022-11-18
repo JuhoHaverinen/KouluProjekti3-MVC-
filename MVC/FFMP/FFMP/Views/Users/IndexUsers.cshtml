@@ -1,4 +1,6 @@
 ﻿@model IEnumerable<FFMP.Data.User>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, FFMP
 
 @{
     ViewData["Title"] = "IndexUsers";
@@ -33,13 +35,22 @@
 <p>
     <a asp-action="Create">Create New User</a>
 </p>
+
 <table class="table">
     <thead>
         <tr>
-            <th>@Html.DisplayNameFor(model => model.Name)</th>
+            <th>
+            <a asp-action="IndexUsers" asp-route-sortOrder="@ViewData["NameSortParam"]">
+            @Html.DisplayNameFor(model => model.Name)
+            </a>
+            </th>
             @* <th>@Html.DisplayNameFor(model => model.Password)</th> *@
-            <th>@Html.DisplayNameFor(model => model.Created)</th>
-            <th>@Html.DisplayNameFor(model => model.LastLogin)</th>
+            <th>
+             <a asp-action="IndexUsers" asp-route-sortOrder="@ViewData["CreatedSortParam"]">
+            @Html.DisplayNameFor(model => model.Created)
+            </a>
+            </th>
+            @*<th>@Html.DisplayNameFor(model => model.LastLogin)</th>*@
             <th>@Html.DisplayNameFor(model => model.Admin)</th>
             <th>@Html.DisplayNameFor(model => model.Active)</th>
         </tr>
@@ -49,20 +60,23 @@
         {
             <tr>
                 <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                
                 @* <td>@Html.DisplayFor(modelItem => item.Password)</td> *@
+
                 <td>@Html.DisplayFor(modelItem => item.Created)</td>
-                <td>@Html.DisplayFor(modelItem => item.LastLogin)</td>
-                @*<td>@Html.DisplayFor(modelItem => item.Admin)</td>*@
+                
+                @*<td>@Html.DisplayFor(modelItem => item.LastLogin)</td>*@
+               
                 <td>@if(item.Admin == true){@Html.Raw("True")}
                     else if(item.Admin == false){@Html.Raw("False")}
                 </td>
                 <td>@if(item.Active == true){@Html.Raw("True")}
                     else if(item.Active == false){@Html.Raw("False")}
                 </td>
-                @*<td>@Html.DisplayFor(modelItem => item.Active)</td>*@
+                
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Login">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Login">Details</a> |
+                    @*<a asp-action="Details" asp-route-id="@item.Login">Details</a> |*@
                     <a asp-action="Delete" asp-route-id="@item.Login">Delete</a>
                 </td>
             </tr>

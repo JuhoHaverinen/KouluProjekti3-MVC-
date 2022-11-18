@@ -47,9 +47,25 @@ namespace FFMP.Controllers
         }
 
         // GET: Users
-        public async Task<IActionResult> IndexUsers()
+        public async Task<IActionResult> IndexUsers(string SortOrder)
         {
-            return View(await _context.Users.ToListAsync());
+            var users = await _context.Users.ToListAsync();
+
+            ViewData["NameSortParam"] = String.IsNullOrEmpty(SortOrder) ? "name_sort" : "";
+            ViewData["CreatedSortParam"] = SortOrder == "" ? "created_sort" : "created_sort";
+
+            switch(SortOrder)
+            {
+                case "name_sort":
+                    users = await _context.Users.OrderBy(x=>x.Name).ToListAsync();
+                    break;
+                case "created_sort":
+                    users = await _context.Users.OrderBy(x => x.Created).ToListAsync();
+                    break;
+
+            }
+
+            return View(users);
         }
 
         // GET: Users/Details/5
