@@ -11,6 +11,6 @@ namespace FFMP.Data
         public bool Must { get; set; }
         public bool? Result { get; set; }
 
-        public virtual AuditingLog AuditingLogsNavigation { get; set; } = null!;
+        public virtual AuditingLog AuditingLogs { get; set; } = null!;
     }
 }

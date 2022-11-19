@@ -1,7 +1,11 @@
-﻿@model IEnumerable<FFMP.Data.Inspection>
+@model IEnumerable<FFMP.Data.Inspection>
 
 @{
     ViewData["Title"] = "Index";
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_Navbar");}
 }
 
 <h1>Index</h1>
@@ -25,35 +29,36 @@
                 @Html.DisplayNameFor(model => model.UserLoginNavigation)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ObjectIdNavigation)
+                @Html.DisplayNameFor(model => model.Object)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Reason)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Observations)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ChangeOfState)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserLoginNavigation.Login)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ObjectIdNavigation.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Timestamp">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Timestamp">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Timestamp">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Reason)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Observations)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ChangeOfState)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserLoginNavigation.Login)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Object.Id)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Timestamp">Edit</a> |
+                    @*<a asp-action="Details" asp-route-id="@item.Timestamp">Details</a> |*@
+                    <a asp-action="Delete" asp-route-id="@item.Timestamp">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

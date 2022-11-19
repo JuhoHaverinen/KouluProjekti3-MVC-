@@ -23,7 +23,7 @@ namespace FFMP.Data
         public DateTime Created { get; set; }
 
         public virtual User UserLoginNavigation { get; set; } = null!;
-        public virtual TargetGroup TargetGroupNavigation { get; set; } = null!;
+        public virtual TargetGroup TargetGroup { get; set; } = null!;
         public virtual ICollection<AuditingLog> AuditingLogs { get; set; }
         public virtual ICollection<Inspection> Inspections { get; set; }
     }

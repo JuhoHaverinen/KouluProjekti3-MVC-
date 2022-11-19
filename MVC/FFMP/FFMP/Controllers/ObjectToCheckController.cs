@@ -21,7 +21,7 @@ namespace FFMP.Controllers
         // GET: ObjectToCheck
         public async Task<IActionResult> Index()
         {
-            var project_3Context = _context.Objects.Include(o => o.TargetGroupNavigation).Include(o => o.UserLoginNavigation);
+            var project_3Context = _context.Objects.Include(o => o.TargetGroup).Include(o => o.UserLoginNavigation);
             return View(await project_3Context.ToListAsync());
         }
 
@@ -34,7 +34,7 @@ namespace FFMP.Controllers
             }
 
             var objectToCheck = await _context.Objects
-                .Include(o => o.TargetGroupNavigation)
+                .Include(o => o.TargetGroup)
                 .Include(o => o.UserLoginNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (objectToCheck == null)
@@ -135,7 +135,7 @@ namespace FFMP.Controllers
             }
 
             var objectToCheck = await _context.Objects
-                .Include(o => o.TargetGroupNavigation)
+                .Include(o => o.TargetGroup)
                 .Include(o => o.UserLoginNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (objectToCheck == null)

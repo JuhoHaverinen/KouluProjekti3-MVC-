@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,7 +21,7 @@ namespace FFMP.Controllers
         // GET: Inspections
         public async Task<IActionResult> Index()
         {
-            var project_3Context = _context.Inspections.Include(i => i.ObjectIdNavigation).Include(i => i.UserLoginNavigation);
+            var project_3Context = _context.Inspections.Include(i => i.Object).Include(i => i.UserLoginNavigation);
             return View(await project_3Context.ToListAsync());
         }
 
@@ -34,7 +34,7 @@ namespace FFMP.Controllers
             }
 
             var inspection = await _context.Inspections
-                .Include(i => i.ObjectIdNavigation)
+                .Include(i => i.Object)
                 .Include(i => i.UserLoginNavigation)
                 .FirstOrDefaultAsync(m => m.Timestamp == id);
             if (inspection == null)
@@ -135,7 +135,7 @@ namespace FFMP.Controllers
             }
 
             var inspection = await _context.Inspections
-                .Include(i => i.ObjectIdNavigation)
+                .Include(i => i.Object)
                 .Include(i => i.UserLoginNavigation)
                 .FirstOrDefaultAsync(m => m.Timestamp == id);
             if (inspection == null)
@@ -167,7 +167,7 @@ namespace FFMP.Controllers
 
         private bool InspectionExists(DateTime id)
         {
-          return _context.Inspections.Any(e => e.Timestamp == id);
+          return (_context.Inspections?.Any(e => e.Timestamp == id)).GetValueOrDefault();
         }
     }
 }

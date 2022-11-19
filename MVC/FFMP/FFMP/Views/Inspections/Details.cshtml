@@ -1,4 +1,4 @@
-﻿@model FFMP.Data.Inspection
+@model FFMP.Data.Inspection
 
 @{
     ViewData["Title"] = "Details";
@@ -35,10 +35,10 @@
             @Html.DisplayFor(model => model.UserLoginNavigation.Login)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ObjectIdNavigation)
+            @Html.DisplayNameFor(model => model.Object)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ObjectIdNavigation.Id)
+            @Html.DisplayFor(model => model.Object.Id)
         </dd>
     </dl>
 </div>

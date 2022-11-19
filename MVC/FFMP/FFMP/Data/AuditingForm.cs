@@ -17,7 +17,7 @@ namespace FFMP.Data
         public string Description { get; set; } = null!;
 
         public virtual User UserLoginNavigation { get; set; } = null!;
-        public virtual TargetGroup TargetGroupIdNavigation { get; set; } = null!;
+        public virtual TargetGroup TargetGroup { get; set; } = null!;
         public virtual ICollection<Requirement> Requirements { get; set; }
     }
 }

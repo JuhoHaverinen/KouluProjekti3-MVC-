@@ -40,9 +40,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Project_3`.`Object`
+-- Table `Project_3`.`Object_To_Check`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Project_3`.`Object` (
+CREATE TABLE IF NOT EXISTS `Project_3`.`Object_To_Check` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_login` VARCHAR(45) NOT NULL,
   `target_group_id` INT UNSIGNED NOT NULL,
@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `Project_3`.`Inspection` (
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Inspection_Object1`
     FOREIGN KEY (`object_id`)
-    REFERENCES `Project_3`.`Object` (`id`)
+    REFERENCES `Project_3`.`Object_To_Check` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -158,7 +158,7 @@ CREATE TABLE IF NOT EXISTS `Project_3`.`Auditing_logs` (
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Auditing_logs_Object1`
     FOREIGN KEY (`object_id`)
-    REFERENCES `Project_3`.`Object` (`id`)
+    REFERENCES `Project_3`.`Object_To_Check` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

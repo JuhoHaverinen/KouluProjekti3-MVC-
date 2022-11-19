@@ -10,7 +10,7 @@ namespace FFMP.Data
             AuditingForms = new HashSet<AuditingForm>();
             AuditingLogs = new HashSet<AuditingLog>();
             Inspections = new HashSet<Inspection>();
-            Objects = new HashSet<ObjectToCheck>();
+            ObjectToChecks = new HashSet<ObjectToCheck>();
         }
 
         public string Name { get; set; } = null!;
@@ -24,6 +24,6 @@ namespace FFMP.Data
         public virtual ICollection<AuditingForm> AuditingForms { get; set; }
         public virtual ICollection<AuditingLog> AuditingLogs { get; set; }
         public virtual ICollection<Inspection> Inspections { get; set; }
-        public virtual ICollection<ObjectToCheck> Objects { get; set; }
+        public virtual ICollection<ObjectToCheck> ObjectToChecks { get; set; }
     }
 }

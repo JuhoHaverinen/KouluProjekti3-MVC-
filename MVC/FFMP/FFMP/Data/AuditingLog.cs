@@ -18,7 +18,7 @@ namespace FFMP.Data
         public string? Result { get; set; }
 
         public virtual User UserLoginNavigation { get; set; } = null!;
-        public virtual ObjectToCheck ObjectIdNavigation { get; set; } = null!;
+        public virtual ObjectToCheck Object { get; set; } = null!;
         public virtual ICollection<RequirementResult> RequirementResults { get; set; }
     }
 }
