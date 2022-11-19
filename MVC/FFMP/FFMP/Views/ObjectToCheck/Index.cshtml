@@ -5,7 +5,7 @@
 }
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_Navbar");}
+@{await Html.RenderPartialAsync("_Navbar");}
 }
 
 <h1>Objects</h1>
@@ -23,8 +23,8 @@
             <th>@Html.DisplayNameFor(model => model.Model)</th>
             <th>@Html.DisplayNameFor(model => model.State)</th>
             <th>@Html.DisplayNameFor(model => model.Created)</th>
-            <th>@Html.DisplayNameFor(model => model.UserLoginNavigation)</th>
-            <th>@Html.DisplayNameFor(model => model.TargetGroupNavigation)</th>
+            <th>@Html.DisplayName("Creator")</th>
+            <th>@Html.DisplayName("Target group")</th>
         </tr>
     </thead>
     <tbody>
@@ -42,7 +42,7 @@
                 <td>@Html.DisplayFor(modelItem => item.TargetGroupNavigation.Id)</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    @* <a asp-action="Details" asp-route-id="@item.Id">Details</a> | *@
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
             </tr>

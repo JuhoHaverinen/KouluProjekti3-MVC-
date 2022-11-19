@@ -58,7 +58,7 @@ namespace FFMP.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserLogin,TargetGroupId,Name,Description,Location,Type,Model,State,Created")] ObjectToCheck objectToCheck)
+        public async Task<IActionResult> Create([Bind("UserLogin,TargetGroupId,Name,Description,Location,Type,Model")] ObjectToCheck objectToCheck)
         {
             if (ModelState.IsValid)
             {
@@ -160,14 +160,14 @@ namespace FFMP.Controllers
             {
                 _context.Objects.Remove(objectToCheck);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ObjectToCheckExists(uint id)
         {
-          return _context.Objects.Any(e => e.Id == id);
+            return (_context.Objects?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

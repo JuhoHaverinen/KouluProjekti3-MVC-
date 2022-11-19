@@ -166,13 +166,13 @@ namespace FFMP.Data
                 entity.HasOne(d => d.UserLoginNavigation)
                     .WithMany(p => p.Inspections)
                     .HasForeignKey(d => d.UserLogin)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("fk_Inspection_User1");
 
                 entity.HasOne(d => d.ObjectIdNavigation)
                     .WithMany(p => p.Inspections)
                     .HasForeignKey(d => d.ObjectId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("fk_Inspection_Object1");
             });
 
@@ -229,13 +229,13 @@ namespace FFMP.Data
                 entity.HasOne(d => d.UserLoginNavigation)
                     .WithMany(p => p.Objects)
                     .HasForeignKey(d => d.UserLogin)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("fk_Object_User");
 
                 entity.HasOne(d => d.TargetGroupNavigation)
                     .WithMany(p => p.Objects)
                     .HasForeignKey(d => d.TargetGroupId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("fk_Object_Target_group1");
             });
 
