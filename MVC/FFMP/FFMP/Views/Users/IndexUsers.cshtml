@@ -6,29 +6,9 @@
     ViewData["Title"] = "IndexUsers";
 }
 
-<header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container-fluid">
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="IndexUsers">All
-                            users</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Login">Login</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-</header>
+@section Scripts {
+@{await Html.RenderPartialAsync("_Navbar");}
+}
 
 
 
@@ -40,15 +20,15 @@
     <thead>
         <tr>
             <th>
-            <a asp-action="IndexUsers" asp-route-sortOrder="@ViewData["NameSortParam"]">
-            @Html.DisplayNameFor(model => model.Name)
-            </a>
+                <a asp-action="IndexUsers" asp-route-sortOrder="@ViewData["NameSortParam"]">
+                    @Html.DisplayNameFor(model => model.Name)
+                </a>
             </th>
             @* <th>@Html.DisplayNameFor(model => model.Password)</th> *@
             <th>
-             <a asp-action="IndexUsers" asp-route-sortOrder="@ViewData["CreatedSortParam"]">
-            @Html.DisplayNameFor(model => model.Created)
-            </a>
+                <a asp-action="IndexUsers" asp-route-sortOrder="@ViewData["CreatedSortParam"]">
+                    @Html.DisplayNameFor(model => model.Created)
+                </a>
             </th>
             @*<th>@Html.DisplayNameFor(model => model.LastLogin)</th>*@
             <th>@Html.DisplayNameFor(model => model.Admin)</th>
@@ -60,20 +40,32 @@
         {
             <tr>
                 <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                
+
                 @* <td>@Html.DisplayFor(modelItem => item.Password)</td> *@
 
                 <td>@Html.DisplayFor(modelItem => item.Created)</td>
-                
+
                 @*<td>@Html.DisplayFor(modelItem => item.LastLogin)</td>*@
-               
-                <td>@if(item.Admin == true){@Html.Raw("True")}
-                    else if(item.Admin == false){@Html.Raw("False")}
+
+                <td>@if (item.Admin == true)
+                    {
+                        @Html.Raw("True")
+                    }
+                    else if (item.Admin == false)
+                    {
+                        @Html.Raw("False")
+                    }
                 </td>
-                <td>@if(item.Active == true){@Html.Raw("True")}
-                    else if(item.Active == false){@Html.Raw("False")}
+                <td>@if (item.Active == true)
+                    {
+                        @Html.Raw("True")
+                    }
+                    else if (item.Active == false)
+                    {
+                        @Html.Raw("False")
+                    }
                 </td>
-                
+
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Login">Edit</a> |
                     @*<a asp-action="Details" asp-route-id="@item.Login">Details</a> |*@

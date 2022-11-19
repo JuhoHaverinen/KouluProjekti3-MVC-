@@ -195,7 +195,7 @@ namespace FFMP.Data
 
                 entity.Property(e => e.UserLogin)
                     .HasMaxLength(45)
-                    .HasColumnName("creator");
+                    .HasColumnName("user_login");
 
                 entity.Property(e => e.Description)
                     .HasMaxLength(400)
