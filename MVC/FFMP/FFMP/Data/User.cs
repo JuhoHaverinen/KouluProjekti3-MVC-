@@ -16,7 +16,7 @@ namespace FFMP.Data
         public string Name { get; set; } = null!;
         public string Login { get; set; } = null!;
         public string Password { get; set; } = null!;
-        public DateTime Created { get; set; }
+        public DateTime? Created { get; set; }
         public DateTime? LastLogin { get; set; }
         public bool? Admin { get; set; }
         public bool? Active { get; set; }

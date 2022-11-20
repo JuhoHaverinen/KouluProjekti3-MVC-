@@ -38,12 +38,14 @@ namespace FFMP.Controllers
                 return View("Login");
 
             }
-            if (user.Admin == true)
+            if (user.Admin == true && user.Active == true)
                 return View("AdminLanding/Index");
-            else if (user.Admin == false)
+            else if (user.Admin == false && user.Active == true)
                 return View("UserLanding/Index");
             else
+                ViewBag.Message = "Deactivated login information";
                 return View("Login");
+
         }
 
         // GET: Users
@@ -131,8 +133,10 @@ namespace FFMP.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Name,Login,Password,Created,LastLogin,Admin,Active")] User user)
+        public async Task<IActionResult> Edit(string id, [Bind("Name,Login,Password,Created,Admin,Active")] User user)
         {
+            
+
             if (id != user.Login)
             {
                 return NotFound();
