@@ -141,6 +141,11 @@ namespace FFMP.Controllers
             {
                 return NotFound();
             }
+            if (user.Admin == true && user.Active == false)
+            {
+                ViewBag.Message = "Can't deactive an admin";
+                return View();
+            }
 
             if (ModelState.IsValid)
             {
@@ -155,6 +160,7 @@ namespace FFMP.Controllers
                     {
                         return NotFound();
                     }
+                    
                     else
                     {
                         throw;
