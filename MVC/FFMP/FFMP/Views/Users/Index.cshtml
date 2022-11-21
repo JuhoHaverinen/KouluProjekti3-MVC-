@@ -1,0 +1,18 @@
+﻿@model FFMP.Data.User
+
+@{
+    ViewData["Title"] = "User View";
+}
+
+
+
+<div class="text-center">
+   
+   
+   
+    <h1 class="display-4">Welcome @Html.DisplayFor(modelItem => modelItem.Name)</h1>
+        <a asp-action="Details" asp-route-id="@Model.Login">Click to see your information</a>
+    
+    
+    
+</div>

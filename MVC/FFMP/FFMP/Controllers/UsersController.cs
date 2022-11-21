@@ -41,7 +41,7 @@ namespace FFMP.Controllers
             if (user.Admin == true && user.Active == true)
                 return View("AdminLanding/Index");
             else if (user.Admin == false && user.Active == true)
-                return View("UserLanding/Index");
+                return RedirectToAction(nameof(Index), new {id = login});
             else
                 ViewBag.Message = "Deactivated login information";
                 return View("Login");
@@ -68,6 +68,25 @@ namespace FFMP.Controllers
             }
 
             return View(users);
+        }
+
+        // GET: Userlanding index information
+        
+        public async Task<IActionResult> Index(string id)
+        {
+            //if (id == null || _context.Users == null)
+            //{
+            //    return NotFound();
+            //}
+
+            var user = await _context.Users
+                .FirstOrDefaultAsync(m => m.Login == id);
+            //if (user == null)
+            //{
+            //    return NotFound();
+            //}
+
+            return View(user);
         }
 
         // GET: Users/Details/5
