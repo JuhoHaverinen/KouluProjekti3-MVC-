@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using FFMP.Data;
 using System.Security.Cryptography;
 using System.Text;
+using NuGet.Protocol.Plugins;
 
 namespace FFMP.Controllers
 {
@@ -70,21 +71,21 @@ namespace FFMP.Controllers
             return View(users);
         }
 
-        // GET: Userlanding index information
+        // GET: user information for user index
         
         public async Task<IActionResult> Index(string id)
         {
-            //if (id == null || _context.Users == null)
-            //{
-            //    return NotFound();
-            //}
+            if (id == null || _context.Users == null)
+            {
+                return NotFound();
+            }
 
             var user = await _context.Users
                 .FirstOrDefaultAsync(m => m.Login == id);
-            //if (user == null)
-            //{
-            //    return NotFound();
-            //}
+            if (user == null)
+            {
+                return NotFound();
+            }
 
             return View(user);
         }
@@ -147,6 +148,21 @@ namespace FFMP.Controllers
             return View(user);
         }
 
+        public async Task<IActionResult> EditForUser(string id)
+        {
+            if (id == null || _context.Users == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
+        }
+
         // POST: Users/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -170,6 +186,7 @@ namespace FFMP.Controllers
             {
                 try
                 {
+                    user.Password = HashSh1(user.Password);
                     _context.Update(user);
                     await _context.SaveChangesAsync();
                 }
@@ -190,6 +207,42 @@ namespace FFMP.Controllers
             return View(user);
         }
 
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditForUser(string id, [Bind("Name,Login,Password,Created,Admin,Active")] User user)
+        {
+
+
+            if (id != user.Login)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    user.Password = HashSh1(user.Password);
+                    _context.Update(user);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UserExists(user.Login))
+                    {
+                        return NotFound();
+                    }
+
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Details), new { id = user.Login });
+            }
+            return View(user);
+        }
         // GET: Users/Delete/5
         public async Task<IActionResult> Delete(string id)
         {

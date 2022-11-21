@@ -4,7 +4,12 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_NavbarForUsers");
+    }
+    }
+
 
 <div>
     <h4>User</h4>
@@ -25,6 +30,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Login">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="EditForUser" asp-route-id="@Model?.Login">Edit account information</a> |
+    <a asp-action="Index" asp-route-id="@Model?.Login">Back to main</a>
 </div>
