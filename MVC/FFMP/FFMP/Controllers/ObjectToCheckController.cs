@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FFMP.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace FFMP.Controllers
 {
@@ -94,36 +95,49 @@ namespace FFMP.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(uint id, [Bind("Id,UserLogin,TargetGroupId,Name,Description,Location,Type,Model,State,Created")] ObjectToCheck objectToCheck)
+        public async Task<IActionResult> Edit(uint id, [Bind("Id,UserLogin,TargetGroupId,Name,Description,Location,Type,Model,State")] ObjectToCheck objectToCheck)
         {
-            if (id != objectToCheck.Id)
+            var otc = await _context.Objects.FindAsync(id);
+            if(null == otc)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(objectToCheck);
+            otc.Id = id;
+            otc.UserLogin = objectToCheck.UserLogin;
+            otc.TargetGroupId = objectToCheck.TargetGroupId;
+            otc.Name = objectToCheck.Name;
+            otc.Description = objectToCheck.Description;
+            otc.Location = objectToCheck.Location;
+            otc.Type = objectToCheck.Type;
+            otc.Model = objectToCheck.Model;
+            otc.State = objectToCheck.State;
+            //otc.Created = objectToCheck.Created;
+            
+
+            //if (ModelState.IsValid)
+            //{
+            //    try
+            //    {
+                    //_context.Update(objectToCheck);
                     await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ObjectToCheckExists(objectToCheck.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                //}
+                //catch (DbUpdateConcurrencyException)
+                //{
+                //    if (!ObjectToCheckExists(objectToCheck.Id))
+                //    {
+                //        return NotFound();
+                //    }
+                //    else
+                //    {
+                //        throw;
+                //    }
+                //}
                 return RedirectToAction(nameof(Index));
-            }
-            ViewData["TargetGroupId"] = new SelectList(_context.TargetGroups, "Id", "Id", objectToCheck.TargetGroupId);
-            ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", objectToCheck.UserLogin);
-            return View(objectToCheck);
+            //}
+            //ViewData["TargetGroupId"] = new SelectList(_context.TargetGroups, "Id", "Id", objectToCheck.TargetGroupId);
+            //ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", objectToCheck.UserLogin);
+            //return View(objectToCheck);
         }
 
         // GET: ObjectToCheck/Delete/5
