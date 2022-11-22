@@ -9,24 +9,24 @@ using FFMP.Data;
 
 namespace FFMP.Controllers
 {
-    public class InspectionsController : Controller
+    public class InspectionController : Controller
     {
         private readonly project_3Context _context;
 
-        public InspectionsController(project_3Context context)
+        public InspectionController(project_3Context context)
         {
             _context = context;
         }
 
-        // GET: Inspections
+        // GET: Inspection
         public async Task<IActionResult> Index()
         {
             var project_3Context = _context.Inspections.Include(i => i.Object).Include(i => i.UserLoginNavigation);
             return View(await project_3Context.ToListAsync());
         }
 
-        // GET: Inspections/Details/5
-        public async Task<IActionResult> Details(DateTime? id)
+        // GET: Inspection/Details/5
+        public async Task<IActionResult> Details(uint? id)
         {
             if (id == null || _context.Inspections == null)
             {
@@ -36,7 +36,7 @@ namespace FFMP.Controllers
             var inspection = await _context.Inspections
                 .Include(i => i.Object)
                 .Include(i => i.UserLoginNavigation)
-                .FirstOrDefaultAsync(m => m.Timestamp == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (inspection == null)
             {
                 return NotFound();
@@ -45,20 +45,20 @@ namespace FFMP.Controllers
             return View(inspection);
         }
 
-        // GET: Inspections/Create
+        // GET: Inspection/Create
         public IActionResult Create()
         {
-            ViewData["ObjectId"] = new SelectList(_context.Objects, "Id", "Id");
+            ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id");
             ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login");
             return View();
         }
 
-        // POST: Inspections/Create
+        // POST: Inspection/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Timestamp,UserLogin,ObjectId,Reason,Observations,ChangeOfState")] Inspection inspection)
+        public async Task<IActionResult> Create([Bind("Id,UserLogin,ObjectId,Timestamp,Reason,Observations,ChangeOfState,Inspectioncol")] Inspection inspection)
         {
             if (ModelState.IsValid)
             {
@@ -66,13 +66,13 @@ namespace FFMP.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ObjectId"] = new SelectList(_context.Objects, "Id", "Id", inspection.ObjectId);
+            ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id", inspection.ObjectId);
             ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", inspection.UserLogin);
             return View(inspection);
         }
 
-        // GET: Inspections/Edit/5
-        public async Task<IActionResult> Edit(DateTime? id)
+        // GET: Inspection/Edit/5
+        public async Task<IActionResult> Edit(uint? id)
         {
             if (id == null || _context.Inspections == null)
             {
@@ -84,19 +84,19 @@ namespace FFMP.Controllers
             {
                 return NotFound();
             }
-            ViewData["ObjectId"] = new SelectList(_context.Objects, "Id", "Id", inspection.ObjectId);
+            ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id", inspection.ObjectId);
             ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", inspection.UserLogin);
             return View(inspection);
         }
 
-        // POST: Inspections/Edit/5
+        // POST: Inspection/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(DateTime id, [Bind("Timestamp,UserLogin,ObjectId,Reason,Observations,ChangeOfState")] Inspection inspection)
+        public async Task<IActionResult> Edit(uint id, [Bind("Id,UserLogin,ObjectId,Timestamp,Reason,Observations,ChangeOfState,Inspectioncol")] Inspection inspection)
         {
-            if (id != inspection.Timestamp)
+            if (id != inspection.Id)
             {
                 return NotFound();
             }
@@ -110,7 +110,7 @@ namespace FFMP.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!InspectionExists(inspection.Timestamp))
+                    if (!InspectionExists(inspection.Id))
                     {
                         return NotFound();
                     }
@@ -121,13 +121,13 @@ namespace FFMP.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ObjectId"] = new SelectList(_context.Objects, "Id", "Id", inspection.ObjectId);
+            ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id", inspection.ObjectId);
             ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", inspection.UserLogin);
             return View(inspection);
         }
 
-        // GET: Inspections/Delete/5
-        public async Task<IActionResult> Delete(DateTime? id)
+        // GET: Inspection/Delete/5
+        public async Task<IActionResult> Delete(uint? id)
         {
             if (id == null || _context.Inspections == null)
             {
@@ -137,7 +137,7 @@ namespace FFMP.Controllers
             var inspection = await _context.Inspections
                 .Include(i => i.Object)
                 .Include(i => i.UserLoginNavigation)
-                .FirstOrDefaultAsync(m => m.Timestamp == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (inspection == null)
             {
                 return NotFound();
@@ -146,10 +146,10 @@ namespace FFMP.Controllers
             return View(inspection);
         }
 
-        // POST: Inspections/Delete/5
+        // POST: Inspection/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(DateTime id)
+        public async Task<IActionResult> DeleteConfirmed(uint id)
         {
             if (_context.Inspections == null)
             {
@@ -160,14 +160,14 @@ namespace FFMP.Controllers
             {
                 _context.Inspections.Remove(inspection);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool InspectionExists(DateTime id)
+        private bool InspectionExists(uint id)
         {
-          return (_context.Inspections?.Any(e => e.Timestamp == id)).GetValueOrDefault();
+            return (_context.Inspections?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

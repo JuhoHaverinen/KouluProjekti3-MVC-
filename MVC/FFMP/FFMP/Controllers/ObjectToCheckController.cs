@@ -22,19 +22,19 @@ namespace FFMP.Controllers
         // GET: ObjectToCheck
         public async Task<IActionResult> Index()
         {
-            var project_3Context = _context.Objects.Include(o => o.TargetGroup).Include(o => o.UserLoginNavigation);
+            var project_3Context = _context.ObjectToChecks.Include(o => o.TargetGroup).Include(o => o.UserLoginNavigation);
             return View(await project_3Context.ToListAsync());
         }
 
         // GET: ObjectToCheck/Details/5
         public async Task<IActionResult> Details(uint? id)
         {
-            if (id == null || _context.Objects == null)
+            if (id == null || _context.ObjectToChecks == null)
             {
                 return NotFound();
             }
 
-            var objectToCheck = await _context.Objects
+            var objectToCheck = await _context.ObjectToChecks
                 .Include(o => o.TargetGroup)
                 .Include(o => o.UserLoginNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -75,12 +75,12 @@ namespace FFMP.Controllers
         // GET: ObjectToCheck/Edit/5
         public async Task<IActionResult> Edit(uint? id)
         {
-            if (id == null || _context.Objects == null)
+            if (id == null || _context.ObjectToChecks == null)
             {
                 return NotFound();
             }
 
-            var objectToCheck = await _context.Objects.FindAsync(id);
+            var objectToCheck = await _context.ObjectToChecks.FindAsync(id);
             if (objectToCheck == null)
             {
                 return NotFound();
@@ -97,8 +97,8 @@ namespace FFMP.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(uint id, [Bind("Id,UserLogin,TargetGroupId,Name,Description,Location,Type,Model,State")] ObjectToCheck objectToCheck)
         {
-            var otc = await _context.Objects.FindAsync(id);
-            if(null == otc)
+            var otc = await _context.ObjectToChecks.FindAsync(id);
+            if (null == otc)
             {
                 return NotFound();
             }
@@ -113,27 +113,27 @@ namespace FFMP.Controllers
             otc.Model = objectToCheck.Model;
             otc.State = objectToCheck.State;
             //otc.Created = objectToCheck.Created;
-            
+
 
             //if (ModelState.IsValid)
             //{
             //    try
             //    {
-                    //_context.Update(objectToCheck);
-                    await _context.SaveChangesAsync();
-                //}
-                //catch (DbUpdateConcurrencyException)
-                //{
-                //    if (!ObjectToCheckExists(objectToCheck.Id))
-                //    {
-                //        return NotFound();
-                //    }
-                //    else
-                //    {
-                //        throw;
-                //    }
-                //}
-                return RedirectToAction(nameof(Index));
+            //_context.Update(objectToCheck);
+            await _context.SaveChangesAsync();
+            //}
+            //catch (DbUpdateConcurrencyException)
+            //{
+            //    if (!ObjectToCheckExists(objectToCheck.Id))
+            //    {
+            //        return NotFound();
+            //    }
+            //    else
+            //    {
+            //        throw;
+            //    }
+            //}
+            return RedirectToAction(nameof(Index));
             //}
             //ViewData["TargetGroupId"] = new SelectList(_context.TargetGroups, "Id", "Id", objectToCheck.TargetGroupId);
             //ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", objectToCheck.UserLogin);
@@ -143,12 +143,12 @@ namespace FFMP.Controllers
         // GET: ObjectToCheck/Delete/5
         public async Task<IActionResult> Delete(uint? id)
         {
-            if (id == null || _context.Objects == null)
+            if (id == null || _context.ObjectToChecks == null)
             {
                 return NotFound();
             }
 
-            var objectToCheck = await _context.Objects
+            var objectToCheck = await _context.ObjectToChecks
                 .Include(o => o.TargetGroup)
                 .Include(o => o.UserLoginNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -165,14 +165,14 @@ namespace FFMP.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(uint id)
         {
-            if (_context.Objects == null)
+            if (_context.ObjectToChecks == null)
             {
                 return Problem("Entity set 'project_3Context.Objects'  is null.");
             }
-            var objectToCheck = await _context.Objects.FindAsync(id);
+            var objectToCheck = await _context.ObjectToChecks.FindAsync(id);
             if (objectToCheck != null)
             {
-                _context.Objects.Remove(objectToCheck);
+                _context.ObjectToChecks.Remove(objectToCheck);
             }
 
             await _context.SaveChangesAsync();
@@ -181,7 +181,7 @@ namespace FFMP.Controllers
 
         private bool ObjectToCheckExists(uint id)
         {
-            return (_context.Objects?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.ObjectToChecks?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

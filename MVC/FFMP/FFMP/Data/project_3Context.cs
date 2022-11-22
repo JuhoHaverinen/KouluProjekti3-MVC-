@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -20,12 +19,11 @@ namespace FFMP.Data
         public virtual DbSet<AuditingForm> AuditingForms { get; set; } = null!;
         public virtual DbSet<AuditingLog> AuditingLogs { get; set; } = null!;
         public virtual DbSet<Inspection> Inspections { get; set; } = null!;
-        public virtual DbSet<ObjectToCheck> Objects { get; set; } = null!;
+        public virtual DbSet<ObjectToCheck> ObjectToChecks { get; set; } = null!;
         public virtual DbSet<Requirement> Requirements { get; set; } = null!;
         public virtual DbSet<RequirementResult> RequirementResults { get; set; } = null!;
         public virtual DbSet<TargetGroup> TargetGroups { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
-        public IEnumerable ObjectToChecks { get; internal set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -73,11 +71,11 @@ namespace FFMP.Data
                     .HasMaxLength(45)
                     .HasColumnName("user_login");
 
-                //entity.HasOne(d => d.TargetGroup)
-                //    .WithMany(p => p.AuditingForms)
-                //    .HasForeignKey(d => d.TargetGroupId)
-                //    .OnDelete(DeleteBehavior.ClientSetNull)
-                //    .HasConstraintName("fk_Auditing_Target_group1");
+                entity.HasOne(d => d.TargetGroup)
+                    .WithMany(p => p.AuditingForms)
+                    .HasForeignKey(d => d.TargetGroupId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_Auditing_Target_group1");
 
                 entity.HasOne(d => d.UserLoginNavigation)
                     .WithMany(p => p.AuditingForms)
@@ -133,21 +131,19 @@ namespace FFMP.Data
 
             modelBuilder.Entity<Inspection>(entity =>
             {
-                entity.HasKey(e => e.Timestamp)
-                    .HasName("PRIMARY");
-
                 entity.ToTable("inspection");
 
                 entity.HasIndex(e => e.ObjectId, "fk_Inspection_Object1_idx");
 
                 entity.HasIndex(e => e.UserLogin, "fk_Inspection_User1_idx");
 
-                entity.Property(e => e.Timestamp)
-                    .HasColumnType("timestamp")
-                    .HasColumnName("timestamp")
-                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(10) unsigned")
+                    .HasColumnName("id");
 
                 entity.Property(e => e.ChangeOfState).HasColumnName("change_of_state");
+
+                entity.Property(e => e.Inspectioncol).HasMaxLength(45);
 
                 entity.Property(e => e.ObjectId)
                     .HasColumnType("int(10) unsigned")
@@ -160,6 +156,11 @@ namespace FFMP.Data
                 entity.Property(e => e.Reason)
                     .HasMaxLength(100)
                     .HasColumnName("reason");
+
+                entity.Property(e => e.Timestamp)
+                    .HasColumnType("timestamp")
+                    .HasColumnName("timestamp")
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.Property(e => e.UserLogin)
                     .HasMaxLength(45)

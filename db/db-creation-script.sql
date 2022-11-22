@@ -73,13 +73,15 @@ ENGINE = InnoDB;
 -- Table `Project_3`.`Inspection`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Project_3`.`Inspection` (
-  `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_login` VARCHAR(45) NOT NULL,
   `object_id` INT UNSIGNED NOT NULL,
+  `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `reason` VARCHAR(100) NOT NULL,
   `observations` VARCHAR(400) NULL,
   `change_of_state` TINYINT(1) NULL,
-  PRIMARY KEY (`timestamp`),
+  `Inspectioncol` VARCHAR(45) NULL,
+  PRIMARY KEY (`id`),
   INDEX `fk_Inspection_User1_idx` (`user_login` ASC),
   INDEX `fk_Inspection_Object1_idx` (`object_id` ASC),
   CONSTRAINT `fk_Inspection_User1`

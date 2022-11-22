@@ -1,16 +1,21 @@
 @model FFMP.Data.Inspection
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Details";
 }
 
-<h1>Delete</h1>
+<h1>Details</h1>
 
-<h3>Are you sure you want to delete this?</h3>
 <div>
     <h4>Inspection</h4>
     <hr />
     <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Timestamp)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Timestamp)
+        </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Reason)
         </dt>
@@ -30,10 +35,10 @@
             @Html.DisplayFor(model => model.ChangeOfState)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UserLoginNavigation)
+            @Html.DisplayNameFor(model => model.Inspectioncol)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserLoginNavigation.Login)
+            @Html.DisplayFor(model => model.Inspectioncol)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Object)
@@ -41,11 +46,15 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Object.Id)
         </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.UserLoginNavigation)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.UserLoginNavigation.Login)
+        </dd>
     </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Timestamp" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
 </div>
