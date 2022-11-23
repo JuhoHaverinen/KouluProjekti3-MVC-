@@ -12,8 +12,7 @@
 
 
 <hr />
-<div class="row">
-    <div class="col-md-4">
+
         <form asp-action="EditForUser">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -56,19 +55,19 @@
                 <span asp-validation-for="Active" class="text-danger"></span>
             </div>
             <br />
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save</button>              
             </div>
             
         </form>
-    </div>
-</div>
+            
 <br />
 <div>
     <a asp-action="Index" asp-route-id="@Model.Login">Cancel</a>
 </div>
 
-@section Scripts {
+section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }

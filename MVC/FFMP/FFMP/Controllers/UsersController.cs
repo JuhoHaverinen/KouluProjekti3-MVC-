@@ -145,7 +145,7 @@ namespace FFMP.Controllers
             {
                 return NotFound();
             }
-            return View(user);
+            return PartialView("_EditAdminPartialView", user);
         }
 
         public async Task<IActionResult> EditForUser(string id)
@@ -160,7 +160,7 @@ namespace FFMP.Controllers
             {
                 return NotFound();
             }
-            return View(user);
+            return PartialView("_EditUserPartialView", user);
         }
 
         // POST: Users/Edit/5
@@ -186,9 +186,18 @@ namespace FFMP.Controllers
             {
                 try
                 {
+                    var usercheck = await _context.Users.FindAsync(id);
+                    if (!user.Password.Equals(usercheck?.Password))
+                    {
                     user.Password = HashSh1(user.Password);
-                    _context.Update(user);
+                    }
+                    _context.Entry(user).State = EntityState.Detached;
+                    _context.Set<User>().Update(user);
+                    //_context.Update(user);
                     await _context.SaveChangesAsync();
+                    
+                    
+                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {
