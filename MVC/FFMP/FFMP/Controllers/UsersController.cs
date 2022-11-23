@@ -182,8 +182,6 @@ namespace FFMP.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("Name,Login,Password,Created,Admin,Active")] User user)
         {
-
-
             if (id != user.Login)
             {
                 return NotFound();
@@ -194,38 +192,45 @@ namespace FFMP.Controllers
                 return View();
             }
 
-            if (ModelState.IsValid)
+            var otc = await _context.Users.FindAsync(id);
+            if (null == otc)
             {
-                try
-                {
-                    var usercheck = await _context.Users.FindAsync(id);
-                    if (!user.Password.Equals(usercheck?.Password))
-                    {
-                    user.Password = HashSh1(user.Password);
-                    }
-                    _context.Entry(user).State = EntityState.Detached;
-                    _context.Set<User>().Update(user);
-                    //_context.Update(user);
-                    await _context.SaveChangesAsync();
-                    
-                    
-                    
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UserExists(user.Login))
-                    {
-                        return NotFound();
-                    }
-
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(IndexUsers));
+                return NotFound();
             }
-            return View(user);
+            otc.Name = user.Name;
+            otc.Login = user.Login;
+            if (otc.Password != user.Password)
+                otc.Password = HashSh1(user.Password);
+            else otc.Password = user.Password;
+            otc.Created = user.Created;
+            otc.Admin = user.Admin;
+            otc.Active = user.Active;
+
+            _context.Update(otc);
+            await _context.SaveChangesAsync();
+
+            //if (ModelState.IsValid)
+            //{
+            //try
+            //{
+            //    //user.Password = HashSh1(user.Password);
+            //    _context.Update(user);
+            //    await _context.SaveChangesAsync();
+            //}
+            //catch (DbUpdateConcurrencyException)
+            //{
+            //    if (!UserExists(user.Login))
+            //    {
+            //        return NotFound();
+            //    }
+            //    else
+            //    {
+            //        throw;
+            //    }
+            //}
+            return RedirectToAction(nameof(IndexUsers));
+            //}
+            //return View(user);
         }
 
 

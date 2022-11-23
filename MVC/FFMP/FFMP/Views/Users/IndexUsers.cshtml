@@ -67,13 +67,10 @@
                 </td>
 
                 <td>
-<<<<<<< HEAD
                     <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="@("#editFAdmin-"+item.Login)" data-bs-url="@Url.Action($"Edit/{item.Login}")">Edit User</button>
-                    @await Html.PartialAsync("_EditAdminPartialView",item)
+                    @await Html.PartialAsync("_EditAdminPartialView", item)
                     @*<a asp-action="Edit" asp-route-id="@item.Login">Edit User</a> *@
-=======
-                    <a asp-action="Edit" asp-route-id="@item.Login">Edit User</a>
->>>>>>> 9b945d32bdc453c8bb0289cd2cb90fa28c5b60a2
+                    @*<a asp-action="Edit" asp-route-id="@item.Login">Edit User</a>*@
                     @*<a asp-action="Details" asp-route-id="@item.Login">Details</a> |*@
                     @* <a asp-action="Delete" asp-route-id="@item.Login">Delete</a>*@
                 </td>
