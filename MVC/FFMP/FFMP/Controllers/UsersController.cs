@@ -40,12 +40,24 @@ namespace FFMP.Controllers
 
             }
             if (user.Admin == true && user.Active == true)
+            {
+                user.LastLogin = DateTime.Now;
+                _context.Update(user);
+                await _context.SaveChangesAsync();
+
                 return View("AdminLanding/Index");
+            }
             else if (user.Admin == false && user.Active == true)
-                return RedirectToAction(nameof(Index), new {id = login});
+            {
+                user.LastLogin = DateTime.Now;
+                _context.Update(user);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index), new { id = login });
+            }
             else
                 ViewBag.Message = "Deactivated login information";
-                return View("Login");
+            return View("Login");
 
         }
 
@@ -57,10 +69,10 @@ namespace FFMP.Controllers
             ViewData["NameSortParam"] = String.IsNullOrEmpty(SortOrder) ? "name_sort" : "";
             ViewData["CreatedSortParam"] = SortOrder == "" ? "created_sort" : "created_sort";
 
-            switch(SortOrder)
+            switch (SortOrder)
             {
                 case "name_sort":
-                    users = await _context.Users.OrderBy(x=>x.Name).ToListAsync();
+                    users = await _context.Users.OrderBy(x => x.Name).ToListAsync();
                     break;
                 case "created_sort":
                     users = await _context.Users.OrderBy(x => x.Created).ToListAsync();
@@ -72,7 +84,7 @@ namespace FFMP.Controllers
         }
 
         // GET: user information for user index
-        
+
         public async Task<IActionResult> Index(string id)
         {
             if (id == null || _context.Users == null)
@@ -170,7 +182,7 @@ namespace FFMP.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("Name,Login,Password,Created,Admin,Active")] User user)
         {
-            
+
 
             if (id != user.Login)
             {
@@ -196,7 +208,7 @@ namespace FFMP.Controllers
                     {
                         return NotFound();
                     }
-                    
+
                     else
                     {
                         throw;
