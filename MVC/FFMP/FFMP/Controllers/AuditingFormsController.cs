@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FFMP.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -160,10 +161,15 @@ namespace FFMP.Controllers
             if (_context.AuditingForms == null)
             {
                 return Problem("Entity set 'project_3Context.AuditingForms'  is null.");
-            }
-            var auditingForm = await _context.AuditingForms.FindAsync(id);
+            }            
+
+            var auditingForm = await _context.AuditingForms.Include(a => a.Requirements).FirstOrDefaultAsync(x => x.AuditingId == id);
             if (auditingForm != null)
             {
+                foreach (var r in auditingForm.Requirements)
+                {
+                    _context.Requirements.Remove(r);
+                }
                 _context.AuditingForms.Remove(auditingForm);
             }
 
