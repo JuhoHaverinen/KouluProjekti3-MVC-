@@ -50,7 +50,7 @@ namespace FFMP.Controllers
         // GET: AuditingForms/Create
         public IActionResult Create()
         {
-            ViewData["TargetGroupId"] = new SelectList(_context.TargetGroups, "Id", "Id");
+            ViewData["TargetGroupId"] = new SelectList(_context.TargetGroups, "Id", "Description");
             ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login");
             return View();
         }
@@ -64,18 +64,7 @@ namespace FFMP.Controllers
         {
             _context.Add(auditingForm);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-
-            if (ModelState.IsValid)
-            {
-                _context.Add(auditingForm);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            
-            ViewData["TargetGroupId"] = new SelectList(_context.TargetGroups, "Id", "Id", auditingForm.TargetGroupId);
-            ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", auditingForm.UserLogin);
-            return View(auditingForm);
+            return RedirectToAction("Edit", "AuditingForms", new { id = auditingForm.AuditingId });
         }
 
         // GET: AuditingForms/Edit/5
@@ -91,7 +80,7 @@ namespace FFMP.Controllers
             {
                 return NotFound();
             }
-            ViewData["TargetGroupId"] = new SelectList(_context.TargetGroups, "Id", "Id", auditingForm.TargetGroupId);
+            ViewData["TargetGroupId"] = new SelectList(_context.TargetGroups, "Id", "Description", auditingForm.TargetGroupId);
             ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", auditingForm.UserLogin);
             return View(auditingForm);
         }
@@ -108,29 +97,24 @@ namespace FFMP.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+
+            try
             {
-                try
-                {
-                    _context.Update(auditingForm);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AuditingFormExists(auditingForm.AuditingId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(auditingForm);
+                await _context.SaveChangesAsync();
             }
-            ViewData["TargetGroupId"] = new SelectList(_context.TargetGroups, "Id", "Id", auditingForm.TargetGroupId);
-            ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", auditingForm.UserLogin);
-            return View(auditingForm);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!AuditingFormExists(auditingForm.AuditingId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: AuditingForms/Delete/5

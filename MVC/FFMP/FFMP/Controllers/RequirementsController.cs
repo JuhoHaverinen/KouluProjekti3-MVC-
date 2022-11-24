@@ -47,8 +47,10 @@ namespace FFMP.Controllers
         // GET: Requirements/Create
         public IActionResult Create(uint? AuditingAuditingId)
         {
+            var r = new Requirement();
+            r.AuditingAuditingId = AuditingAuditingId.Value;
             ViewData["AuditingAuditingId"] = AuditingAuditingId;
-            return View();
+            return View(r);
         }
 
         // POST: Requirements/Create

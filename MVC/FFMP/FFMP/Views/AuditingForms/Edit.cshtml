@@ -13,17 +13,17 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="AuditingId" />
-            <div class="form-group">
+            <div class="form-group" style="display:none;">
                 <label asp-for="UserLogin" class="control-label"></label>
                 <select asp-for="UserLogin" class="form-control" asp-items="ViewBag.UserLogin"></select>
                 <span asp-validation-for="UserLogin" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TargetGroupId" class="control-label"></label>
+                <label class="control-label">Target group</label>
                 <select asp-for="TargetGroupId" class="form-control" asp-items="ViewBag.TargetGroupId"></select>
                 <span asp-validation-for="TargetGroupId" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="display:none;">
                 <label asp-for="Created" class="control-label"></label>
                 <input asp-for="Created" class="form-control" />
                 <span asp-validation-for="Created" class="text-danger"></span>
@@ -40,6 +40,7 @@
     </div>
 </div>
 <div class="row">
+    <h4>Auditing forms requirements</h4>
     <p>
         <a asp-controller="Requirements" asp-action="Create" asp-route-AuditingAuditingId="@Model.AuditingId">Create New</a>
     </p>
@@ -50,7 +51,7 @@
                     Description
                 </th>
                 <th>
-                    Must
+                    Mandatory
                 </th>
                 <th></th>
             </tr>
