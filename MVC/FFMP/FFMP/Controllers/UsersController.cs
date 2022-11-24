@@ -124,7 +124,8 @@ namespace FFMP.Controllers
         // GET: Users/Create
         public IActionResult Create()
         {
-            return View();
+            User user = new User();
+            return PartialView("_CreatePartialView", user);
         }
 
         // POST: Users/Create
@@ -132,7 +133,7 @@ namespace FFMP.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind($"Name,Login,Password,Created,LastLogin,Admin,Active")] User user)
+        public async Task<IActionResult> Create([Bind($"Name,Login,Password,Created,Admin,Active")] User user)
         {
             if (ModelState.IsValid)
             {

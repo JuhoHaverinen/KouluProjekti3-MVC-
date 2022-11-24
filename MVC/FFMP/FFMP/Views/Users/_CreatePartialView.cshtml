@@ -1,14 +1,16 @@
 ﻿@model FFMP.Data.User
 
-@{
-    ViewData["Title"] = "Create";
-}
 
-<h1>Create User</h1>
-
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="modal fade" id="createUser" aria-labelledby="CreateUserLabel" aria-hidden="true">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="createUserLabel">Create User</h5>
+            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -31,17 +33,13 @@
                 <input asp-for="LastLogin" class="form-control" />
                 <span asp-validation-for="LastLogin" class="text-danger"></span>
             </div>*@
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
+           
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
         </form>
     </div>
 </div>
-
-<div>
-    <a asp-action="IndexUsers">Back to List</a>
 </div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+</div>

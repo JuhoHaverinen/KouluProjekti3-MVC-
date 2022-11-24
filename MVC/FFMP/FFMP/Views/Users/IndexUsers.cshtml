@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<FFMP.Data.User>
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, FFMP
+@using FFMP.Data
 
 @{
     ViewData["Title"] = "IndexUsers";
@@ -13,7 +14,9 @@
 
 
 <p>
-    <a asp-action="Create">Create New User</a>
+    <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="@("#createUser")" data-bs-url="@Url.Action($"Create")">Create User</button>
+     @await Html.PartialAsync("_CreatePartialView", new User())
+    @*<a asp-action="Create">Create New User</a>*@
 </p>
 
 @*<div>
