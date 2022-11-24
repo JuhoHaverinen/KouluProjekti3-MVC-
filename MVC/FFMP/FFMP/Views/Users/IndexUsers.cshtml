@@ -16,6 +16,11 @@
     <a asp-action="Create">Create New User</a>
 </p>
 
+@*<div>
+    @if(ViewBag.Message != null)
+    @ViewBag.Message
+</div>*@
+
 <table class="table">
     <thead>
         <tr>
@@ -32,7 +37,7 @@
                 </a>
             </th>
             <th>@Html.DisplayName("Last login")</th>
-            <th>@Html.DisplayNameFor(model => model.Admin)</th>
+            @*<th>@Html.DisplayNameFor(model => model.Admin)</th>*@
             <th>@Html.DisplayNameFor(model => model.Active)</th>
         </tr>
     </thead>
@@ -45,7 +50,7 @@
                 @* <td>@Html.DisplayFor(modelItem => item.Password)</td> *@
                 <td>@Html.DisplayFor(modelItem => item.Created)</td>
                 <td>@Html.DisplayFor(modelItem => item.LastLogin)</td>
-                <td>
+                @*<td>
                     @if (item.Admin == true)
                     {
                         @Html.Raw("True")
@@ -54,7 +59,7 @@
                     {
                         @Html.Raw("False")
                     }
-                </td>
+                </td>*@
                 <td>
                     @if (item.Active == true)
                     {
@@ -65,7 +70,7 @@
                         @Html.Raw("False")
                     }
                 </td>
-
+                
                 <td>
                     <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="@("#editFAdmin-"+item.Login)" data-bs-url="@Url.Action($"Edit/{item.Login}")">Edit User</button>
                     @await Html.PartialAsync("_EditAdminPartialView", item)

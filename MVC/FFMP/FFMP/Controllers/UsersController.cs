@@ -9,6 +9,7 @@ using FFMP.Data;
 using System.Security.Cryptography;
 using System.Text;
 using NuGet.Protocol.Plugins;
+//using AspNetCore;
 
 namespace FFMP.Controllers
 {
@@ -64,18 +65,18 @@ namespace FFMP.Controllers
         // GET: Users
         public async Task<IActionResult> IndexUsers(string SortOrder)
         {
-            var users = await _context.Users.ToListAsync();
-
+            var users = await _context.Users.Where(x => x.Admin == false).ToListAsync();
+            
             ViewData["NameSortParam"] = String.IsNullOrEmpty(SortOrder) ? "name_sort" : "";
             ViewData["CreatedSortParam"] = SortOrder == "" ? "created_sort" : "created_sort";
 
             switch (SortOrder)
             {
                 case "name_sort":
-                    users = await _context.Users.OrderBy(x => x.Name).ToListAsync();
+                    users = await _context.Users.Where(x => x.Admin == false).OrderBy(x => x.Name).ToListAsync();
                     break;
                 case "created_sort":
-                    users = await _context.Users.OrderBy(x => x.Created).ToListAsync();
+                    users = await _context.Users.Where(x => x.Admin == false).OrderBy(x => x.Created).ToListAsync();
                     break;
 
             }
@@ -186,51 +187,44 @@ namespace FFMP.Controllers
             {
                 return NotFound();
             }
-            if (user.Admin == true && user.Active == false)
+
+
+            if (ModelState.IsValid)
             {
-                ViewBag.Message = "Can't deactive an admin";
-                return View();
+                try
+                {
+                    var otc = await _context.Users.FindAsync(id);
+                    if (null == otc)
+                    {
+                        return NotFound();
+                    }
+                    otc.Name = user.Name;
+                    otc.Login = user.Login;
+                    if (otc.Password != user.Password)
+                        otc.Password = HashSh1(user.Password);
+                    else otc.Password = user.Password;
+                    otc.Created = user.Created;
+                    otc.Admin = user.Admin;
+                    otc.Active = user.Active;
+
+                    _context.Update(otc);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UserExists(user.Login))
+                    {
+                        return NotFound();
+                    }
+                    
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(IndexUsers));
             }
-
-            var otc = await _context.Users.FindAsync(id);
-            if (null == otc)
-            {
-                return NotFound();
-            }
-            otc.Name = user.Name;
-            otc.Login = user.Login;
-            if (otc.Password != user.Password)
-                otc.Password = HashSh1(user.Password);
-            else otc.Password = user.Password;
-            otc.Created = user.Created;
-            otc.Admin = user.Admin;
-            otc.Active = user.Active;
-
-            _context.Update(otc);
-            await _context.SaveChangesAsync();
-
-            //if (ModelState.IsValid)
-            //{
-            //try
-            //{
-            //    //user.Password = HashSh1(user.Password);
-            //    _context.Update(user);
-            //    await _context.SaveChangesAsync();
-            //}
-            //catch (DbUpdateConcurrencyException)
-            //{
-            //    if (!UserExists(user.Login))
-            //    {
-            //        return NotFound();
-            //    }
-            //    else
-            //    {
-            //        throw;
-            //    }
-            //}
-            return RedirectToAction(nameof(IndexUsers));
-            //}
-            //return View(user);
+            return View(user);
         }
 
 
@@ -244,13 +238,26 @@ namespace FFMP.Controllers
             {
                 return NotFound();
             }
-
+           
             if (ModelState.IsValid)
             {
                 try
                 {
-                    user.Password = HashSh1(user.Password);
-                    _context.Update(user);
+                    var otc = await _context.Users.FindAsync(id);
+                    if (null == otc)
+                    {
+                        return NotFound();
+                    }
+                    otc.Name = user.Name;
+                    otc.Login = user.Login;
+                    if (otc.Password != user.Password)
+                        otc.Password = HashSh1(user.Password);
+                    else otc.Password = user.Password;
+                    otc.Created = user.Created;
+                    otc.Admin = user.Admin;
+                    otc.Active = user.Active;
+
+                    _context.Update(otc);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

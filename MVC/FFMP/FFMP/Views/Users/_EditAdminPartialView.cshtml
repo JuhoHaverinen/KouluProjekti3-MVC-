@@ -28,12 +28,12 @@
                         <input asp-for="Created" class="form-control" />
                         <span asp-validation-for="Created" class="text-danger"></span>
                     </div>
-                    @*<div class="form-group">
+                    <div class="form-group" style="display: none">
                     <label asp-for="LastLogin" class="control-label"></label>
                     <input asp-for="LastLogin" class="form-control" />
                     <span asp-validation-for="LastLogin" class="text-danger"></span>
-                    </div>*@
-                    <div class="form-group">
+                    </div>
+                    <div class="form-group" style="display: none">
                         <label asp-for="Admin" class="control-label"></label>
                         @*<input asp-for="Admin" class="form-control" />*@
                         <select asp-for="Admin" id="selectAdTF" class="form-control">
@@ -57,7 +57,7 @@
                         <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                      <div>
-                        @ViewBag.Message
+                      
                     </div>
                 </form>
             </div>
