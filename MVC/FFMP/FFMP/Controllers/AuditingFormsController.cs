@@ -36,6 +36,7 @@ namespace FFMP.Controllers
             var auditingForm = await _context.AuditingForms
                 .Include(a => a.TargetGroup)
                 .Include(a => a.UserLoginNavigation)
+                .Include(a => a.Requirements)
                 .FirstOrDefaultAsync(m => m.AuditingId == id);
             if (auditingForm == null)
             {
@@ -84,7 +85,7 @@ namespace FFMP.Controllers
                 return NotFound();
             }
 
-            var auditingForm = await _context.AuditingForms.FindAsync(id);
+            var auditingForm = await _context.AuditingForms.Include(a => a.Requirements).FirstOrDefaultAsync(x => x.AuditingId == id);
             if (auditingForm == null)
             {
                 return NotFound();

@@ -45,9 +45,9 @@ namespace FFMP.Controllers
         }
 
         // GET: Requirements/Create
-        public IActionResult Create()
+        public IActionResult Create(uint? AuditingAuditingId)
         {
-            ViewData["AuditingAuditingId"] = new SelectList(_context.AuditingForms, "AuditingId", "AuditingId");
+            ViewData["AuditingAuditingId"] = AuditingAuditingId;
             return View();
         }
 
@@ -60,7 +60,7 @@ namespace FFMP.Controllers
         {
             _context.Add(requirement);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Edit", "AuditingForms", new { id = requirement.AuditingAuditingId });
 
             if (ModelState.IsValid)
             {
@@ -75,7 +75,7 @@ namespace FFMP.Controllers
                        .ToList();
             }
             ViewData["AuditingAuditingId"] = new SelectList(_context.AuditingForms, "AuditingId", "AuditingId", requirement.AuditingAuditingId);
-            return View(requirement);
+            return RedirectToAction("Edit", "AuditingForms", new { id = requirement.AuditingAuditingId });
         }
 
         // GET: Requirements/Edit/5
@@ -107,28 +107,23 @@ namespace FFMP.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _context.Update(requirement);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RequirementExists(requirement.ReqId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(requirement);
+                await _context.SaveChangesAsync();
             }
-            ViewData["AuditingAuditingId"] = new SelectList(_context.AuditingForms, "AuditingId", "AuditingId", requirement.AuditingAuditingId);
-            return View(requirement);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!RequirementExists(requirement.ReqId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction("Edit", "AuditingForms", new { id = requirement.AuditingAuditingId });
         }
 
         // GET: Requirements/Delete/5
@@ -166,7 +161,7 @@ namespace FFMP.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Edit", "AuditingForms", new { id = requirement.AuditingAuditingId });
         }
 
         private bool RequirementExists(uint id)

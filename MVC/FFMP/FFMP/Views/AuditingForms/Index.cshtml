@@ -22,7 +22,7 @@
                 @Html.DisplayNameFor(model => model.UserLoginNavigation)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TargetGroup)
+                Target group
             </th>
             <th></th>
         </tr>
@@ -40,11 +40,10 @@
                 @Html.DisplayFor(modelItem => item.UserLoginNavigation.Login)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TargetGroup.Id)
+                    @Html.DisplayFor(modelItem => item.TargetGroup.Description)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.AuditingId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.AuditingId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.AuditingId">Delete</a>
             </td>
         </tr>

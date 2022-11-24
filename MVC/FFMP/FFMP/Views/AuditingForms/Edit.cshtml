@@ -39,6 +39,42 @@
         </form>
     </div>
 </div>
+<div class="row">
+    <p>
+        <a asp-controller="Requirements" asp-action="Create" asp-route-AuditingAuditingId="@Model.AuditingId">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Must
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Requirements)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Must)
+                    </td>
+                    <td>
+                        <a asp-controller="Requirements" asp-action="Edit" asp-route-id="@item.ReqId">Edit</a> |
+                        <a asp-controller="Requirements" asp-action="Delete" asp-route-id="@item.ReqId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
 
 <div>
     <a asp-action="Index">Back to List</a>

@@ -13,7 +13,7 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ReqId" />
-            <div class="form-group">
+            <div class="form-group" style="display:none;">
                 <label asp-for="AuditingAuditingId" class="control-label"></label>
                 <select asp-for="AuditingAuditingId" class="form-control" asp-items="ViewBag.AuditingAuditingId"></select>
                 <span asp-validation-for="AuditingAuditingId" class="text-danger"></span>
