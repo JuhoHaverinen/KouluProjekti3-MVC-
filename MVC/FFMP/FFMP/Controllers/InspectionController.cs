@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FFMP.Data;
+using Microsoft.Data.SqlClient;
 
 namespace FFMP.Controllers
 {
@@ -19,10 +20,26 @@ namespace FFMP.Controllers
         }
 
         // GET: Inspection
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string SortOrder)
         {
-            var project_3Context = _context.Inspections.Include(i => i.Object).Include(i => i.UserLoginNavigation);
-            return View(await project_3Context.ToListAsync());
+            var inspections = await _context.Inspections.Include(i => i.Object).Include(i => i.UserLoginNavigation).ToListAsync();
+
+            ViewData["TimestampSortParam"] = String.IsNullOrEmpty(SortOrder) ? "timestamp_sort" : "";
+            ViewData["ObjectSortParam"] = SortOrder == "" ? "object_sort" : "object_sort";
+
+            switch (SortOrder)
+            {
+
+                case "timestamp_sort":
+                    inspections = await _context.Inspections.Include(i => i.Object).Include(i => i.UserLoginNavigation).OrderByDescending(i => i.Timestamp).ToListAsync();
+                    break;
+                case "object_sort":
+                    inspections = await _context.Inspections.Include(i => i.Object).Include(i => i.UserLoginNavigation).OrderBy(i => i.ObjectId).ToListAsync();
+                    break;
+
+            }
+
+            return View(inspections);
         }
 
         // GET: Inspections of Object(id)

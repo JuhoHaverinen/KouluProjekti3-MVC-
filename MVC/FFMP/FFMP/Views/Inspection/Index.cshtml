@@ -30,8 +30,13 @@
     <thead>
         <tr>
             <th>
+            <a asp-action="Index" asp-route-sortOrder="@ViewData["TimestampSortParam"]">
                 @Html.DisplayNameFor(model => model.Timestamp)
+            </a>
             </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.Timestamp)
+            </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.Reason)
             </th>
@@ -42,8 +47,13 @@
                 @Html.DisplayNameFor(model => model.ChangeOfState)
             </th>
             <th>
+            <a asp-action="Index" asp-route-sortOrder="@ViewData["ObjectSortParam"]">
                 @Html.DisplayNameFor(model => model.Object)
+            </a>
             </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.Object)
+            </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.UserLoginNavigation)
             </th>
@@ -74,7 +84,7 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |</br>
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |<br />
                 <a asp-action="ObjectsInspections" asp-route-id=@item.ObjectId>Show only inspections of this object</a>
             </td>
         </tr>
