@@ -25,6 +25,13 @@ namespace FFMP.Controllers
             return View(await project_3Context.ToListAsync());
         }
 
+        // GET: Inspections of Object(id)
+        public async Task<IActionResult> ObjectsInspections(uint? id)
+        {
+            var objInspections = await _context.Inspections.Include(i => i.Object).Include(i => i.UserLoginNavigation).Where(x=>x.ObjectId == id).ToListAsync();
+            return View("ObjectsInspections", objInspections);
+        }
+
         // GET: Inspection/Details/5
         public async Task<IActionResult> Details(uint? id)
         {
@@ -48,9 +55,12 @@ namespace FFMP.Controllers
         // GET: Inspection/Create
         public IActionResult Create()
         {
+            
+            Inspection inspection = new Inspection();
             ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id");
             ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login");
-            return View();
+            return PartialView("_CreatePartialView", inspection);
+            
         }
 
         // POST: Inspection/Create
