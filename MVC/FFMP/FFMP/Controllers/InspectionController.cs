@@ -19,6 +19,26 @@ namespace FFMP.Controllers
             _context = context;
         }
 
+        public async Task<IActionResult> Start(string id)
+        {
+            //if (id == null || _context.Inspections == null)
+            //{
+            //    return NotFound();
+            //}
+
+            var inspection = await _context.Inspections
+                .Include(i => i.Object)
+                .Include(i => i.UserLoginNavigation)
+                .FirstOrDefaultAsync(m => m.UserLogin == id);
+            if (inspection == null)
+            {
+                return NotFound();
+            }
+
+            return View(inspection);
+        }
+        
+
         // GET: Inspection
         public async Task<IActionResult> Index(string SortOrder)
         {
