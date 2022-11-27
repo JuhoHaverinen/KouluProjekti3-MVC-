@@ -46,11 +46,30 @@ namespace FFMP.Controllers
         }
 
         // GET: AuditingLogs/Create
-        public IActionResult Create()
+        public IActionResult Create(uint id)
         {
-            ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id");
-            ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login");
-            return View();
+            var a = new AuditingLog();
+            a.ObjectId = id;
+            a.Object = _context.ObjectToChecks.FirstOrDefault(x => x.Id == id);
+            a.RequirementResults = new List<RequirementResult>();
+            a.Created = DateTime.Now;
+            a.UserLoginNavigation = _context.Users.FirstOrDefault();
+
+            var af = _context.AuditingForms.FirstOrDefault(x => x.TargetGroupId == a.Object.TargetGroupId);
+            var reqs = _context.Requirements.Where(x => x.AuditingAuditingId == af.AuditingId);
+
+            foreach (var r in reqs)
+            {
+                var rr = new RequirementResult();
+                rr.Description = r.Description;
+                rr.Must = r.Must;
+                rr.Result = false;
+                a.RequirementResults.Add(rr);
+            }
+            _context.Add(a);
+            _context.SaveChanges();
+
+            return RedirectToAction("Edit", "AuditingLogs", new { id = a.Id });
         }
 
         // POST: AuditingLogs/Create
@@ -58,7 +77,7 @@ namespace FFMP.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserLogin,ObjectId,Created,Description,Result")] AuditingLog auditingLog)
+        public async Task<IActionResult> Create(AuditingLog auditingLog)
         {
             _context.Add(auditingLog);
             await _context.SaveChangesAsync();
@@ -82,7 +101,7 @@ namespace FFMP.Controllers
                 return NotFound();
             }
 
-            var auditingLog = await _context.AuditingLogs.FindAsync(id);
+            var auditingLog = await _context.AuditingLogs.Include(x => x.RequirementResults).FirstOrDefaultAsync(x => x.Id == id);
             if (auditingLog == null)
             {
                 return NotFound();
@@ -104,29 +123,23 @@ namespace FFMP.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _context.Update(auditingLog);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AuditingLogExists(auditingLog.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(auditingLog);
+                await _context.SaveChangesAsync();
             }
-            ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id", auditingLog.ObjectId);
-            ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", auditingLog.UserLogin);
-            return View(auditingLog);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!AuditingLogExists(auditingLog.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: AuditingLogs/Delete/5

@@ -12,11 +12,11 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+            <div class="form-group" style="display:none;">
                 <label asp-for="UserLogin" class="control-label"></label>
                 <select asp-for="UserLogin" class ="form-control" asp-items="ViewBag.UserLogin"></select>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="display:none;">
                 <label asp-for="ObjectId" class="control-label"></label>
                 <select asp-for="ObjectId" class ="form-control" asp-items="ViewBag.ObjectId"></select>
             </div>
@@ -30,7 +30,7 @@
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="display:none;">
                 <label asp-for="Result" class="control-label"></label>
                 <input asp-for="Result" class="form-control" />
                 <span asp-validation-for="Result" class="text-danger"></span>
@@ -40,6 +40,41 @@
             </div>
         </form>
     </div>
+</div>
+<div class="row">
+    <h4>Auditing forms requirements</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Mandatory
+                </th>
+                <th>
+                    Result
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.RequirementResults)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Must)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Result)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
 </div>
 
 <div>

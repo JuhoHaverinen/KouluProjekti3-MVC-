@@ -94,35 +94,32 @@ namespace FFMP.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(uint id, [Bind("RequirementId,AuditingLogsId,Description,Must,Result")] RequirementResult requirementResult)
+        public async Task<IActionResult> PostEdit(uint id, [Bind("RequirementId,AuditingLogsId,Description,Must,Result")] RequirementResult requirementResult)
         {
             if (id != requirementResult.RequirementId)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _context.Update(requirementResult);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RequirementResultExists(requirementResult.RequirementId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                if (requirementResult.Result == null)
+                    requirementResult.Result = false;
+                _context.Update(requirementResult);
+                await _context.SaveChangesAsync();
             }
-            ViewData["AuditingLogsId"] = new SelectList(_context.AuditingLogs, "Id", "Id", requirementResult.AuditingLogsId);
-            return View(requirementResult);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!RequirementResultExists(requirementResult.RequirementId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction("Edit", "AuditingLogs", new { id = requirementResult.AuditingLogsId });
         }
 
         // GET: RequirementResults/Delete/5
