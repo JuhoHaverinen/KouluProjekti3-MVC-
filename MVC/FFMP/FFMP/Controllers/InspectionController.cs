@@ -70,12 +70,22 @@ namespace FFMP.Controllers
         }
 
         // GET: Inspection/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create(string id)
         {
-            
+            if (id == null || _context.Inspections == null)
+            {
+                return NotFound();
+            }
+
+            var loginUser = await _context.Inspections.FindAsync(id);
+            if (loginUser == null)
+            {
+                return NotFound();
+            }
             Inspection inspection = new Inspection();
+            inspection.UserLogin = loginUser.UserLogin;
             ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id");
-            ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login");
+            //ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login");
             return PartialView("_CreatePartialView", inspection);
             
         }
@@ -87,8 +97,10 @@ namespace FFMP.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,UserLogin,ObjectId,Timestamp,Reason,Observations,ChangeOfState,Inspectioncol")] Inspection inspection)
         {
+            
             if (ModelState.IsValid)
             {
+                
                 _context.Add(inspection);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

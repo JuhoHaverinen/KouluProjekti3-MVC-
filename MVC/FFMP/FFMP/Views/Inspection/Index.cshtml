@@ -6,7 +6,7 @@
 }
 
 <h1>List of all inspections</h1>
-</br>
+<br />
 
 @*<p>Show inspections of which object?</p></br>
   <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -44,7 +44,7 @@
                 @Html.DisplayNameFor(model => model.Observations)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ChangeOfState)
+                @Html.DisplayName("State")
             </th>
             <th>
             <a asp-action="Index" asp-route-sortOrder="@ViewData["ObjectSortParam"]">
@@ -55,7 +55,7 @@
                 @Html.DisplayNameFor(model => model.Object)
             </th>*@
             <th>
-                @Html.DisplayNameFor(model => model.UserLoginNavigation)
+                @Html.DisplayName("Creator")
             </th>
             <th></th>
         </tr>
@@ -72,9 +72,16 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Observations)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ChangeOfState)
-            </td>
+                <td>
+                    @if (item.ChangeOfState == true)
+                    {
+                        @Html.Raw("In order")
+                    }
+                    else if (item.ChangeOfState == false)
+                    {
+                        @Html.Raw("Out of order")
+                    }
+                </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Object.Name)
             </td>

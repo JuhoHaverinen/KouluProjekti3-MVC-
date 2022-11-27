@@ -25,13 +25,13 @@
                 @Html.DisplayNameFor(model => model.Observations)
             </th>*@
             <th>
-                @Html.DisplayNameFor(model => model.ChangeOfState)
+                @Html.DisplayName("State")
             </th>
             @*<th>
                 @Html.DisplayNameFor(model => model.Object)
             </th>*@
             <th>
-                @Html.DisplayNameFor(model => model.UserLoginNavigation)
+                @Html.DisplayName("Creator")
             </th>
             <th></th>
         </tr>
@@ -50,7 +50,14 @@
                     @Html.DisplayFor(modelItem => item.Observations)
                 </td>*@
                 <td>
-                    @Html.DisplayFor(modelItem => item.ChangeOfState)
+                    @if (item.ChangeOfState == true)
+                    {
+                        @Html.Raw("In order")
+                    }
+                    else if (item.ChangeOfState == false)
+                    {
+                        @Html.Raw("Out of order")
+                    }
                 </td>
                 @*<td>
                     @Html.DisplayFor(modelItem => item.Object.Name)
