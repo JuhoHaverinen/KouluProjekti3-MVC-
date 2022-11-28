@@ -9,6 +9,8 @@ using FFMP.Data;
 using System.Security.Cryptography;
 using System.Text;
 using NuGet.Protocol.Plugins;
+
+
 //using AspNetCore;
 
 namespace FFMP.Controllers
@@ -16,16 +18,20 @@ namespace FFMP.Controllers
     public class UsersController : Controller
     {
         private readonly project_3Context _context;
+        private readonly IHttpContextAccessor _cntxt;
 
-        public UsersController(project_3Context context)
+
+        public UsersController(project_3Context context, IHttpContextAccessor cntxt)
         {
             _context = context;
+            _cntxt = cntxt;
         }
 
         public IActionResult Login()
         {
             return View();
         }
+        
 
         // LOGIN CHECK
         [HttpPost]
@@ -40,8 +46,14 @@ namespace FFMP.Controllers
                 return View("Login");
 
             }
+            
+            
+            
             if (user.Admin == true && user.Active == true)
             {
+                _cntxt.HttpContext?.Session.SetString("username", user.Name);
+                _cntxt.HttpContext?.Session.SetString("userlogin", user.Login);
+                
                 user.LastLogin = DateTime.Now;
                 _context.Update(user);
                 await _context.SaveChangesAsync();
@@ -50,6 +62,8 @@ namespace FFMP.Controllers
             }
             else if (user.Admin == false && user.Active == true)
             {
+                _cntxt.HttpContext?.Session.SetString("username", user.Name);
+                _cntxt.HttpContext?.Session.SetString("userlogin", user.Login);
                 user.LastLogin = DateTime.Now;
                 _context.Update(user);
                 await _context.SaveChangesAsync();

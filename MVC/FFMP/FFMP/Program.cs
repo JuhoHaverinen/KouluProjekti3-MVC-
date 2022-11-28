@@ -1,4 +1,5 @@
 using FFMP.Data;
+using Microsoft.CodeAnalysis.Host.Mef;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,10 @@ options.UseMySql(connectionString, serverVersion));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDistributedMemoryCache(); // For session
+builder.Services.AddSession(); // For session
+
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); // For session
 
 var app = builder.Build();
 
@@ -22,6 +27,9 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseSession();  // For session
+
 app.UseStaticFiles();
 
 app.UseRouting();
