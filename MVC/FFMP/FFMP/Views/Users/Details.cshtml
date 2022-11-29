@@ -30,7 +30,7 @@
     </dl>
 </div>
 <div>
-        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="@("#editFUser-"+Model.Login)" data-bs-url="@Url.Action($"EditForUser/{Model.Login}")">Edit User</button>
+        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="@("#editFUser-"+Model?.Login)" data-bs-url="@Url.Action($"EditForUser/{Model?.Login}")">Edit User</button>
         @await Html.PartialAsync("_EditUserPartialView",Model)
     @*<a asp-action="EditForUser" asp-route-id="@Model?.Login">Edit account information</a> |*@
     <a asp-action="Index" asp-route-id="@Model?.Login">Back to main</a>

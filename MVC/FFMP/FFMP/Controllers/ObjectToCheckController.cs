@@ -13,10 +13,12 @@ namespace FFMP.Controllers
     public class ObjectToCheckController : Controller
     {
         private readonly project_3Context _context;
+        private readonly IHttpContextAccessor _cntxt;
 
-        public ObjectToCheckController(project_3Context context)
+        public ObjectToCheckController(project_3Context context, IHttpContextAccessor cntxt)
         {
             _context = context;
+            _cntxt = cntxt;
         }
 
         // GET: ObjectToCheck
@@ -44,6 +46,23 @@ namespace FFMP.Controllers
             }
 
             return View(objectToCheck);
+        }
+        // POST: InspectionCreate
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateInspection([Bind("Id,UserLogin,ObjectId,Timestamp,Reason,Observations,ChangeOfState,Inspectioncol")] Inspection inspection)
+        {
+
+            if (ModelState.IsValid)
+            {
+                inspection.UserLogin = _cntxt!.HttpContext.Session.GetString("userlogin").ToString();
+                _context.Add(inspection);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            //ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id", inspection.ObjectId);
+            //ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", inspection.UserLogin);
+            return View(inspection);
         }
 
         // GET: ObjectToCheck/Create

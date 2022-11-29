@@ -8,15 +8,18 @@ using Microsoft.EntityFrameworkCore;
 using FFMP.Data;
 using Microsoft.Data.SqlClient;
 
+
 namespace FFMP.Controllers
 {
     public class InspectionController : Controller
     {
         private readonly project_3Context _context;
+        private readonly IHttpContextAccessor _cntxt;
 
-        public InspectionController(project_3Context context)
+        public InspectionController(project_3Context context, IHttpContextAccessor cntxt)
         {
             _context = context;
+            _cntxt = cntxt;
         }
 
         public async Task<IActionResult> Start(string id)
@@ -90,20 +93,19 @@ namespace FFMP.Controllers
         }
 
         // GET: Inspection/Create
-        public async Task<IActionResult> Create(string id)
+        public IActionResult Create(string id)
         {
-            if (id == null || _context.Inspections == null)
-            {
-                return NotFound();
-            }
+            //if (id == null || _context.Inspections == null)
+            //{
+            //    return NotFound();
+            //}
 
-            var loginUser = await _context.Inspections.FindAsync(id);
-            if (loginUser == null)
-            {
-                return NotFound();
-            }
+            //var loginUser = await _context.Inspections.Where(x => x.UserLogin == id).FirstOrDefaultAsync();
+            //if (loginUser == null)
+            //{
+            //    return NotFound();
+            //}
             Inspection inspection = new Inspection();
-            inspection.UserLogin = loginUser.UserLogin;
             ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id");
             //ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login");
             return PartialView("_CreatePartialView", inspection);
@@ -120,13 +122,13 @@ namespace FFMP.Controllers
             
             if (ModelState.IsValid)
             {
-                
+                inspection.UserLogin = _cntxt!.HttpContext.Session.GetString("userlogin").ToString();
                 _context.Add(inspection);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id", inspection.ObjectId);
-            ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", inspection.UserLogin);
+            //ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id", inspection.ObjectId);
+            //ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", inspection.UserLogin);
             return View(inspection);
         }
 

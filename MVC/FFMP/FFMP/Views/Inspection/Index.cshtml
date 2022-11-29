@@ -1,4 +1,5 @@
 @model IEnumerable<FFMP.Data.Inspection>
+@inject IHttpContextAccessor _contxt;
 @using FFMP.Data
 
 @{
@@ -7,19 +8,6 @@
 
 <h1>List of all inspections</h1>
 <br />
-
-@*<p>Show inspections of which object?</p></br>
-  <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <a asp-action="Index" asp-route-objId="@o.ObjectId">
-                    <select asp-for="@Model.Id">
-                        @foreach(var o in Model)
-                {    
-                <option value="@o.Object.Id" @*"@Html.DisplayFor(model => o.Object.Id)"@*/>@o.Object.Name</option>
-                
-                    </a>
-                }
-                    </select>*@
                 
 
 <p>

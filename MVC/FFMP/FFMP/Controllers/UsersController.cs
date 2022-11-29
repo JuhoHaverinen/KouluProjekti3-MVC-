@@ -11,6 +11,7 @@ using System.Text;
 using NuGet.Protocol.Plugins;
 
 
+
 //using AspNetCore;
 
 namespace FFMP.Controllers
@@ -53,7 +54,8 @@ namespace FFMP.Controllers
             {
                 _cntxt.HttpContext?.Session.SetString("username", user.Name);
                 _cntxt.HttpContext?.Session.SetString("userlogin", user.Login);
-                
+               
+
                 user.LastLogin = DateTime.Now;
                 _context.Update(user);
                 await _context.SaveChangesAsync();
@@ -152,7 +154,6 @@ namespace FFMP.Controllers
             if (ModelState.IsValid)
             {
                 user.Password = HashSh1(user.Password);
-
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(IndexUsers));
