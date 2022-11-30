@@ -50,19 +50,27 @@ namespace FFMP.Controllers
         // POST: InspectionCreate
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateInspection([Bind("Id,UserLogin,ObjectId,Timestamp,Reason,Observations,ChangeOfState,Inspectioncol")] Inspection inspection)
+        public async Task<IActionResult> CreateInspection([Bind("Id,UserLogin,ObjectId,/*Timestamp*/,Reason,Observations,ChangeOfState,Inspectioncol")] Inspection inspection)
         {
-
-            if (ModelState.IsValid)
+            var insp = new Inspection();
+            insp.UserLogin = _cntxt!.HttpContext.Session.GetString("userlogin");
+            insp.ObjectId = inspection.ObjectId;
+            insp.Reason = inspection.Reason;
+            insp.Observations = inspection.Observations;
+            insp.ChangeOfState = inspection.ChangeOfState;
+            insp.Inspectioncol = inspection.Inspectioncol;
+            
+            
+            if (insp != null) /*ModelState.IsValid*/
             {
-                inspection.UserLogin = _cntxt!.HttpContext.Session.GetString("userlogin").ToString();
-                _context.Add(inspection);
+                
+                _context.Add(insp);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(InspectionController.Index), "Inspection");
             }
             //ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id", inspection.ObjectId);
             //ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", inspection.UserLogin);
-            return View(inspection);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: ObjectToCheck/Create

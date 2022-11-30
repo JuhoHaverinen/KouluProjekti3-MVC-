@@ -69,8 +69,8 @@
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                     @*<a asp-action="Create" asp-route-id="@item.Id">Create a new inspection</a>*@
-                    <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="@("#createInspection-"+item.ObjectId)" data-bs-url="@Url.Action($"Create/{item.ObjectId}")">Create Inspection</button>
-                    @await Html.PartialAsync("_CreatePartialView", new Inspection())
+                    @*<button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="@("#createInspection-"+item.ObjectId)" data-bs-url="@Url.Action($"Create/{item.ObjectId}")">Create Inspection</button>
+                    @await Html.PartialAsync("_CreatePartialView", new Inspection())*@
                   
                 </td>
             </tr>
