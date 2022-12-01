@@ -6,6 +6,12 @@
     ViewData["Title"] = "Index";
 }
 
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_Navbar");
+    }
+    }
+
 <h1>List of all inspections</h1>
 <br />
                 

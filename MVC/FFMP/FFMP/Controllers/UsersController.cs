@@ -54,7 +54,8 @@ namespace FFMP.Controllers
             {
                 _cntxt.HttpContext?.Session.SetString("username", user.Name);
                 _cntxt.HttpContext?.Session.SetString("userlogin", user.Login);
-               
+                _cntxt.HttpContext?.Session.SetString("onadmin", "Admin");
+
 
                 user.LastLogin = DateTime.Now;
                 _context.Update(user);
@@ -66,6 +67,8 @@ namespace FFMP.Controllers
             {
                 _cntxt.HttpContext?.Session.SetString("username", user.Name);
                 _cntxt.HttpContext?.Session.SetString("userlogin", user.Login);
+                _cntxt.HttpContext?.Session.SetString("onuser", "User");
+
                 user.LastLogin = DateTime.Now;
                 _context.Update(user);
                 await _context.SaveChangesAsync();
