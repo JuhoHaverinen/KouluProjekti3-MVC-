@@ -21,9 +21,14 @@
                         </div>
                         <div class="form-group">
                             <label asp-for="Password" class="control-label"></label>
-                        <input asp-for="Password" class="form-control" />
+                        <input asp-for="Password" type="password" id="p1" class="form-control" />
                             <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
+                    <div class="form-group">
+                        <label class="control-label">P2</label>
+                        <input type="password" id="p2" class="form-control" />
+
+                    </div>
                         <div class="form-group" style="display: none">
                             <label asp-for="Created" class="control-label"></label>
                             <input asp-for="Created" class="form-control" />
@@ -55,7 +60,7 @@
                         <br />
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" id="save" class="btn btn-primary">Save</button>
                         </div>
 
                     </form>
@@ -67,3 +72,10 @@
   @*  <div>
         <a asp-action="Index" asp-route-id="@Model.Login">Cancel</a>
     </div>*@
+        
+    
+
+   
+
+       
+   
