@@ -43,13 +43,17 @@ namespace FFMP.Controllers
         
 
         // GET: Inspection
-        public async Task<IActionResult> Index(string SortOrder)
+        public async Task<IActionResult> Index(string SortOrder, string searchByCreator)
         {
             var inspections = await _context.Inspections.Include(i => i.Object).Include(i => i.UserLoginNavigation).ToListAsync();
 
             ViewData["TimestampSortParam"] = String.IsNullOrEmpty(SortOrder) ? "timestamp_sort" : "";
             ViewData["ObjectSortParam"] = SortOrder == "" ? "object_sort" : "object_sort";
 
+            if(!String.IsNullOrEmpty(searchByCreator))
+            {
+                inspections = await _context.Inspections.Include(i => i.Object).Include(i => i.UserLoginNavigation).Where(i => i.UserLogin.Contains(searchByCreator)).ToListAsync();
+            }
             switch (SortOrder)
             {
 

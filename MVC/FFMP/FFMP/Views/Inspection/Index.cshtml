@@ -20,6 +20,13 @@
     <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="@("#createInspection")" data-bs-url="@Url.Action($"Create")">Create Inspection</button>
     @await Html.PartialAsync("_CreatePartialView", new Inspection())
 </p>*@
+    @using (Html.BeginForm())
+    {
+        <p>
+            Find by Creator: @Html.TextBox("searchByCreator")
+            <input type="submit" value="Search" />
+        </p>
+    }
 <table class="table">
     <thead>
         <tr>
@@ -80,7 +87,7 @@
                 @Html.DisplayFor(modelItem => item.Object.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UserLoginNavigation.Login)
+                @Html.DisplayFor(modelItem => item.UserLoginNavigation.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
