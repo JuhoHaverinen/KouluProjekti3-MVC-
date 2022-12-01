@@ -81,6 +81,12 @@ namespace FFMP.Controllers
 
         }
 
+        public async Task<IActionResult> Logout()
+        {
+            _cntxt.HttpContext.Session.Clear();
+            return View("Login");
+        }
+
         // GET: Users
         public async Task<IActionResult> IndexUsers(string SortOrder)
         {
