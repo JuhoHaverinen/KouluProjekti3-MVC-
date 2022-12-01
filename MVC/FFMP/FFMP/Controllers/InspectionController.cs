@@ -144,7 +144,11 @@ namespace FFMP.Controllers
                 return NotFound();
             }
 
-            var inspection = await _context.Inspections.FindAsync(id);
+            //var inspection = await _context.Inspections.FindAsync(id);
+            var inspection = await _context.Inspections
+                .Include(i => i.Object)
+                .Include(i => i.UserLoginNavigation)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (inspection == null)
             {
                 return NotFound();
