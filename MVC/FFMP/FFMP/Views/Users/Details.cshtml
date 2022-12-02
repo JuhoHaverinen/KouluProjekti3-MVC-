@@ -9,25 +9,36 @@
     @{
         await Html.RenderPartialAsync("_Navbar");
     <script type="text/javascript">
-                $(document).ready(function () {
-                    console.log("asdf");
+                            $(document).ready(function () {
+                                $('#p2').keyup(function () {
+                                    var Password = $('#p1').val();
+                                    var ConfirmPassword = $('#p2').val();
+                                    //console.log('working :' + Password + ' ' + ConfirmPassword);
+                               
+                                    if (Password == ConfirmPassword) {
+                                      $('#save').prop('disabled', false);
+                                $('#nomatch').text("");
+                                    }
+                                    else {
+                                $('#save').prop('disabled', true);
+                                      $('#nomatch').text("Passwords need to match");                           
+                                    }
+                                });
 
-                    $('#p2').keyup(function () {
-                        var Password = $('#p1').val();
-                        var ConfirmPassword = $('#p2').val();
-                        console.log('working :' + Password + ' ' + ConfirmPassword);
-                    });
-                    $("#save").click(function () {
-                        if (Password == ConfirmPassword) {
-                        }
-                        else {
-                            alert("The passwords are not the same");
-                            break;
-                        }
-                    });
+                        $('#p1').keyup(function () {
+                            var Password = $('#p1').val();
+                            var ConfirmPassword = $('#p2').val();
 
-
-                });
+                            if (Password == ConfirmPassword) {
+                                $('#save').prop('disabled', false);
+                        $('#nomatch').text("");
+                            }
+                            else {
+                                $('#save').prop('disabled', true);
+                        $('#nomatch').text("Passwords need to match");
+                    }
+                        });
+                            });
     </script>
 
 
