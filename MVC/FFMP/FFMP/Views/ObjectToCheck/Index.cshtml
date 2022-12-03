@@ -11,9 +11,11 @@
 
 <h1>Objects</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+    <form asp-action="Create">
+        <input type="submit" value="Create New" class="btn btn-primary" formmethod="get" />
+    </form>
+
+
 <table class="table">
     <thead>
         <tr>
@@ -45,7 +47,7 @@
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     @* <a asp-action="Details" asp-route-id="@item.Id">Details</a> | *@
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
-                    <a asp-action="Create" asp-controller="AuditingLogs" asp-route-id="@item.Id">Audit</a> <br />
+                    <a asp-action="Index" asp-controller="AuditingLogs" asp-route-id="@item.Id">Auditings</a> <br />
                     <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="@("#createInspection-"+item.Id)" data-bs-url="@Url.Action($"CreateInspection/{item.Id}")">Create Inspection</button>
                     @await Html.PartialAsync("_CreatePartialView", new Inspection{ObjectId = item.Id})
                     

@@ -3,6 +3,14 @@
 @{
     ViewData["Title"] = "Create";
 }
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_Navbar");
+    }
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }
 
 <h1>Create</h1>
 
@@ -78,9 +86,6 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <input onclick="history.back()" type="button" value="Back" class="btn btn-info" />
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

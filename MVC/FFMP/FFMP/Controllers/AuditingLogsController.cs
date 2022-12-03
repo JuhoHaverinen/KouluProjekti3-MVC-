@@ -19,10 +19,19 @@ namespace FFMP.Controllers
         }
 
         // GET: AuditingLogs
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(uint? id)
         {
-            var project_3Context = _context.AuditingLogs.Include(a => a.Object).Include(a => a.UserLoginNavigation);
-            return View(await project_3Context.ToListAsync());
+            var project_3Context = id != null ? _context.AuditingLogs.Include(a => a.Object).Include(a => a.UserLoginNavigation).Where(x => x.ObjectId == id) : _context.AuditingLogs.Include(a => a.Object).Include(a => a.UserLoginNavigation);
+
+            var a = await project_3Context.ToListAsync();
+            if (!a.Any())
+            {
+                var al = new AuditingLog();
+                al.ObjectId = id.Value;
+                a.Add(al);
+            }
+                
+            return View(a);
         }
 
         // GET: AuditingLogs/Details/5
@@ -125,6 +134,14 @@ namespace FFMP.Controllers
 
             try
             {
+                var rr = _context.RequirementResults.Where(x => x.AuditingLogsId == auditingLog.Id).ToList();
+                auditingLog.Result = "OK";
+                foreach (var r in rr)
+                {
+                    if (r.Result == false)
+                        auditingLog.Result = "NOT OK";
+                }
+
                 _context.Update(auditingLog);
                 await _context.SaveChangesAsync();
             }
@@ -139,7 +156,7 @@ namespace FFMP.Controllers
                     throw;
                 }
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "AuditingLogs", new { id = auditingLog.ObjectId });
         }
 
         // GET: AuditingLogs/Delete/5
@@ -174,6 +191,10 @@ namespace FFMP.Controllers
             var auditingLog = await _context.AuditingLogs.FindAsync(id);
             if (auditingLog != null)
             {
+                foreach (var r in auditingLog.RequirementResults)
+                {
+                    _context.RequirementResults.Remove(r);
+                }
                 _context.AuditingLogs.Remove(auditingLog);
             }
 

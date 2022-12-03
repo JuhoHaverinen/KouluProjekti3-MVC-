@@ -12,9 +12,11 @@
 
 <h1>Auditing form management</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
+    <form asp-action="Create">
+        <input type="submit" value="Create New" class="btn btn-primary" formmethod="get" />
+    </form>
+
 <table class="table">
     <thead>
         <tr>

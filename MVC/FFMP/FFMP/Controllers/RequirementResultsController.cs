@@ -103,9 +103,26 @@ namespace FFMP.Controllers
 
             try
             {
+
                 if (requirementResult.Result == null)
                     requirementResult.Result = false;
                 _context.Update(requirementResult);
+
+                var rr = _context.RequirementResults.Where(x => x.AuditingLogsId == requirementResult.AuditingLogsId).ToList();
+                bool? result = true;
+                foreach (var r in rr)
+                {
+                    if (r.Result == null) { 
+                        result = null;
+                        break;
+                    }
+                    if (r.Result == false)
+                    {
+                        result = false;
+                    }
+                }
+                var a = _context.AuditingLogs.First(x => x.Id == requirementResult.AuditingLogsId);
+                a.Result = result == false ? "NOT OK" : result == true ? "OK" : null;
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
