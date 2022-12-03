@@ -11,9 +11,12 @@
 
 <h1>Auditin Log</h1>
 
+@if (Model.FirstOrDefault().ObjectId != 0)
+{
     <form asp-action="Create" asp-route-id="@Model.FirstOrDefault().ObjectId">
         <input type="submit" value="Create New" class="btn btn-primary" formmethod="get" />
     </form>
+}
 
 
 <table class="table">

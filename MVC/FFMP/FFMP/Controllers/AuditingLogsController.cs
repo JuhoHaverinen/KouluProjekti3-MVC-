@@ -27,7 +27,7 @@ namespace FFMP.Controllers
             if (!a.Any())
             {
                 var al = new AuditingLog();
-                al.ObjectId = id.Value;
+                al.ObjectId = id == null ? 0 : id.Value;
                 a.Add(al);
             }
                 
@@ -188,7 +188,7 @@ namespace FFMP.Controllers
             {
                 return Problem("Entity set 'project_3Context.AuditingLogs'  is null.");
             }
-            var auditingLog = await _context.AuditingLogs.FindAsync(id);
+            var auditingLog = await _context.AuditingLogs.Include(x => x.RequirementResults).FirstOrDefaultAsync(x => x.Id == id);
             if (auditingLog != null)
             {
                 foreach (var r in auditingLog.RequirementResults)
