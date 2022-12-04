@@ -12,15 +12,21 @@ namespace FFMP.Controllers
     public class AuditingLogsController : Controller
     {
         private readonly project_3Context _context;
+        private readonly IHttpContextAccessor _ctx;
 
-        public AuditingLogsController(project_3Context context)
+        public AuditingLogsController(project_3Context context, IHttpContextAccessor ctx)
         {
             _context = context;
+            _ctx = ctx;
         }
 
-        // GET: AuditingLogs
+        // GET: AuditingLogs       
         public async Task<IActionResult> Index(uint? id)
         {
+
+            if (!UsersController.UserAuthenticated(_ctx))
+                return RedirectToAction("Login", "Users");
+
             var project_3Context = id != null ? _context.AuditingLogs.Include(a => a.Object).Include(a => a.UserLoginNavigation).Where(x => x.ObjectId == id) : _context.AuditingLogs.Include(a => a.Object).Include(a => a.UserLoginNavigation);
 
             var a = await project_3Context.ToListAsync();
@@ -29,6 +35,10 @@ namespace FFMP.Controllers
                 var al = new AuditingLog();
                 al.ObjectId = id == null ? 0 : id.Value;
                 a.Add(al);
+            }
+            else if (id == null)
+            {
+                a[0].ObjectId = 0;
             }
                 
             return View(a);
@@ -72,7 +82,6 @@ namespace FFMP.Controllers
                 var rr = new RequirementResult();
                 rr.Description = r.Description;
                 rr.Must = r.Must;
-                rr.Result = false;
                 a.RequirementResults.Add(rr);
             }
             _context.Add(a);
@@ -138,7 +147,11 @@ namespace FFMP.Controllers
                 auditingLog.Result = "OK";
                 foreach (var r in rr)
                 {
-                    if (r.Result == false)
+                    if (r.Result == null) { 
+                        auditingLog.Result = "INCOMPLETE";
+                        break;
+                    }
+                    if (r.Result == false && r.Must)
                         auditingLog.Result = "NOT OK";
                 }
 

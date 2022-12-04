@@ -13,15 +13,19 @@ namespace FFMP.Controllers
     public class AuditingFormsController : Controller
     {
         private readonly project_3Context _context;
-
-        public AuditingFormsController(project_3Context context)
+        private readonly IHttpContextAccessor _ctx;
+        public AuditingFormsController(project_3Context context, IHttpContextAccessor ctx)
         {
             _context = context;
+            _ctx = ctx;
         }
 
         // GET: AuditingForms
         public async Task<IActionResult> Index()
         {
+            if (!UsersController.UserAuthenticatedAdmin(_ctx))
+                return RedirectToAction("Login", "Users");
+
             var project_3Context = _context.AuditingForms.Include(a => a.TargetGroup).Include(a => a.UserLoginNavigation);
             return View(await project_3Context.ToListAsync());
         }

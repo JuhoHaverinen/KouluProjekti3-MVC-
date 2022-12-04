@@ -30,6 +30,10 @@ namespace FFMP.Controllers
 
         public IActionResult Login()
         {
+
+            if (UserAuthenticated(_cntxt))
+                return View("AdminLanding/Index");
+
             return View();
         }
         
@@ -341,6 +345,23 @@ namespace FFMP.Controllers
         private bool UserExists(string id)
         {
             return _context.Users.Any(e => e.Login == id);
+        }
+        public static bool UserAuthenticated(IHttpContextAccessor accessor)
+        {
+            var user = accessor.HttpContext?.Session.GetString("username");
+            if (user == null)
+                return false;
+            return true;
+        }
+        public static bool UserAuthenticatedAdmin(IHttpContextAccessor accessor)
+        {
+            var user = accessor.HttpContext?.Session.GetString("username");
+            if (user == null)
+                return false;
+            var admin = accessor.HttpContext?.Session.GetString("onadmin");
+            if (admin == null || admin != "Admin")
+                return false;
+            return true;
         }
 
 

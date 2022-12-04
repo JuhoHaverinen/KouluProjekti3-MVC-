@@ -4,6 +4,8 @@
     ViewData["Title"] = "Edit";
 }
 @section Scripts {
+
+
     @{
         await Html.RenderPartialAsync("_Navbar");
     }
@@ -11,7 +13,33 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     }
-
+    <script>
+        function ok(reqId) {
+            console.log("OK");
+            $("#Result-" + reqId).val("True");
+            $("#Save-" + reqId).click();
+            return false;
+        }
+        function notOk(reqId) {
+            debugger
+            console.log("Not OK");
+            $("#Result-" + reqId).val("False");
+            $("#Save-" + reqId).click();
+            return false;
+        }
+    </script>
+    <style>
+       .ok-True{
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+         .nok-False{
+             color: #fff;
+             background-color: #007bff;
+             border-color: #007bff;
+         }
+    </style>
 <h1>Edit</h1>
 
 <h4>AuditingLog</h4>
@@ -85,9 +113,11 @@
 
                             <input style="display:none;" type="checkbox" checked='@item.Must' name='Must' value='@item.Must.ToString().ToLower()' />
 
-                            <input name='Result' value='@item.Result.ToString()' />
-                                
-                                <input type="submit" value="Save" class="btn btn-primary" />
+                            <input style="display:none;" name='Result' id="Result-@item.RequirementId" value='@item.Result.ToString()' />
+                            <button class="btn ok-@item.Result.ToString()" onclick="ok(@item.RequirementId)">Ok</button>
+                            <button class="btn nok-@item.Result.ToString()" onclick="notOk(@item.RequirementId)">Not Ok</button>
+
+                            <input style="display:none;" id="Save-@item.RequirementId" type="submit" value="Save" class="btn btn-primary" />
                                 </form>
                             </td>
                         </tr>
@@ -97,5 +127,7 @@
 </div>
 
 <div>
-    <input onclick="history.back()" type="button" value="Back" class="btn btn-info" /> 
+    <form asp-action="Index" asp-route-id="@Model.ObjectId">
+        <input type="submit" value="Back" class="btn btn-info" formmethod="get" />
+    </form>
 </div>

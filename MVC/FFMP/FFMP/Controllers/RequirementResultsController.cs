@@ -116,13 +116,13 @@ namespace FFMP.Controllers
                         result = null;
                         break;
                     }
-                    if (r.Result == false)
+                    if (r.Result == false && r.Must)
                     {
                         result = false;
                     }
                 }
                 var a = _context.AuditingLogs.First(x => x.Id == requirementResult.AuditingLogsId);
-                a.Result = result == false ? "NOT OK" : result == true ? "OK" : null;
+                a.Result = result == false ? "NOT OK" : result == true ? "OK" : "INCOMPLETE";
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
