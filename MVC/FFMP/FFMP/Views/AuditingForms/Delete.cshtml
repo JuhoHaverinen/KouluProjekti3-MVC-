@@ -3,6 +3,11 @@
 @{
     ViewData["Title"] = "Delete";
 }
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_Navbar");
+    }
+    }
 
 <h1>Delete</h1>
 
@@ -40,6 +45,6 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="AuditingId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input onclick="history.back()" type="button" value="Back" class="btn btn-info" />
     </form>
 </div>

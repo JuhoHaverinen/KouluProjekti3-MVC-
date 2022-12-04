@@ -3,6 +3,14 @@
 @{
     ViewData["Title"] = "Create";
 }
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_Navbar");
+    }
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }
 
 <h1>Create</h1>
 
@@ -36,7 +44,3 @@
 <div>
     <a asp-action="Edit" asp-controller="AuditingForms" asp-route-id=@Model.AuditingAuditingId></a>
 </div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

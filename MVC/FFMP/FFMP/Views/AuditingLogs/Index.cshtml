@@ -3,12 +3,22 @@
 @{
     ViewData["Title"] = "Index";
 }
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_Navbar");
+    }
+    }
 
-<h1>Index</h1>
+<h1>Auditin Log</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (Model.FirstOrDefault().ObjectId != 0)
+{
+    <form asp-action="Create" asp-route-id="@Model.FirstOrDefault().ObjectId">
+        <input type="submit" value="Create New" class="btn btn-primary" formmethod="get" />
+    </form>
+}
+
+
 <table class="table">
     <thead>
         <tr>
@@ -46,11 +56,10 @@
                 @Html.DisplayFor(modelItem => item.UserLoginNavigation.Login)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Object.Id)
+                @Html.DisplayFor(modelItem => item.Object.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>

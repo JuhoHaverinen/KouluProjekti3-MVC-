@@ -12,17 +12,36 @@ namespace FFMP.Controllers
     public class AuditingLogsController : Controller
     {
         private readonly project_3Context _context;
+        private readonly IHttpContextAccessor _ctx;
 
-        public AuditingLogsController(project_3Context context)
+        public AuditingLogsController(project_3Context context, IHttpContextAccessor ctx)
         {
             _context = context;
+            _ctx = ctx;
         }
 
-        // GET: AuditingLogs
-        public async Task<IActionResult> Index()
+        // GET: AuditingLogs       
+        public async Task<IActionResult> Index(uint? id)
         {
-            var project_3Context = _context.AuditingLogs.Include(a => a.Object).Include(a => a.UserLoginNavigation);
-            return View(await project_3Context.ToListAsync());
+
+            if (!UsersController.UserAuthenticated(_ctx))
+                return RedirectToAction("Login", "Users");
+
+            var project_3Context = id != null ? _context.AuditingLogs.Include(a => a.Object).Include(a => a.UserLoginNavigation).Where(x => x.ObjectId == id) : _context.AuditingLogs.Include(a => a.Object).Include(a => a.UserLoginNavigation);
+
+            var a = await project_3Context.ToListAsync();
+            if (!a.Any())
+            {
+                var al = new AuditingLog();
+                al.ObjectId = id == null ? 0 : id.Value;
+                a.Add(al);
+            }
+            else if (id == null)
+            {
+                a[0].ObjectId = 0;
+            }
+                
+            return View(a);
         }
 
         // GET: AuditingLogs/Details/5
@@ -63,7 +82,6 @@ namespace FFMP.Controllers
                 var rr = new RequirementResult();
                 rr.Description = r.Description;
                 rr.Must = r.Must;
-                rr.Result = false;
                 a.RequirementResults.Add(rr);
             }
             _context.Add(a);
@@ -125,6 +143,18 @@ namespace FFMP.Controllers
 
             try
             {
+                var rr = _context.RequirementResults.Where(x => x.AuditingLogsId == auditingLog.Id).ToList();
+                auditingLog.Result = "OK";
+                foreach (var r in rr)
+                {
+                    if (r.Result == null) { 
+                        auditingLog.Result = "INCOMPLETE";
+                        break;
+                    }
+                    if (r.Result == false && r.Must)
+                        auditingLog.Result = "NOT OK";
+                }
+
                 _context.Update(auditingLog);
                 await _context.SaveChangesAsync();
             }
@@ -139,7 +169,7 @@ namespace FFMP.Controllers
                     throw;
                 }
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "AuditingLogs", new { id = auditingLog.ObjectId });
         }
 
         // GET: AuditingLogs/Delete/5
@@ -171,9 +201,13 @@ namespace FFMP.Controllers
             {
                 return Problem("Entity set 'project_3Context.AuditingLogs'  is null.");
             }
-            var auditingLog = await _context.AuditingLogs.FindAsync(id);
+            var auditingLog = await _context.AuditingLogs.Include(x => x.RequirementResults).FirstOrDefaultAsync(x => x.Id == id);
             if (auditingLog != null)
             {
+                foreach (var r in auditingLog.RequirementResults)
+                {
+                    _context.RequirementResults.Remove(r);
+                }
                 _context.AuditingLogs.Remove(auditingLog);
             }
 
