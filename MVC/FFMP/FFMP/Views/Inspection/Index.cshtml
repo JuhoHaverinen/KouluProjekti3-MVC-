@@ -90,7 +90,9 @@
                 @Html.DisplayFor(modelItem => item.UserLoginNavigation.Name)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
+                    <button type="button" class="btn btn-info" id="change" data-bs-toggle="modal" data-bs-target="@("#editInsp-"+item.Id)" data-bs-url="@Url.Action($"Edit/{item.Id}")">Edit</button>
+                    @await Html.PartialAsync("_EditPartialView", item)
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |<br />
                 <a asp-action="ObjectsInspections" asp-route-id=@item.ObjectId>Show only inspections of this object</a>

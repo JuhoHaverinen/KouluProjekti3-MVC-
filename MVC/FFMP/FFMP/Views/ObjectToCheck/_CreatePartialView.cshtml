@@ -30,8 +30,8 @@
                     <div class="form-group">
                         <label asp-for="Reason" class="control-label"></label>
                         <select asp-for="Reason" id="selectReason" class="form-control">
-                            <option value="Tarkastus">Tarkastus</option>
-                            <option value="Huolto">Huolto</option>
+                            <option value="Inspection">Inspection</option>
+                            <option value="Maintenance">Maintenance</option>
                         </select>
                         <span asp-validation-for="Reason" class="text-danger"></span>
                     </div>
@@ -43,8 +43,8 @@
                     <div class="form-group">
                         <label class="control-label">State</label>
                         <select asp-for="ChangeOfState" id="selectState" class="form-control">
-                        <option value="True">Kunnossa</option>
-                        <option value="False">Epäkunnossa</option>
+                        <option value="True">In Order</option>
+                        <option value="False">Out Of Order</option>
                         </select>
                         <span asp-validation-for="ChangeOfState" class="text-danger"></span>
                     </div>
