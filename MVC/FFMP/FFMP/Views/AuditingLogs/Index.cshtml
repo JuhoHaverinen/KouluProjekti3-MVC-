@@ -9,8 +9,9 @@
     }
     }
 
-<h1>Auditin Log</h1>
-
+<h1>Auditing Logs</h1>
+<hr />
+<br />
 @if (Model.FirstOrDefault().ObjectId != 0)
 {
     <form asp-action="Create" asp-route-id="@Model.FirstOrDefault().ObjectId">

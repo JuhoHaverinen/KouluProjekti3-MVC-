@@ -5,6 +5,12 @@
     ViewData["Title"] = "ObjectsInspections";
 }
 
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_Navbar");
+    }
+    }
+
 @{
     int i = 0;
 }
@@ -93,3 +99,5 @@
         }
     </tbody>
 </table>
+
+<a asp-action="Index">Back to List</a>
