@@ -10,9 +10,9 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_Navbar");}
 }
-
-
-
+<h1>List of users</h1>
+<hr />
+<br />
 <p>
     <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="@("#createUser")" data-bs-url="@Url.Action($"Create")">Create User</button>
      @await Html.PartialAsync("_CreatePartialView", new User())
