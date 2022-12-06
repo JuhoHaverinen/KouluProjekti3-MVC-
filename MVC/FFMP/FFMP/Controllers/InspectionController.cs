@@ -21,34 +21,16 @@ namespace FFMP.Controllers
             _context = context;
             _cntxt = cntxt;
         }
-
-        public async Task<IActionResult> Start(string id)
-        {
-            //if (id == null || _context.Inspections == null)
-            //{
-            //    return NotFound();
-            //}
-
-            var inspection = await _context.Inspections
-                .Include(i => i.Object)
-                .Include(i => i.UserLoginNavigation)
-                .FirstOrDefaultAsync(m => m.UserLogin == id);
-            if (inspection == null)
-            {
-                return NotFound();
-            }
-
-            return View(inspection);
-        }
         
 
         // GET: Inspection
         public async Task<IActionResult> Index(string SortOrder, string searchByCreator)
         {
+            ViewData["TimestampSortParam"] = String.IsNullOrEmpty(SortOrder) ? "timestamp_sort" : "";
+            ViewData["ObjectSortParam"] = SortOrder == "object_sort" ? "object_sort_desc" : "object_sort";
+
             var inspections = await _context.Inspections.Include(i => i.Object).Include(i => i.UserLoginNavigation).ToListAsync();
 
-            ViewData["TimestampSortParam"] = String.IsNullOrEmpty(SortOrder) ? "timestamp_sort" : "";
-            ViewData["ObjectSortParam"] = SortOrder == "" ? "object_sort" : "object_sort";
 
             if(!String.IsNullOrEmpty(searchByCreator))
             {
@@ -58,12 +40,17 @@ namespace FFMP.Controllers
             {
 
                 case "timestamp_sort":
-                    inspections = await _context.Inspections.Include(i => i.Object).Include(i => i.UserLoginNavigation).OrderByDescending(i => i.Timestamp).ToListAsync();
+                    inspections = inspections.OrderByDescending(i => i.Timestamp).ToList();
                     break;
                 case "object_sort":
-                    inspections = await _context.Inspections.Include(i => i.Object).Include(i => i.UserLoginNavigation).OrderBy(i => i.ObjectId).ToListAsync();
+                    inspections = inspections.OrderBy(i => i.ObjectId).ToList();
                     break;
-
+                case "object_sort_desc":
+                    inspections = inspections.OrderByDescending(i => i.ObjectId).ToList();
+                    break;
+                default:
+                    inspections = inspections.OrderBy(i => i.Timestamp).ToList();
+                    break;
             }
 
             return View(inspections);
