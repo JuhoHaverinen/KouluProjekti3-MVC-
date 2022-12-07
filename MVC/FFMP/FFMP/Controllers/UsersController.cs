@@ -353,6 +353,11 @@ namespace FFMP.Controllers
                 return false;
             return true;
         }
+        public static string? GetUser(IHttpContextAccessor accessor)
+        {
+            return accessor.HttpContext?.Session.GetString("username");
+
+        }
         public static bool UserAuthenticatedAdmin(IHttpContextAccessor accessor)
         {
             var user = accessor.HttpContext?.Session.GetString("username");

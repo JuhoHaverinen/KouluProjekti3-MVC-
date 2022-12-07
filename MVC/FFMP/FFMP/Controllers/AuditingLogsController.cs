@@ -72,7 +72,8 @@ namespace FFMP.Controllers
             a.Object = _context.ObjectToChecks.FirstOrDefault(x => x.Id == id);
             a.RequirementResults = new List<RequirementResult>();
             a.Created = DateTime.Now;
-            a.UserLoginNavigation = _context.Users.FirstOrDefault();
+            var u = UsersController.GetUser(_ctx);
+            a.UserLoginNavigation = _context.Users.FirstOrDefault(x => x.Name == u);
 
             var af = _context.AuditingForms.FirstOrDefault(x => x.TargetGroupId == a.Object.TargetGroupId);
             var reqs = _context.Requirements.Where(x => x.AuditingAuditingId == af.AuditingId);
