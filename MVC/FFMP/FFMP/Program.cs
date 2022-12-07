@@ -1,3 +1,4 @@
+using FFMP.BlobStorageServices;
 using FFMP.Data;
 using Microsoft.CodeAnalysis.Host.Mef;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ options.UseMySql(connectionString, serverVersion));
 builder.Services.AddControllersWithViews();
 builder.Services.AddDistributedMemoryCache(); // For session
 builder.Services.AddSession(); // For session
+builder.Services.AddScoped<IBlobStorageService, BlobStorageService>();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); // For session
 

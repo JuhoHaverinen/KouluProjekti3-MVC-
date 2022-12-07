@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FFMP.Data;
 using Microsoft.Data.SqlClient;
-
+using FFMP.Models;
 
 namespace FFMP.Controllers
 {
@@ -21,49 +21,36 @@ namespace FFMP.Controllers
             _context = context;
             _cntxt = cntxt;
         }
-
-        public async Task<IActionResult> Start(string id)
-        {
-            //if (id == null || _context.Inspections == null)
-            //{
-            //    return NotFound();
-            //}
-
-            var inspection = await _context.Inspections
-                .Include(i => i.Object)
-                .Include(i => i.UserLoginNavigation)
-                .FirstOrDefaultAsync(m => m.UserLogin == id);
-            if (inspection == null)
-            {
-                return NotFound();
-            }
-
-            return View(inspection);
-        }
         
 
         // GET: Inspection
         public async Task<IActionResult> Index(string SortOrder, string searchByCreator)
         {
+            ViewData["TimestampSortParam"] = String.IsNullOrEmpty(SortOrder) ? "timestamp_sort" : "";
+            ViewData["ObjectSortParam"] = SortOrder == "object_sort" ? "object_sort_desc" : "object_sort";
+
             var inspections = await _context.Inspections.Include(i => i.Object).Include(i => i.UserLoginNavigation).ToListAsync();
 
-            ViewData["TimestampSortParam"] = String.IsNullOrEmpty(SortOrder) ? "timestamp_sort" : "";
-            ViewData["ObjectSortParam"] = SortOrder == "" ? "object_sort" : "object_sort";
 
             if(!String.IsNullOrEmpty(searchByCreator))
             {
-                inspections = await _context.Inspections.Include(i => i.Object).Include(i => i.UserLoginNavigation).Where(i => i.UserLogin.Contains(searchByCreator)).ToListAsync();
+                inspections = await _context.Inspections.Include(i => i.Object).Include(i => i.UserLoginNavigation).Where(i => i.UserLoginNavigation.Name.Contains(searchByCreator)).ToListAsync();
             }
             switch (SortOrder)
             {
 
                 case "timestamp_sort":
-                    inspections = await _context.Inspections.Include(i => i.Object).Include(i => i.UserLoginNavigation).OrderByDescending(i => i.Timestamp).ToListAsync();
+                    inspections = inspections.OrderByDescending(i => i.Timestamp).ToList();
                     break;
                 case "object_sort":
-                    inspections = await _context.Inspections.Include(i => i.Object).Include(i => i.UserLoginNavigation).OrderBy(i => i.ObjectId).ToListAsync();
+                    inspections = inspections.OrderBy(i => i.ObjectId).ToList();
                     break;
-
+                case "object_sort_desc":
+                    inspections = inspections.OrderByDescending(i => i.ObjectId).ToList();
+                    break;
+                default:
+                    inspections = inspections.OrderBy(i => i.Timestamp).ToList();
+                    break;
             }
 
             return View(inspections);
@@ -137,26 +124,26 @@ namespace FFMP.Controllers
         }
 
         // GET: Inspection/Edit/5
-        public async Task<IActionResult> Edit(uint? id)
-        {
-            if (id == null || _context.Inspections == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Edit(uint? id)
+        //{
+        //    if (id == null || _context.Inspections == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            //var inspection = await _context.Inspections.FindAsync(id);
-            var inspection = await _context.Inspections
-                .Include(i => i.Object)
-                .Include(i => i.UserLoginNavigation)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (inspection == null)
-            {
-                return NotFound();
-            }
-            ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id", inspection.ObjectId);
-            ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", inspection.UserLogin);
-            return View(inspection);
-        }
+        //    //var inspection = await _context.Inspections.FindAsync(id);
+        //    var inspection = await _context.Inspections
+        //        .Include(i => i.Object)
+        //        .Include(i => i.UserLoginNavigation)
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (inspection == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id", inspection.ObjectId);
+        //    ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", inspection.UserLogin);
+        //    return View(inspection);
+        //}
 
         // POST: Inspection/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -165,35 +152,49 @@ namespace FFMP.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(uint id, [Bind("Id,UserLogin,ObjectId,Timestamp,Reason,Observations,ChangeOfState,Inspectioncol")] Inspection inspection)
         {
+
+            var insp = await _context.Inspections.FindAsync(id);
             if (id != inspection.Id)
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            if (insp == null)
             {
-                try
-                {
-                    _context.Update(inspection);
+                return NotFound();
+            }
+            insp.Id = id;
+            insp.UserLogin = inspection.UserLogin;
+            insp.ObjectId = inspection.ObjectId;
+            insp.Timestamp = inspection.Timestamp;
+            insp.Reason = inspection.Reason;
+            insp.Observations = inspection.Observations;
+            insp.ChangeOfState = inspection.ChangeOfState;
+            insp.Inspectioncol = inspection.Inspectioncol;
+            
+            //if (ModelState.IsValid)
+            //{
+            //    try
+            //    {
+                    _context.Update(insp);
                     await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!InspectionExists(inspection.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                //}
+                //catch (DbUpdateConcurrencyException)
+                //{
+                //    if (!InspectionExists(inspection.Id))
+                //    {
+                //        return NotFound();
+                //    }
+                //    else
+                //    {
+                //        throw;
+                //    }
+                //}
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id", inspection.ObjectId);
-            ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", inspection.UserLogin);
-            return View(inspection);
-        }
+            //ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id", inspection.ObjectId);
+            //ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", inspection.UserLogin);
+            //return RedirectToAction(nameof(Index));
+        //}
 
         // GET: Inspection/Delete/5
         public async Task<IActionResult> Delete(uint? id)

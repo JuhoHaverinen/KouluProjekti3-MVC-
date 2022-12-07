@@ -5,7 +5,28 @@
     ViewData["Title"] = "ObjectsInspections";
 }
 
-<h1>Index</h1>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_Navbar");
+    }
+    }
+
+@{
+    int i = 0;
+}
+@foreach (var item in Model)
+{
+    if (i == 1)
+    {
+        break;
+    }
+    else{
+        <h4>Showing inspections for @Html.DisplayFor(modelItem => item.Object.Name)</h4>
+        i = i + 1;
+    }
+   
+
+}
 
 
 <p>
@@ -13,6 +34,7 @@
     @await Html.PartialAsync("_CreatePartialView", new Inspection())*@
 </p>
 <table class="table">
+    
     <thead>
         <tr>
             <th>
@@ -66,8 +88,8 @@
                     @Html.DisplayFor(modelItem => item.UserLoginNavigation.Login)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
                     @*<a asp-action="Create" asp-route-id="@item.Id">Create a new inspection</a>*@
                     @*<button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="@("#createInspection-"+item.ObjectId)" data-bs-url="@Url.Action($"Create/{item.ObjectId}")">Create Inspection</button>
                     @await Html.PartialAsync("_CreatePartialView", new Inspection())*@
@@ -77,3 +99,5 @@
         }
     </tbody>
 </table>
+
+<a asp-action="Index">Back to List</a>
