@@ -1,4 +1,5 @@
-﻿using FFMP.Models;
+﻿using System.Runtime.InteropServices;
+using FFMP.Models;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
@@ -111,9 +112,10 @@ namespace FFMP.BlobStorageServices
                 string documentpath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                 var macPath = documentpath + "/" + blob.Name;
 
-                if (macPath != null)
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                     await blob.DownloadToFileAsync(macPath, FileMode.Create);
-                else if (winPath != null)
+
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                     await blob.DownloadToFileAsync(winPath, FileMode.Create);
             }
             catch (Exception)
