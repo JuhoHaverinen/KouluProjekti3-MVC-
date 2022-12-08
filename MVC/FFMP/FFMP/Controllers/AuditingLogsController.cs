@@ -179,7 +179,7 @@ namespace FFMP.Controllers
                     throw;
                 }
             }
-            return RedirectToAction("Index", "AuditingLogs", new { id = auditingLog.ObjectId });
+            return RedirectToAction("Edit", "AuditingLogs", new { id = auditingLog.Id });
         }
 
         // GET: AuditingLogs/Delete/5

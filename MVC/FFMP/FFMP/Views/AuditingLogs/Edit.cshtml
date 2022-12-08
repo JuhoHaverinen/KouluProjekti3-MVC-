@@ -124,12 +124,11 @@
                     }
                 </tbody>
             </table>
-</div>
-
-<div>
-    <form asp-action="Index" asp-route-id="@Model.ObjectId">
-     @*<input type="submit" value="Back" class="btn btn-info" formmethod="get" />  |*@
-
-    <input onclick="history.back()" type="button" value="Back" class="btn btn-info" />  
-    </form>
+    <div>
+        <form asp-action="Index" asp-route-id='@Model.ObjectId'>
+            <input type="submit" value="Back" class="btn btn-info" formmethod="get" />
+            @*
+            <input onclick="history.back()" type="button" value="Back" class="btn btn-info" />  *@
+        </form>
+    </div>
 </div>

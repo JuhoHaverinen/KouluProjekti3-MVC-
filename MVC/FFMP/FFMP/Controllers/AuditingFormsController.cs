@@ -23,7 +23,8 @@ namespace FFMP.Controllers
         // GET: AuditingForms
         public async Task<IActionResult> Index()
         {
-            if (!UsersController.UserAuthenticatedAdmin(_ctx))
+            if (!UsersController.UserAuthenticated(_ctx))
+                ///!UsersController.UserAuthenticatedAdmin(_ctx)
                 return RedirectToAction("Login", "Users");
 
             var project_3Context = _context.AuditingForms.Include(a => a.TargetGroup).Include(a => a.UserLoginNavigation);
