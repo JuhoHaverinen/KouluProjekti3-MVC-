@@ -81,7 +81,7 @@ namespace FFMP.Controllers
             var u = UsersController.GetUser(_ctx);
             a.UserLoginNavigation = _context.Users.FirstOrDefault(x => x.Name == u);
 
-            var af = _context.AuditingForms.FirstOrDefault(x => x.TargetGroupId == a.Object.TargetGroupId);
+            var af = _context.AuditingForms.Where(x => x.TargetGroupId == a.Object.TargetGroupId).OrderByDescending(x => x.Created).FirstOrDefault();
             var reqs = _context.Requirements.Where(x => x.AuditingAuditingId == af.AuditingId);
 
             foreach (var r in reqs)
