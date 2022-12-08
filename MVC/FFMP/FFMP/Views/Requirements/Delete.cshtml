@@ -39,6 +39,7 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="ReqId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        @*<a asp-action="Index" class="btn btn-info">Back</a>*@
+        <input onclick="history.back()" type="button" value="Back" class="btn btn-info" /> 
     </form>
 </div>

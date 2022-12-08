@@ -42,10 +42,11 @@
                 @Html.DisplayFor(modelItem => item.AuditingAuditing.AuditingId)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ReqId">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.ReqId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.ReqId" class="btn btn-info">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.ReqId" class="btn btn-danger">Delete</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+
