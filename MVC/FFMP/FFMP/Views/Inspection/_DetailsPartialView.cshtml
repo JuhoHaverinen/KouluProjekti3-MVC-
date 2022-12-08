@@ -66,6 +66,24 @@
                         <dd class="col-sm-9">
                             @Html.DisplayFor(model => model.UserLoginNavigation.Name)
                         </dd>
+                    <dt class="col-sm-3">
+                        @Html.DisplayName("Files")
+                    </dt>
+                    @{
+                        if(Model.Inspectioncol != null)
+                        {
+                        var names = Model.Inspectioncol.Split(',');
+                        foreach (string fileName in names)
+                        {
+                            <dd class="col-sm-9">
+                                <a href="@Url.Action("DownloadFile", "Inspection", new {blobName=fileName})">@Html.Raw(fileName)</a>
+                            </dd>
+                        }
+                        }
+                    }
+                    @*<dd class="col-sm-9">
+                        <a href="@Url.Action("DownloadFile", "Inspection", new {blobName=Model.Inspectioncol != null? Model.Inspectioncol.Split(',')[0]: ""})">@Html.DisplayFor(model => model.Inspectioncol)</a>
+                    </dd>*@
                     </dl>
                 </div>
         </div>

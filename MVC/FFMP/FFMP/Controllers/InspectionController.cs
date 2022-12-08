@@ -148,24 +148,24 @@ namespace FFMP.Controllers
         // POST: Inspection/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserLogin,ObjectId,Timestamp,Reason,Observations,ChangeOfState,Inspectioncol")] Inspection inspection, IFormFile files)
-        {
-            await _blobStorage.UploadBlobFileAsync(files);
-            var fileName = files.FileName;
-            if (ModelState.IsValid)
-            {
-                inspection.UserLogin = _cntxt!.HttpContext.Session.GetString("userlogin").ToString();
-                inspection.Inspectioncol = fileName;
-                _context.Add(inspection);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create([Bind("Id,UserLogin,ObjectId,Timestamp,Reason,Observations,ChangeOfState,Inspectioncol")] Inspection inspection, IFormFile files)
+        //{
+        //    await _blobStorage.UploadBlobFileAsync(files);
+        //    var fileName = files.FileName;
+        //    if (ModelState.IsValid)
+        //    {
+        //        inspection.UserLogin = _cntxt!.HttpContext.Session.GetString("userlogin").ToString();
+        //        inspection.Inspectioncol = fileName;
+        //        _context.Add(inspection);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
             //ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id", inspection.ObjectId);
             //ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", inspection.UserLogin);
-            return View(inspection);
-        }
+        //    return View(inspection);
+        //}
 
         // GET: Inspection/Edit/5
         //public async Task<IActionResult> Edit(uint? id)

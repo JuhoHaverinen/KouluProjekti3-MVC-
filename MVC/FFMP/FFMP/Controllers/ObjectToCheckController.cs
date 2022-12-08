@@ -9,6 +9,7 @@ using FFMP.Data;
 using Microsoft.AspNetCore.Identity;
 using FFMP.Models;
 using FFMP.BlobStorageServices;
+using System.Collections;
 
 namespace FFMP.Controllers
 {
@@ -57,10 +58,16 @@ namespace FFMP.Controllers
         // POST: InspectionCreate
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateInspection([Bind("Id,UserLogin,ObjectId,/*Timestamp*/,Reason,Observations,ChangeOfState,Inspectioncol")] Inspection inspection, IFormFile files)
+        public async Task<IActionResult> CreateInspection([Bind("Id,UserLogin,ObjectId,/*Timestamp*/,Reason,Observations,ChangeOfState,Inspectioncol")] Inspection inspection, List<IFormFile> files)
         {
-            await _blobStorage.UploadBlobFileAsync(files);
-            var fileName = files.FileName;
+            List<string> fileNames = new List<string>();
+           foreach (IFormFile file in files)
+            {
+                await _blobStorage.UploadBlobFileAsync(file);
+                fileNames.Add(file.FileName);
+            }
+            string combinedString = string.Join(",", fileNames);
+            //var fileName = files.FileName;
             var insp = new Inspection();
             insp.UserLogin = _cntxt!.HttpContext.Session.GetString("userlogin");
             insp.ObjectId = inspection.ObjectId;
@@ -68,7 +75,7 @@ namespace FFMP.Controllers
             insp.Observations = inspection.Observations;
             insp.ChangeOfState = inspection.ChangeOfState;
             
-            insp.Inspectioncol = fileName;
+            insp.Inspectioncol = combinedString;
             
             if (insp != null) /*ModelState.IsValid*/
             {
