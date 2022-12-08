@@ -75,7 +75,7 @@
                 <span asp-validation-for="Result" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" onclick="history.back()"/>
             </div>
         </form>
     </div>
@@ -128,6 +128,8 @@
 
 <div>
     <form asp-action="Index" asp-route-id="@Model.ObjectId">
-        <input type="submit" value="Back" class="btn btn-info" formmethod="get" />
+     @*<input type="submit" value="Back" class="btn btn-info" formmethod="get" />  |*@
+
+    <input onclick="history.back()" type="button" value="Back" class="btn btn-info" />  
     </form>
 </div>

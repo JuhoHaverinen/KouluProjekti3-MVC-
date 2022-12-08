@@ -33,6 +33,9 @@ namespace FFMP.Controllers
         // GET: AuditingForms/Details/5
         public async Task<IActionResult> Details(uint? id)
         {
+            if (!UsersController.UserAuthenticatedAdmin(_ctx))
+                return RedirectToAction("Login", "Users");
+
             if (id == null || _context.AuditingForms == null)
             {
                 return NotFound();
@@ -54,6 +57,9 @@ namespace FFMP.Controllers
         // GET: AuditingForms/Create
         public IActionResult Create()
         {
+            if (!UsersController.UserAuthenticatedAdmin(_ctx))
+                return RedirectToAction("Login", "Users");
+
             ViewData["TargetGroupId"] = new SelectList(_context.TargetGroups, "Id", "Description");
             ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login");
             return View();
@@ -74,6 +80,9 @@ namespace FFMP.Controllers
         // GET: AuditingForms/Edit/5
         public async Task<IActionResult> Edit(uint? id)
         {
+            if (!UsersController.UserAuthenticatedAdmin(_ctx))
+                return RedirectToAction("Login", "Users");
+
             if (id == null || _context.AuditingForms == null)
             {
                 return NotFound();
@@ -124,6 +133,9 @@ namespace FFMP.Controllers
         // GET: AuditingForms/Delete/5
         public async Task<IActionResult> Delete(uint? id)
         {
+            if (!UsersController.UserAuthenticatedAdmin(_ctx))
+                return RedirectToAction("Login", "Users");
+
             if (id == null || _context.AuditingForms == null)
             {
                 return NotFound();

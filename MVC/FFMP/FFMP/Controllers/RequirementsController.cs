@@ -12,15 +12,20 @@ namespace FFMP.Controllers
     public class RequirementsController : Controller
     {
         private readonly project_3Context _context;
+        private readonly IHttpContextAccessor _cntxt;
 
-        public RequirementsController(project_3Context context)
+        public RequirementsController(project_3Context context, IHttpContextAccessor cntxt)
         {
             _context = context;
+            _cntxt = cntxt;
         }
 
         // GET: Requirements
         public async Task<IActionResult> Index()
         {
+            if (!UsersController.UserAuthenticated(_cntxt))
+                return RedirectToAction("Login", "Users");
+
             var project_3Context = _context.Requirements.Include(r => r.AuditingAuditing);
             return View(await project_3Context.ToListAsync());
         }

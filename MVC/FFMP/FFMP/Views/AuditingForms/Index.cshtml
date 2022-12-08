@@ -10,7 +10,7 @@
     }
     }
 
-<h1>Auditing form management</h1>
+<h1>Auditing management</h1>
     <hr />
     <br />
 
@@ -52,8 +52,9 @@
                     @Html.DisplayFor(modelItem => item.TargetGroup.Description)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.AuditingId">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.AuditingId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.AuditingId" class="btn btn-info">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.AuditingId" class="btn btn-danger">Delete</a>
+
             </td>
         </tr>
 }

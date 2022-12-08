@@ -94,6 +94,9 @@ namespace FFMP.Controllers
         // GET: Users
         public async Task<IActionResult> IndexUsers(string SortOrder)
         {
+            if (!UsersController.UserAuthenticated(_cntxt))
+                return RedirectToAction("Login", "Users");
+
             var users = await _context.Users.Where(x => x.Admin == false).ToListAsync();
             
             ViewData["NameSortParam"] = String.IsNullOrEmpty(SortOrder) ? "name_sort" : "";
