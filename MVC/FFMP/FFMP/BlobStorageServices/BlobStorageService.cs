@@ -14,6 +14,8 @@ namespace FFMP.BlobStorageServices
             _storageConnectionString = configuration.GetValue<string>("BlobConnectionString");
             _storageContainerName = configuration.GetValue<string>("BlobContainerName");
         }
+
+
         public async Task<List<BlobStorage>> GetAllBlobFiles()
         {
             try
@@ -24,10 +26,9 @@ namespace FFMP.BlobStorageServices
                 CloudBlobContainer container = blobClient.GetContainerReference(_storageContainerName);
                 CloudBlobDirectory dirb = container.GetDirectoryReference(_storageContainerName);
 
-
                 BlobResultSegment resultSegment = await container.ListBlobsSegmentedAsync(string.Empty,
                     true, BlobListingDetails.Metadata, 100, null, null, null);
-                List<BlobStorage> fileList = new List<BlobStorage>();
+                List<BlobStorage> fileList = new();
 
                 foreach (var blobItem in resultSegment.Results)
                 {
@@ -44,12 +45,9 @@ namespace FFMP.BlobStorageServices
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
-
-
 
         public async Task UploadBlobFileAsync(IFormFile files)
         {
@@ -80,10 +78,10 @@ namespace FFMP.BlobStorageServices
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
+
         public async Task DeleteDocumentAsync(string blobName)
         {
             try
@@ -96,13 +94,12 @@ namespace FFMP.BlobStorageServices
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
+
         public async Task DownloadDocumentAsync(string blobName)
         {
-            
             try
             {
                 CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(_storageConnectionString);
@@ -110,20 +107,17 @@ namespace FFMP.BlobStorageServices
                 CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(_storageContainerName);
                 var blob = cloudBlobContainer.GetBlobReference(blobName);
 
-                var localPath = @"C:\temp\" +blob.Name;
-                await blob.DownloadToFileAsync(localPath, FileMode.Create);
+                var winPath = @"C:\temp\" + blob.Name;
+                string documentpath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                var macPath = documentpath + "/" + blob.Name;
 
-                //using(var stream = new MemoryStream())
-                //{
-                //    blob.DownloadToStreamAsync(stream);
-                //    stream.Position = 0;
-                //    return stream;
-
-                //}
+                if (macPath != null)
+                    await blob.DownloadToFileAsync(macPath, FileMode.Create);
+                else if (winPath != null)
+                    await blob.DownloadToFileAsync(winPath, FileMode.Create);
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
