@@ -126,8 +126,8 @@ namespace FFMP.Controllers
         }
 
         // GET: Inspection/Create
-        public IActionResult Create(string id)
-        {
+        //public IActionResult Create(string id)
+        //{
             //if (id == null || _context.Inspections == null)
             //{
             //    return NotFound();
@@ -138,24 +138,26 @@ namespace FFMP.Controllers
             //{
             //    return NotFound();
             //}
-            Inspection inspection = new Inspection();
-            ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id");
+            //Inspection inspection = new Inspection();
+            //ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id");
             //ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login");
-            return PartialView("_CreatePartialView", inspection);
+            //return PartialView("_CreatePartialView", inspection);
             
-        }
+        //}
 
         // POST: Inspection/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserLogin,ObjectId,Timestamp,Reason,Observations,ChangeOfState,Inspectioncol")] Inspection inspection)
+        public async Task<IActionResult> Create([Bind("Id,UserLogin,ObjectId,Timestamp,Reason,Observations,ChangeOfState,Inspectioncol")] Inspection inspection, IFormFile files)
         {
-            
+            await _blobStorage.UploadBlobFileAsync(files);
+            var fileName = files.FileName;
             if (ModelState.IsValid)
             {
                 inspection.UserLogin = _cntxt!.HttpContext.Session.GetString("userlogin").ToString();
+                inspection.Inspectioncol = fileName;
                 _context.Add(inspection);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

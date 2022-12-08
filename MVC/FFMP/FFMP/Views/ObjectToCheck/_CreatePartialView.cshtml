@@ -12,7 +12,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form asp-action="CreateInspection" asp-route-id="@Model.ObjectId" data-id="@Model.ObjectId">
+                <form asp-action="CreateInspection" enctype="multipart/form-data" asp-route-id="@Model.ObjectId" data-id="@Model.ObjectId">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group" style="display:none">
                         <label asp-for="UserLogin" class="control-label"></label>
@@ -53,6 +53,11 @@
                     <input asp-for="Inspectioncol" class="form-control" />
                     <span asp-validation-for="Inspectioncol" class="text-danger"></span>
                     </div>
+                    <div class="form-group">
+                        <label> Select File </label>
+                        <input class="form-control" name="files" multiple="multiple" type="file" />
+                    </div>
+                    
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Create</button>

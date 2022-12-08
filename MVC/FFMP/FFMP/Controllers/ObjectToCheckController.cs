@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FFMP.Data;
 using Microsoft.AspNetCore.Identity;
+using FFMP.Models;
+using FFMP.BlobStorageServices;
 
 namespace FFMP.Controllers
 {
@@ -14,11 +16,13 @@ namespace FFMP.Controllers
     {
         private readonly project_3Context _context;
         private readonly IHttpContextAccessor _cntxt;
+        private readonly IBlobStorageService _blobStorage;
 
-        public ObjectToCheckController(project_3Context context, IHttpContextAccessor cntxt)
+        public ObjectToCheckController(project_3Context context, IHttpContextAccessor cntxt, IBlobStorageService blobStorage)
         {
             _context = context;
             _cntxt = cntxt;
+            _blobStorage = blobStorage;
         }
 
         // GET: ObjectToCheck
@@ -53,16 +57,18 @@ namespace FFMP.Controllers
         // POST: InspectionCreate
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateInspection([Bind("Id,UserLogin,ObjectId,/*Timestamp*/,Reason,Observations,ChangeOfState,Inspectioncol")] Inspection inspection)
+        public async Task<IActionResult> CreateInspection([Bind("Id,UserLogin,ObjectId,/*Timestamp*/,Reason,Observations,ChangeOfState,Inspectioncol")] Inspection inspection, IFormFile files)
         {
+            await _blobStorage.UploadBlobFileAsync(files);
+            var fileName = files.FileName;
             var insp = new Inspection();
             insp.UserLogin = _cntxt!.HttpContext.Session.GetString("userlogin");
             insp.ObjectId = inspection.ObjectId;
             insp.Reason = inspection.Reason;
             insp.Observations = inspection.Observations;
             insp.ChangeOfState = inspection.ChangeOfState;
-            insp.Inspectioncol = inspection.Inspectioncol;
             
+            insp.Inspectioncol = fileName;
             
             if (insp != null) /*ModelState.IsValid*/
             {
