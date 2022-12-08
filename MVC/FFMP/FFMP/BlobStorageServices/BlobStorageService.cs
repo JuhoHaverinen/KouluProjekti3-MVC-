@@ -1,4 +1,5 @@
-﻿using FFMP.Models;
+﻿using System.Runtime.InteropServices;
+using FFMP.Models;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
@@ -14,6 +15,8 @@ namespace FFMP.BlobStorageServices
             _storageConnectionString = configuration.GetValue<string>("BlobConnectionString");
             _storageContainerName = configuration.GetValue<string>("BlobContainerName");
         }
+
+
         public async Task<List<BlobStorage>> GetAllBlobFiles()
         {
             try
@@ -24,10 +27,9 @@ namespace FFMP.BlobStorageServices
                 CloudBlobContainer container = blobClient.GetContainerReference(_storageContainerName);
                 CloudBlobDirectory dirb = container.GetDirectoryReference(_storageContainerName);
 
-
                 BlobResultSegment resultSegment = await container.ListBlobsSegmentedAsync(string.Empty,
                     true, BlobListingDetails.Metadata, 100, null, null, null);
-                List<BlobStorage> fileList = new List<BlobStorage>();
+                List<BlobStorage> fileList = new();
 
                 foreach (var blobItem in resultSegment.Results)
                 {
@@ -44,10 +46,10 @@ namespace FFMP.BlobStorageServices
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
+
         public async Task UploadBlobFileAsync(IFormFile files)
         {
             try
@@ -77,10 +79,10 @@ namespace FFMP.BlobStorageServices
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
+
         public async Task DeleteDocumentAsync(string blobName)
         {
             try
@@ -93,7 +95,31 @@ namespace FFMP.BlobStorageServices
             }
             catch (Exception)
             {
+                throw;
+            }
+        }
 
+        public async Task DownloadDocumentAsync(string blobName)
+        {
+            try
+            {
+                CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(_storageConnectionString);
+                CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
+                CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(_storageContainerName);
+                var blob = cloudBlobContainer.GetBlobReference(blobName);
+
+                var winPath = @"C:\temp\" + blob.Name;
+                string documentpath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                var macPath = documentpath + "/" + blob.Name;
+
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                    await blob.DownloadToFileAsync(macPath, FileMode.Create);
+
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                    await blob.DownloadToFileAsync(winPath, FileMode.Create);
+            }
+            catch (Exception)
+            {
                 throw;
             }
         }

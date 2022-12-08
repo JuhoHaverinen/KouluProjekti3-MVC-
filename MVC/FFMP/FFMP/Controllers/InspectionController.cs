@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using FFMP.Data;
 using Microsoft.Data.SqlClient;
 using FFMP.Models;
+using FFMP.BlobStorageServices;
 
 namespace FFMP.Controllers
 {
@@ -15,13 +16,51 @@ namespace FFMP.Controllers
     {
         private readonly project_3Context _context;
         private readonly IHttpContextAccessor _cntxt;
+        private readonly IBlobStorageService _blobStorage;
 
-        public InspectionController(project_3Context context, IHttpContextAccessor cntxt)
+        public InspectionController(project_3Context context, IHttpContextAccessor cntxt, IBlobStorageService blobStorage)
         {
+
             _context = context;
             _cntxt = cntxt;
+            _blobStorage = blobStorage;
+        }
+
+        // GET: All Blob Files
+        public async Task<IActionResult> Files()
+        {
+            return View(await _blobStorage.GetAllBlobFiles());
+        }
+
+        // Upload view
+        [HttpGet]
+        public IActionResult Upload()
+        {
+            return View();
+        }
+
+        // Upload a file
+        [HttpPost]
+        public async Task<IActionResult> Upload(IFormFile files)
+        {
+            await _blobStorage.UploadBlobFileAsync(files);
+            return RedirectToAction("Files");
+        }
+
+        // Delete a file
+        
+        public async Task<IActionResult> DeleteFile(string blobName)
+        {
+            await _blobStorage.DeleteDocumentAsync(blobName);
+            return RedirectToAction("Files", "Inspection");
         }
         
+        public async Task<IActionResult> DownloadFile(string blobName)
+        {
+            await _blobStorage.DownloadDocumentAsync(blobName);
+            return RedirectToAction("Files", "Inspection");
+        }
+
 
         // GET: Inspection
         public async Task<IActionResult> Index(string SortOrder, string searchByCreator)
@@ -87,8 +126,8 @@ namespace FFMP.Controllers
         }
 
         // GET: Inspection/Create
-        public IActionResult Create(string id)
-        {
+        //public IActionResult Create(string id)
+        //{
             //if (id == null || _context.Inspections == null)
             //{
             //    return NotFound();
@@ -99,32 +138,34 @@ namespace FFMP.Controllers
             //{
             //    return NotFound();
             //}
-            Inspection inspection = new Inspection();
-            ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id");
+            //Inspection inspection = new Inspection();
+            //ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id");
             //ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login");
-            return PartialView("_CreatePartialView", inspection);
+            //return PartialView("_CreatePartialView", inspection);
             
-        }
+        //}
 
         // POST: Inspection/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserLogin,ObjectId,Timestamp,Reason,Observations,ChangeOfState,Inspectioncol")] Inspection inspection)
-        {
-            
-            if (ModelState.IsValid)
-            {
-                inspection.UserLogin = _cntxt!.HttpContext.Session.GetString("userlogin").ToString();
-                _context.Add(inspection);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create([Bind("Id,UserLogin,ObjectId,Timestamp,Reason,Observations,ChangeOfState,Inspectioncol")] Inspection inspection, IFormFile files)
+        //{
+        //    await _blobStorage.UploadBlobFileAsync(files);
+        //    var fileName = files.FileName;
+        //    if (ModelState.IsValid)
+        //    {
+        //        inspection.UserLogin = _cntxt!.HttpContext.Session.GetString("userlogin").ToString();
+        //        inspection.Inspectioncol = fileName;
+        //        _context.Add(inspection);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
             //ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id", inspection.ObjectId);
             //ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", inspection.UserLogin);
-            return View(inspection);
-        }
+        //    return View(inspection);
+        //}
 
         // GET: Inspection/Edit/5
         //public async Task<IActionResult> Edit(uint? id)
