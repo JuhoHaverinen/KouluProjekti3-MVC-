@@ -24,6 +24,9 @@ namespace FFMP.Controllers
         // GET: ObjectToCheck
         public async Task<IActionResult> Index()
         {
+            if (!UsersController.UserAuthenticated(_cntxt))
+                return RedirectToAction("Login", "Users");
+
             var project_3Context = _context.ObjectToChecks.Include(o => o.TargetGroup).Include(o => o.UserLoginNavigation);
             return View(await project_3Context.ToListAsync());
         }

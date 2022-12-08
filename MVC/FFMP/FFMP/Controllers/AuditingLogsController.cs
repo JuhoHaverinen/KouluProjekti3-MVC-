@@ -47,6 +47,9 @@ namespace FFMP.Controllers
         // GET: AuditingLogs/Details/5
         public async Task<IActionResult> Details(uint? id)
         {
+            if (!UsersController.UserAuthenticated(_ctx))
+                return RedirectToAction("Login", "Users");
+
             if (id == null || _context.AuditingLogs == null)
             {
                 return NotFound();
@@ -67,6 +70,9 @@ namespace FFMP.Controllers
         // GET: AuditingLogs/Create
         public IActionResult Create(uint id)
         {
+            if (!UsersController.UserAuthenticated(_ctx))
+                return RedirectToAction("Login", "Users");
+
             var a = new AuditingLog();
             a.ObjectId = id;
             a.Object = _context.ObjectToChecks.FirstOrDefault(x => x.Id == id);
@@ -115,6 +121,9 @@ namespace FFMP.Controllers
         // GET: AuditingLogs/Edit/5
         public async Task<IActionResult> Edit(uint? id)
         {
+            if (!UsersController.UserAuthenticated(_ctx))
+                return RedirectToAction("Login", "Users");
+
             if (id == null || _context.AuditingLogs == null)
             {
                 return NotFound();
@@ -176,6 +185,9 @@ namespace FFMP.Controllers
         // GET: AuditingLogs/Delete/5
         public async Task<IActionResult> Delete(uint? id)
         {
+            if (!UsersController.UserAuthenticated(_ctx))
+                return RedirectToAction("Login", "Users");
+
             if (id == null || _context.AuditingLogs == null)
             {
                 return NotFound();

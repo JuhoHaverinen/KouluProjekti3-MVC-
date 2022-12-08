@@ -26,6 +26,9 @@ namespace FFMP.Controllers
         // GET: Inspection
         public async Task<IActionResult> Index(string SortOrder, string searchByCreator)
         {
+            if (!UsersController.UserAuthenticated(_cntxt))
+                return RedirectToAction("Login", "Users");
+
             ViewData["TimestampSortParam"] = String.IsNullOrEmpty(SortOrder) ? "timestamp_sort" : "";
             ViewData["ObjectSortParam"] = SortOrder == "object_sort" ? "object_sort_desc" : "object_sort";
 
