@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using FFMP.Data;
 using Microsoft.Data.SqlClient;
 using FFMP.Models;
+using FFMP.BlobStorageServices;
 
 namespace FFMP.Controllers
 {
@@ -15,13 +16,51 @@ namespace FFMP.Controllers
     {
         private readonly project_3Context _context;
         private readonly IHttpContextAccessor _cntxt;
+        private readonly IBlobStorageService _blobStorage;
 
-        public InspectionController(project_3Context context, IHttpContextAccessor cntxt)
+        public InspectionController(project_3Context context, IHttpContextAccessor cntxt, IBlobStorageService blobStorage)
         {
+
             _context = context;
             _cntxt = cntxt;
+            _blobStorage = blobStorage;
+        }
+
+        // GET: All Blob Files
+        public async Task<IActionResult> Files()
+        {
+            return View(await _blobStorage.GetAllBlobFiles());
+        }
+
+        // Upload view
+        [HttpGet]
+        public IActionResult Upload()
+        {
+            return View();
+        }
+
+        // Upload a file
+        [HttpPost]
+        public async Task<IActionResult> Upload(IFormFile files)
+        {
+            await _blobStorage.UploadBlobFileAsync(files);
+            return RedirectToAction("Files");
+        }
+
+        // Delete a file
+        
+        public async Task<IActionResult> DeleteFile(string blobName)
+        {
+            await _blobStorage.DeleteDocumentAsync(blobName);
+            return RedirectToAction("Files", "Inspection");
         }
         
+        public async Task<IActionResult> DownloadFile(string blobName)
+        {
+            await _blobStorage.DownloadDocumentAsync(blobName);
+            return RedirectToAction("Files", "Inspection");
+        }
+
 
         // GET: Inspection
         public async Task<IActionResult> Index(string SortOrder, string searchByCreator)

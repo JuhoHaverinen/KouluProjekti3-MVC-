@@ -7,5 +7,6 @@ namespace FFMP.BlobStorageServices
         Task<List<BlobStorage>> GetAllBlobFiles();
         Task UploadBlobFileAsync(IFormFile files);
         Task DeleteDocumentAsync(string blobName);
+        Task DownloadDocumentAsync(string blobName);
     }
 }

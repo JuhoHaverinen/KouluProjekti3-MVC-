@@ -48,6 +48,9 @@ namespace FFMP.BlobStorageServices
                 throw;
             }
         }
+
+
+
         public async Task UploadBlobFileAsync(IFormFile files)
         {
             try
@@ -90,6 +93,33 @@ namespace FFMP.BlobStorageServices
                 CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(_storageContainerName);
                 var blob = cloudBlobContainer.GetBlobReference(blobName);
                 await blob.DeleteIfExistsAsync();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        public async Task DownloadDocumentAsync(string blobName)
+        {
+            
+            try
+            {
+                CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(_storageConnectionString);
+                CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
+                CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(_storageContainerName);
+                var blob = cloudBlobContainer.GetBlobReference(blobName);
+
+                var localPath = @"C:\temp\" +blob.Name;
+                await blob.DownloadToFileAsync(localPath, FileMode.Create);
+
+                //using(var stream = new MemoryStream())
+                //{
+                //    blob.DownloadToStreamAsync(stream);
+                //    stream.Position = 0;
+                //    return stream;
+
+                //}
             }
             catch (Exception)
             {
