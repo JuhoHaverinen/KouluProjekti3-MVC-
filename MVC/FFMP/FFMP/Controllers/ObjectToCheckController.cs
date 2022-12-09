@@ -76,26 +76,26 @@ namespace FFMP.Controllers
             insp.Reason = inspection.Reason;
             insp.Observations = inspection.Observations;
             insp.ChangeOfState = inspection.ChangeOfState;
-            
+
             insp.Inspectioncol = combinedString;
-            
+
             if (insp != null)
             {
-                
+
                 _context.Add(insp);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(InspectionController.Index), "Inspection");
             }
-            
+
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: ObjectToCheck/Create
+        //GET: ObjectToCheck/Create
         public IActionResult Create()
         {
             ViewData["TargetGroupId"] = new SelectList(_context.TargetGroups, "Id", "Id");
             ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login");
-            return View();
+            return PartialView("_CreateObjectPartialView");
         }
 
         // POST: ObjectToCheck/Create
@@ -105,15 +105,24 @@ namespace FFMP.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("UserLogin,TargetGroupId,Name,Description,Location,Type,Model")] ObjectToCheck objectToCheck)
         {
-            if (ModelState.IsValid)
+            var obj = new ObjectToCheck();
+            obj.UserLogin = _cntxt!.HttpContext.Session.GetString("userlogin");
+            obj.TargetGroupId = objectToCheck.TargetGroupId;
+            obj.Name = objectToCheck.Name;
+            obj.Description = objectToCheck.Description;
+            obj.Location = objectToCheck.Location;
+            obj.Type = objectToCheck.Type;
+            obj.Model = objectToCheck.Model;
+
+            if (obj != null)
             {
-                _context.Add(objectToCheck);
+                _context.Add(obj);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TargetGroupId"] = new SelectList(_context.TargetGroups, "Id", "Id", objectToCheck.TargetGroupId);
-            ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", objectToCheck.UserLogin);
-            return View(objectToCheck);
+            //ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", objectToCheck.UserLogin);
+            //ViewData["TargetGroupId"] = new SelectList(_context.TargetGroups, "Id", "Id", objectToCheck.TargetGroupId);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: ObjectToCheck/Edit/5
@@ -156,9 +165,9 @@ namespace FFMP.Controllers
             otc.Type = objectToCheck.Type;
             otc.Model = objectToCheck.Model;
             otc.State = objectToCheck.State;
-            
+
             await _context.SaveChangesAsync();
-            
+
             return RedirectToAction(nameof(Index));
         }
 
