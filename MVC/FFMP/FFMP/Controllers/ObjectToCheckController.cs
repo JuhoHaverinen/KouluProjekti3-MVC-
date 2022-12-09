@@ -43,7 +43,6 @@ namespace FFMP.Controllers
             {
                 return NotFound();
             }
-
             var objectToCheck = await _context.ObjectToChecks
                 .Include(o => o.TargetGroup)
                 .Include(o => o.UserLoginNavigation)
@@ -140,7 +139,7 @@ namespace FFMP.Controllers
             }
             ViewData["TargetGroupId"] = new SelectList(_context.TargetGroups, "Id", "Id", objectToCheck.TargetGroupId);
             ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", objectToCheck.UserLogin);
-            return View(objectToCheck);
+            return PartialView("_EditPartialView", objectToCheck);
         }
 
         // POST: ObjectToCheck/Edit/5
