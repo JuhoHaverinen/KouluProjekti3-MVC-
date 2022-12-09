@@ -11,6 +11,15 @@
     }
     }
 
+    <script>
+        $(document).ready(function () {
+
+            var table = $('#table').DataTable({
+                order: [[0, 'desc']],
+            });
+        });
+    </script>
+
 @{
     int i = 0;
 }
@@ -21,19 +30,19 @@
         break;
     }
     else{
-        <h4>Showing inspections for @Html.DisplayFor(modelItem => item.Object.Name)</h4>
+        <h1 class="text-center">Showing inspections for @Html.DisplayFor(modelItem => item.Object.Name)</h1>
         i = i + 1;
     }
    
 
 }
-
+<br />
 
 <p>
     @*<button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="@("#createInspection")" data-bs-url="@Url.Action($"Create")">Create Inspection</button>
     @await Html.PartialAsync("_CreatePartialView", new Inspection())*@
 </p>
-<table class="table">
+<table class="table table-striped" id="table">
     
     <thead>
         <tr>
@@ -55,7 +64,7 @@
             <th>
                 @Html.DisplayName("Creator")
             </th>
-            <th></th>
+            
         </tr>
     </thead>
     <tbody>
@@ -65,12 +74,6 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Timestamp)
                 </td>
-                @*<td>
-                    @Html.DisplayFor(modelItem => item.Reason)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Observations)
-                </td>*@
                 <td>
                     @if (item.ChangeOfState == true)
                     {
@@ -81,20 +84,14 @@
                         @Html.Raw("Out of order")
                     }
                 </td>
-                @*<td>
-                    @Html.DisplayFor(modelItem => item.Object.Name)
-                </td>*@
                 <td>
                     @Html.DisplayFor(modelItem => item.UserLoginNavigation.Login)
                 </td>
-                <td>
-                    @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
-                    @*<a asp-action="Create" asp-route-id="@item.Id">Create a new inspection</a>*@
+                @*<td>*@
                     @*<button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="@("#createInspection-"+item.ObjectId)" data-bs-url="@Url.Action($"Create/{item.ObjectId}")">Create Inspection</button>
                     @await Html.PartialAsync("_CreatePartialView", new Inspection())*@
                   
-                </td>
+               @* </td>*@
             </tr>
         }
     </tbody>

@@ -125,25 +125,7 @@ namespace FFMP.Controllers
             return View(inspection);
         }
 
-        // GET: Inspection/Create
-        //public IActionResult Create(string id)
-        //{
-            //if (id == null || _context.Inspections == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //var loginUser = await _context.Inspections.Where(x => x.UserLogin == id).FirstOrDefaultAsync();
-            //if (loginUser == null)
-            //{
-            //    return NotFound();
-            //}
-            //Inspection inspection = new Inspection();
-            //ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id");
-            //ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login");
-            //return PartialView("_CreatePartialView", inspection);
-            
-        //}
+        // TÄMÄ LÖYTYY OBJECTTOCHECKIN PUOLELTA
 
         // POST: Inspection/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -167,27 +149,6 @@ namespace FFMP.Controllers
         //    return View(inspection);
         //}
 
-        // GET: Inspection/Edit/5
-        //public async Task<IActionResult> Edit(uint? id)
-        //{
-        //    if (id == null || _context.Inspections == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    //var inspection = await _context.Inspections.FindAsync(id);
-        //    var inspection = await _context.Inspections
-        //        .Include(i => i.Object)
-        //        .Include(i => i.UserLoginNavigation)
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (inspection == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id", inspection.ObjectId);
-        //    ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", inspection.UserLogin);
-        //    return View(inspection);
-        //}
 
         // POST: Inspection/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -215,30 +176,14 @@ namespace FFMP.Controllers
             insp.ChangeOfState = inspection.ChangeOfState;
             insp.Inspectioncol = inspection.Inspectioncol;
             
-            //if (ModelState.IsValid)
-            //{
-            //    try
-            //    {
+            
+            
                     _context.Update(insp);
                     await _context.SaveChangesAsync();
-                //}
-                //catch (DbUpdateConcurrencyException)
-                //{
-                //    if (!InspectionExists(inspection.Id))
-                //    {
-                //        return NotFound();
-                //    }
-                //    else
-                //    {
-                //        throw;
-                //    }
-                //}
+                
                 return RedirectToAction(nameof(Index));
-            }
-            //ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id", inspection.ObjectId);
-            //ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", inspection.UserLogin);
-            //return RedirectToAction(nameof(Index));
-        //}
+        }
+            
 
         // GET: Inspection/Delete/5
         public async Task<IActionResult> Delete(uint? id)

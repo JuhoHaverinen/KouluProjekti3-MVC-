@@ -70,7 +70,6 @@ namespace FFMP.Controllers
                 }
             }
             string combinedString = string.Join(",", fileNames);
-            //var fileName = files.FileName;
             var insp = new Inspection();
             insp.UserLogin = _cntxt!.HttpContext.Session.GetString("userlogin");
             insp.ObjectId = inspection.ObjectId;
@@ -80,15 +79,14 @@ namespace FFMP.Controllers
             
             insp.Inspectioncol = combinedString;
             
-            if (insp != null) /*ModelState.IsValid*/
+            if (insp != null)
             {
                 
                 _context.Add(insp);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(InspectionController.Index), "Inspection");
             }
-            //ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id", inspection.ObjectId);
-            //ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", inspection.UserLogin);
+            
             return RedirectToAction(nameof(Index));
         }
 
@@ -158,32 +156,10 @@ namespace FFMP.Controllers
             otc.Type = objectToCheck.Type;
             otc.Model = objectToCheck.Model;
             otc.State = objectToCheck.State;
-            //otc.Created = objectToCheck.Created;
-
-
-            //if (ModelState.IsValid)
-            //{
-            //    try
-            //    {
-            //_context.Update(objectToCheck);
+            
             await _context.SaveChangesAsync();
-            //}
-            //catch (DbUpdateConcurrencyException)
-            //{
-            //    if (!ObjectToCheckExists(objectToCheck.Id))
-            //    {
-            //        return NotFound();
-            //    }
-            //    else
-            //    {
-            //        throw;
-            //    }
-            //}
+            
             return RedirectToAction(nameof(Index));
-            //}
-            //ViewData["TargetGroupId"] = new SelectList(_context.TargetGroups, "Id", "Id", objectToCheck.TargetGroupId);
-            //ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", objectToCheck.UserLogin);
-            //return View(objectToCheck);
         }
 
         // GET: ObjectToCheck/Delete/5
