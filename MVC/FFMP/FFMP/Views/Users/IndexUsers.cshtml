@@ -24,7 +24,15 @@
     @ViewBag.Message
 </div>*@
 
-<table class="table">
+    <script>
+        $(document).ready(function () {
+
+            var table = $('#table').DataTable({
+                order: [[0, 'desc']],
+            });
+        });
+    </script>
+    <table class="table table-striped" id="table">
     <thead>
         <tr>
             <th>
@@ -42,6 +50,7 @@
             <th>@Html.DisplayName("Last login")</th>
             @*<th>@Html.DisplayNameFor(model => model.Admin)</th>*@
             <th>@Html.DisplayNameFor(model => model.Active)</th>
+                <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -75,7 +84,7 @@
                 </td>
                 
                 <td>
-                    <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="@("#editFAdmin-"+item.Login)" data-bs-url="@Url.Action($"Edit/{item.Login}")">Edit User</button>
+                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="@("#editFAdmin-"+item.Login)" data-bs-url="@Url.Action($"Edit/{item.Login}")">Edit User</button>
                     @await Html.PartialAsync("_EditAdminPartialView", item)
                     @*<a asp-action="Edit" asp-route-id="@item.Login">Edit User</a> *@
                     @*<a asp-action="Edit" asp-route-id="@item.Login">Edit User</a>*@
