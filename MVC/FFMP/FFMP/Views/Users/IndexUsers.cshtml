@@ -15,36 +15,34 @@
 <br />
 <p>
     <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="@("#createUser")" data-bs-url="@Url.Action($"Create")">Create User</button>
-     @await Html.PartialAsync("_CreatePartialView", new User())
+    @await Html.PartialAsync("_CreatePartialView", new User())
 </p>
 
 
-    <script>
-        $(document).ready(function () {
+<script>$(document).ready(function () {
 
-            var table = $('#table').DataTable({
-                order: [[0, 'asc']],
-            });
+        var table = $('#table').DataTable({
+            order: [[0, 'asc']],
         });
-    </script>
-    <table class="table table-striped" id="table">
+    });</script>
+<table class="table table-striped" id="table">
     <thead>
         <tr>
             <th>
                 @*<a asp-action="IndexUsers" asp-route-sortOrder="@ViewData["NameSortParam"]">*@
-                    @Html.DisplayNameFor(model => model.Name)
-               @* </a>*@
+                @Html.DisplayNameFor(model => model.Name)
+                @* </a>*@
             </th>
             <th>@Html.DisplayNameFor(model => model.Login)</th>
             @* <th>@Html.DisplayNameFor(model => model.Password)</th> *@
             <th>
                 @*<a asp-action="IndexUsers" asp-route-sortOrder="@ViewData["CreatedSortParam"]">*@
-                    @Html.DisplayNameFor(model => model.Created)
+                @Html.DisplayNameFor(model => model.Created)
                 @*</a>*@
             </th>
-            <th>@Html.DisplayName("Last login")</th>          
+            <th>@Html.DisplayName("Last login")</th>
             <th>@Html.DisplayNameFor(model => model.Active)</th>
-                <th>Actions</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -56,20 +54,16 @@
                 <td>@Html.DisplayFor(modelItem => item.Created)</td>
                 <td>@Html.DisplayFor(modelItem => item.LastLogin)</td>
                 <td>
-                    @if (item.Active == true)
-                    {
-                        @Html.Raw("True")
-                    }
-                    else if (item.Active == false)
-                    {
-                        @Html.Raw("False")
-                    }
+                    <span class="@(item.Active == true ? "green" : "red")">
+                        @if (item.Active == true)
+                            @Html.Raw("True")
+                            else if (item.Active == false)
+                                @Html.Raw("False")
+                    </span>
                 </td>
-                
                 <td>
                     <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="@("#editFAdmin-"+item.Login)" data-bs-url="@Url.Action($"Edit/{item.Login}")">Edit User</button>
                     @await Html.PartialAsync("_EditAdminPartialView", item)
-                   
                 </td>
             </tr>
         }

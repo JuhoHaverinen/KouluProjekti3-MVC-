@@ -73,10 +73,9 @@ body {
 
 
 .green {
-    content: "1";
-    background-color: #28a745;
+    color: green;
 }
 
 .red {
-    background-color: red;
+    color: red;
 }

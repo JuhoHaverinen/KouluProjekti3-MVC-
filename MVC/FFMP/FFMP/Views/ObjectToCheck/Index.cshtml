@@ -55,7 +55,12 @@
                 <td>@Html.DisplayFor(modelItem => item.Type)</td>
                 <td>@Html.DisplayFor(modelItem => item.Model)</td>
                 <td>
-                    <span class="@(item.State == true ? "green" : "red")">@Html.DisplayFor(modelItem => item.State)</span>
+                    <span class="@(item.State == true ? "green" : "red")">
+                        @if (item.State == true)
+                            @Html.Raw("In order")
+                            else if (item.State == false)
+                                @Html.Raw("Out of order")
+                    </span>
                 </td>
                 <td>@Html.DisplayFor(modelItem => item.TargetGroup.Description)</td>
                 <td>
