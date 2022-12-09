@@ -61,10 +61,13 @@ namespace FFMP.Controllers
         public async Task<IActionResult> CreateInspection([Bind("Id,UserLogin,ObjectId,/*Timestamp*/,Reason,Observations,ChangeOfState,Inspectioncol")] Inspection inspection, List<IFormFile> files)
         {
             List<string> fileNames = new List<string>();
-           foreach (IFormFile file in files)
+            foreach (IFormFile file in files)
             {
-                await _blobStorage.UploadBlobFileAsync(file);
-                fileNames.Add(file.FileName);
+                if (file.Length < 5097152)
+                {
+                    await _blobStorage.UploadBlobFileAsync(file);
+                    fileNames.Add(file.FileName);
+                }
             }
             string combinedString = string.Join(",", fileNames);
             //var fileName = files.FileName;
