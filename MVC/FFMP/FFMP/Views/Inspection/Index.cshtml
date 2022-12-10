@@ -3,18 +3,27 @@
 @using FFMP.Data
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Inspections";
 }
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_Navbar");}
 }
+    <script>
+        $(document).ready(function () {
+            var table = $('#table').DataTable({
+                order: [[0, 'desc']],
+            });
+        });
+        
+    </script>
 
 <h1 class="text-center">Inspection Management</h1>
 <hr />
 <br />
-
-
+    <span class="label label-primary mytooltip" title="My ToolTip"><img src="C:\Users\Juho_\OneDrive\Asiakirjat\Koodihommat\Projekti3\MVC\FFMP\FFMP\wwwroot\information.png" /></span>
+     <a asp-action="Index" asp-controller="ObjectToCheck" class="btn btn-info btn-sm">Create Inspection</a>
+<br />
 @*<p>
     <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="@("#createInspection")"
     data-bs-url="@Url.Action($"Create")">Create Inspection</button>
@@ -27,11 +36,7 @@
     <input type="submit" value="Search" />
     </p>
     }*@
-<script>$(document).ready(function () {
-        var table = $('#table').DataTable({
-            order: [[0, 'desc']],
-        });
-    });</script>
+
 
 <table class="table table-striped" id="table">
     <thead>
@@ -42,6 +47,7 @@
             <th>@Html.DisplayName("State")</th>
             <th>@Html.DisplayNameFor(model => model.Object)</th>
             <th>@Html.DisplayName("Creator")</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>

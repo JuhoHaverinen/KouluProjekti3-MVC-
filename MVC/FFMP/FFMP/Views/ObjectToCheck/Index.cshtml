@@ -4,7 +4,7 @@
 @using FFMP.Data
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "ServiceObjects";
 }
 
 @section Scripts {
@@ -17,7 +17,7 @@
 
 <p>
     <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="@("#createObject")" data-bs-url="@Url.Action($"Create")">
-        Create New Object
+        Create Service Object
     </button>
     @await Html.PartialAsync("_CreateObjectPartialView", new ObjectToCheck())
 </p>
