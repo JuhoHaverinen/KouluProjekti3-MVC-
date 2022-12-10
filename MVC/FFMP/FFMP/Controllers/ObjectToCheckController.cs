@@ -59,6 +59,9 @@ namespace FFMP.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateInspection([Bind("Id,UserLogin,ObjectId,/*Timestamp*/,Reason,Observations,ChangeOfState,Inspectioncol")] Inspection inspection, List<IFormFile> files)
         {
+
+            var objectInspected = await _context.ObjectToChecks.FindAsync(inspection.ObjectId);
+
             List<string> fileNames = new List<string>();
             foreach (IFormFile file in files)
             {
@@ -77,6 +80,15 @@ namespace FFMP.Controllers
             insp.ChangeOfState = inspection.ChangeOfState;
 
             insp.Inspectioncol = combinedString;
+
+
+            if(insp.ChangeOfState != objectInspected!.State)
+            {
+                objectInspected.State = inspection.ChangeOfState;
+                _context.Update(objectInspected);
+                await _context.SaveChangesAsync();
+            }
+                
 
             if (insp != null)
             {

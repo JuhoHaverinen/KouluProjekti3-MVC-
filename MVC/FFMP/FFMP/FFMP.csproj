@@ -30,10 +30,6 @@
     <None Remove="Views\Users\UserLanding\" />
     <None Remove="Microsoft.EntityFrameworkCore.Sqlite" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Content\Images\information.png" />
-  </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Users\AdminLanding\" />
     <Folder Include="Views\Users\UserLanding\" />

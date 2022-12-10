@@ -48,13 +48,13 @@ namespace FFMP.Controllers
         }
 
         // Delete a file
-        
+
         public async Task<IActionResult> DeleteFile(string blobName)
         {
             await _blobStorage.DeleteDocumentAsync(blobName);
             return RedirectToAction("Files", "Inspection");
         }
-        
+
         public async Task<IActionResult> DownloadFile(string blobName)
         {
             await _blobStorage.DownloadDocumentAsync(blobName);
@@ -74,7 +74,7 @@ namespace FFMP.Controllers
             var inspections = await _context.Inspections.Include(i => i.Object).Include(i => i.UserLoginNavigation).ToListAsync();
 
 
-            if(!String.IsNullOrEmpty(searchByCreator))
+            if (!String.IsNullOrEmpty(searchByCreator))
             {
                 inspections = await _context.Inspections.Include(i => i.Object).Include(i => i.UserLoginNavigation).Where(i => i.UserLoginNavigation.Name.Contains(searchByCreator)).ToListAsync();
             }
@@ -101,7 +101,7 @@ namespace FFMP.Controllers
         // GET: Inspections of Object(id)
         public async Task<IActionResult> ObjectsInspections(uint? id)
         {
-            var objInspections = await _context.Inspections.Include(i => i.Object).Include(i => i.UserLoginNavigation).Where(x=>x.ObjectId == id).ToListAsync();
+            var objInspections = await _context.Inspections.Include(i => i.Object).Include(i => i.UserLoginNavigation).Where(x => x.ObjectId == id).ToListAsync();
             return View("ObjectsInspections", objInspections);
         }
 
@@ -144,8 +144,8 @@ namespace FFMP.Controllers
         //        await _context.SaveChangesAsync();
         //        return RedirectToAction(nameof(Index));
         //    }
-            //ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id", inspection.ObjectId);
-            //ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", inspection.UserLogin);
+        //ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id", inspection.ObjectId);
+        //ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", inspection.UserLogin);
         //    return View(inspection);
         //}
 
@@ -157,7 +157,7 @@ namespace FFMP.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(uint id, [Bind("Id,UserLogin,ObjectId,Timestamp,Reason,Observations,ChangeOfState,Inspectioncol")] Inspection inspection)
         {
-
+            var objectInspected = await _context.ObjectToChecks.FindAsync(inspection.ObjectId);
             var insp = await _context.Inspections.FindAsync(id);
             if (id != inspection.Id)
             {
@@ -175,15 +175,20 @@ namespace FFMP.Controllers
             insp.Observations = inspection.Observations;
             insp.ChangeOfState = inspection.ChangeOfState;
             insp.Inspectioncol = inspection.Inspectioncol;
-            
-            
-            
-                    _context.Update(insp);
-                    await _context.SaveChangesAsync();
-                
-                return RedirectToAction(nameof(Index));
+
+            if (insp.ChangeOfState != objectInspected!.State)
+            {
+                objectInspected.State = insp.ChangeOfState;
+                _context.Update(objectInspected);
+                await _context.SaveChangesAsync();
+            }
+
+            _context.Update(insp);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
-            
+
 
         // GET: Inspection/Delete/5
         public async Task<IActionResult> Delete(uint? id)
