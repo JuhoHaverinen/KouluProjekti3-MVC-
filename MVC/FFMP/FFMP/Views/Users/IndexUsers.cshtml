@@ -42,7 +42,7 @@
             </th>
             <th>@Html.DisplayName("Last login")</th>
             <th>@Html.DisplayNameFor(model => model.Active)</th>
-            <th>Actions</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -62,7 +62,7 @@
                     </span>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="@("#editFAdmin-"+item.Login)" data-bs-url="@Url.Action($"Edit/{item.Login}")">Edit User</button>
+                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="@("#editFAdmin-"+item.Login)" data-bs-url="@Url.Action($"Edit/{item.Login}")">Edit</button>
                     @await Html.PartialAsync("_EditAdminPartialView", item)
                 </td>
             </tr>

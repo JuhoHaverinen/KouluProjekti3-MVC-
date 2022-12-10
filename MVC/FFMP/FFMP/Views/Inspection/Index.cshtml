@@ -21,8 +21,9 @@
 <h1 class="text-center">Inspection Management</h1>
 <hr />
 <br />
-    <span class="label label-primary mytooltip" title="My ToolTip"><img src=@Url.Content("~/Content/Images/information.png")/></span>
-     <a asp-action="Index" asp-controller="ObjectToCheck" class="btn btn-info btn-sm">Create Inspection</a>
+    <span class="label label-primary mytooltip" title="This button takes you to service objects view where you can create a new inspection by clicking an inspect button of the service object you want to inspect"><img src="~/images/information.png" /></span>
+     <a asp-action="Index" asp-controller="ObjectToCheck" class="btn btn-info btn">Create Inspection</a>
+<br />
 <br />
 @*<p>
     <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="@("#createInspection")"
