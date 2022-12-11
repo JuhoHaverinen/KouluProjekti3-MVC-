@@ -12,7 +12,7 @@
 
 <h1>Edit</h1>
 
-<h4>AuditingForm</h4>
+<h4>Auditing form</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -39,6 +39,7 @@
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
+                <br />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -50,6 +51,8 @@
     <h4>Auditing requirements</h4><br />
     <p>
         <a asp-controller="Requirements" asp-action="Create" asp-route-AuditingAuditingId="@Model.AuditingId" class="btn btn-info">Add</a>
+
+
     </p>
     <table class="table">
         <thead>
@@ -77,6 +80,7 @@
                         <a asp-controller="Requirements" asp-action="Edit" asp-route-id="@item.ReqId" class="btn btn-info">Edit</a> |
                         <a asp-controller="Requirements" asp-action="Delete" asp-route-id="@item.ReqId" class="btn btn-danger">Delete</a>
 
+
                         @*<button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="@("#deleteInsp-"+item.Id)" data-bs-url="@Url.Action($"Delete/{item.Id}")">Delete</button>
                         @await Html.PartialAsync("_DeletePartialView", item)*@
 
@@ -89,6 +93,6 @@
 </div>
 
 <div>
-    <input onclick="history.back()" type="button" value="Back" class="btn btn-info" />
+    <a asp-action="index" class="btn btn-info" formmethod="get">Back</a>
 </div>
 

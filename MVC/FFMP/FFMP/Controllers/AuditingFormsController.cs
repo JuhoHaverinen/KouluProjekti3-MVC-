@@ -128,7 +128,7 @@ namespace FFMP.Controllers
                     throw;
                 }
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Edit", "AuditingForms", new { id = auditingForm.AuditingId });
         }
 
         // GET: AuditingForms/Delete/5
