@@ -43,7 +43,6 @@ namespace FFMP.Controllers
             {
                 return NotFound();
             }
-
             var objectToCheck = await _context.ObjectToChecks
                 .Include(o => o.TargetGroup)
                 .Include(o => o.UserLoginNavigation)
@@ -60,41 +59,54 @@ namespace FFMP.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateInspection([Bind("Id,UserLogin,ObjectId,/*Timestamp*/,Reason,Observations,ChangeOfState,Inspectioncol")] Inspection inspection, List<IFormFile> files)
         {
+
+            var objectInspected = await _context.ObjectToChecks.FindAsync(inspection.ObjectId);
+
             List<string> fileNames = new List<string>();
-           foreach (IFormFile file in files)
+            foreach (IFormFile file in files)
             {
-                await _blobStorage.UploadBlobFileAsync(file);
-                fileNames.Add(file.FileName);
+                if (file.Length < 5097152)
+                {
+                    await _blobStorage.UploadBlobFileAsync(file);
+                    fileNames.Add(file.FileName);
+                }
             }
             string combinedString = string.Join(",", fileNames);
-            //var fileName = files.FileName;
             var insp = new Inspection();
             insp.UserLogin = _cntxt!.HttpContext.Session.GetString("userlogin");
             insp.ObjectId = inspection.ObjectId;
             insp.Reason = inspection.Reason;
             insp.Observations = inspection.Observations;
             insp.ChangeOfState = inspection.ChangeOfState;
-            
+
             insp.Inspectioncol = combinedString;
-            
-            if (insp != null) /*ModelState.IsValid*/
+
+
+            if(insp.ChangeOfState != objectInspected!.State)
             {
+                objectInspected.State = inspection.ChangeOfState;
+                _context.Update(objectInspected);
+                await _context.SaveChangesAsync();
+            }
                 
+
+            if (insp != null)
+            {
+
                 _context.Add(insp);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(InspectionController.Index), "Inspection");
             }
-            //ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id", inspection.ObjectId);
-            //ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", inspection.UserLogin);
+
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: ObjectToCheck/Create
+        //GET: ObjectToCheck/Create
         public IActionResult Create()
         {
             ViewData["TargetGroupId"] = new SelectList(_context.TargetGroups, "Id", "Id");
             ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login");
-            return View();
+            return PartialView("_CreateObjectPartialView");
         }
 
         // POST: ObjectToCheck/Create
@@ -104,15 +116,24 @@ namespace FFMP.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("UserLogin,TargetGroupId,Name,Description,Location,Type,Model")] ObjectToCheck objectToCheck)
         {
-            if (ModelState.IsValid)
+            var obj = new ObjectToCheck();
+            obj.UserLogin = _cntxt!.HttpContext.Session.GetString("userlogin");
+            obj.TargetGroupId = objectToCheck.TargetGroupId;
+            obj.Name = objectToCheck.Name;
+            obj.Description = objectToCheck.Description;
+            obj.Location = objectToCheck.Location;
+            obj.Type = objectToCheck.Type;
+            obj.Model = objectToCheck.Model;
+
+            if (obj != null)
             {
-                _context.Add(objectToCheck);
+                _context.Add(obj);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TargetGroupId"] = new SelectList(_context.TargetGroups, "Id", "Id", objectToCheck.TargetGroupId);
-            ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", objectToCheck.UserLogin);
-            return View(objectToCheck);
+            //ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", objectToCheck.UserLogin);
+            //ViewData["TargetGroupId"] = new SelectList(_context.TargetGroups, "Id", "Id", objectToCheck.TargetGroupId);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: ObjectToCheck/Edit/5
@@ -130,7 +151,7 @@ namespace FFMP.Controllers
             }
             ViewData["TargetGroupId"] = new SelectList(_context.TargetGroups, "Id", "Id", objectToCheck.TargetGroupId);
             ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", objectToCheck.UserLogin);
-            return View(objectToCheck);
+            return PartialView("_EditPartialView", objectToCheck);
         }
 
         // POST: ObjectToCheck/Edit/5
@@ -155,32 +176,10 @@ namespace FFMP.Controllers
             otc.Type = objectToCheck.Type;
             otc.Model = objectToCheck.Model;
             otc.State = objectToCheck.State;
-            //otc.Created = objectToCheck.Created;
 
-
-            //if (ModelState.IsValid)
-            //{
-            //    try
-            //    {
-            //_context.Update(objectToCheck);
             await _context.SaveChangesAsync();
-            //}
-            //catch (DbUpdateConcurrencyException)
-            //{
-            //    if (!ObjectToCheckExists(objectToCheck.Id))
-            //    {
-            //        return NotFound();
-            //    }
-            //    else
-            //    {
-            //        throw;
-            //    }
-            //}
+
             return RedirectToAction(nameof(Index));
-            //}
-            //ViewData["TargetGroupId"] = new SelectList(_context.TargetGroups, "Id", "Id", objectToCheck.TargetGroupId);
-            //ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", objectToCheck.UserLogin);
-            //return View(objectToCheck);
         }
 
         // GET: ObjectToCheck/Delete/5
@@ -199,7 +198,6 @@ namespace FFMP.Controllers
             {
                 return NotFound();
             }
-
             return View(objectToCheck);
         }
 

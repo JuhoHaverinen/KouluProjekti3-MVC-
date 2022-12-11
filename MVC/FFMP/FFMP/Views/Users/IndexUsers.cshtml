@@ -4,53 +4,45 @@
 @using FFMP.Data
 
 @{
-    ViewData["Title"] = "IndexUsers";
+    ViewData["Title"] = "Users";
 }
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_Navbar");}
 }
-<h1>List of users</h1>
+<h1 class="text-center">User Management</h1>
 <hr />
 <br />
 <p>
     <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="@("#createUser")" data-bs-url="@Url.Action($"Create")">Create User</button>
-     @await Html.PartialAsync("_CreatePartialView", new User())
-    @*<a asp-action="Create">Create New User</a>*@
+    @await Html.PartialAsync("_CreatePartialView", new User())
 </p>
 
-@*<div>
-    @if(ViewBag.Message != null)
-    @ViewBag.Message
-</div>*@
 
-    <script>
-        $(document).ready(function () {
+<script>$(document).ready(function () {
 
-            var table = $('#table').DataTable({
-                order: [[0, 'desc']],
-            });
+        var table = $('#table').DataTable({
+            order: [[0, 'asc']],
         });
-    </script>
-    <table class="table table-striped" id="table">
+    });</script>
+<table class="table table-striped" id="table">
     <thead>
         <tr>
             <th>
-                <a asp-action="IndexUsers" asp-route-sortOrder="@ViewData["NameSortParam"]">
-                    @Html.DisplayNameFor(model => model.Name)
-                </a>
+                @*<a asp-action="IndexUsers" asp-route-sortOrder="@ViewData["NameSortParam"]">*@
+                @Html.DisplayNameFor(model => model.Name)
+                @* </a>*@
             </th>
             <th>@Html.DisplayNameFor(model => model.Login)</th>
             @* <th>@Html.DisplayNameFor(model => model.Password)</th> *@
             <th>
-                <a asp-action="IndexUsers" asp-route-sortOrder="@ViewData["CreatedSortParam"]">
-                    @Html.DisplayNameFor(model => model.Created)
-                </a>
+                @*<a asp-action="IndexUsers" asp-route-sortOrder="@ViewData["CreatedSortParam"]">*@
+                @Html.DisplayNameFor(model => model.Created)
+                @*</a>*@
             </th>
             <th>@Html.DisplayName("Last login")</th>
-            @*<th>@Html.DisplayNameFor(model => model.Admin)</th>*@
             <th>@Html.DisplayNameFor(model => model.Active)</th>
-                <th>Actions</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -59,37 +51,19 @@
             <tr>
                 <td>@Html.DisplayFor(modelItem => item.Name)</td>
                 <td>@Html.DisplayFor(modelItem => item.Login)</td>
-                @* <td>@Html.DisplayFor(modelItem => item.Password)</td> *@
                 <td>@Html.DisplayFor(modelItem => item.Created)</td>
                 <td>@Html.DisplayFor(modelItem => item.LastLogin)</td>
-                @*<td>
-                    @if (item.Admin == true)
-                    {
-                        @Html.Raw("True")
-                    }
-                    else if (item.Admin == false)
-                    {
-                        @Html.Raw("False")
-                    }
-                </td>*@
                 <td>
-                    @if (item.Active == true)
-                    {
-                        @Html.Raw("True")
-                    }
-                    else if (item.Active == false)
-                    {
-                        @Html.Raw("False")
-                    }
+                    <span class="@(item.Active == true ? "green" : "red")">
+                        @if (item.Active == true)
+                            @Html.Raw("True")
+                            else if (item.Active == false)
+                                @Html.Raw("False")
+                    </span>
                 </td>
-                
                 <td>
-                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="@("#editFAdmin-"+item.Login)" data-bs-url="@Url.Action($"Edit/{item.Login}")">Edit User</button>
+                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="@("#editFAdmin-"+item.Login)" data-bs-url="@Url.Action($"Edit/{item.Login}")">Edit</button>
                     @await Html.PartialAsync("_EditAdminPartialView", item)
-                    @*<a asp-action="Edit" asp-route-id="@item.Login">Edit User</a> *@
-                    @*<a asp-action="Edit" asp-route-id="@item.Login">Edit User</a>*@
-                    @*<a asp-action="Details" asp-route-id="@item.Login">Details</a> |*@
-                    @* <a asp-action="Delete" asp-route-id="@item.Login">Delete</a>*@
                 </td>
             </tr>
         }

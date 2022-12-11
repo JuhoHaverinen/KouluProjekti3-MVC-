@@ -1,33 +1,37 @@
 ﻿@model IEnumerable<FFMP.Data.ObjectToCheck>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, FFMP
 @using FFMP.Data
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "ServiceObjects";
 }
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_Navbar");}
 }
 
-<h1>List of objects</h1>
+<h1 class="text-center">Service Object Management</h1>
 <hr />
 <br />
 
-    <form asp-action="Create">
-        <input type="submit" value="Create New" class="btn btn-info" formmethod="get" />
-    </form>
+    <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="@("#createObject")" data-bs-url="@Url.Action($"Create")">
+        Create Service Object
+    </button>
+    @await Html.PartialAsync("_CreateObjectPartialView", new ObjectToCheck())
 
-    <br />
 
-    <script>
-        $(document).ready(function () {
+<br />
+<br />
 
-            var table = $('#table').DataTable({
-                order: [[0, 'asc']],
-            });
+<script>$(document).ready(function () {
+
+        var table = $('#table').DataTable({
+            order: [[0, 'asc']],
         });
-    </script>
-    <table class="table table-striped" id="table">
+    });</script>
+
+<table class="table table-striped" id="table">
     <thead>
         <tr>
             <th>@Html.DisplayNameFor(model => model.Name)</th>
@@ -36,8 +40,6 @@
             <th>@Html.DisplayNameFor(model => model.Type)</th>
             <th>@Html.DisplayNameFor(model => model.Model)</th>
             <th>@Html.DisplayNameFor(model => model.State)</th>
-@*            <th>@Html.DisplayNameFor(model => model.Created)</th>
-            <th>@Html.DisplayName("Creator")</th>*@
             <th>@Html.DisplayName("Target group")</th>
             <th>Actions</th>
         </tr>
@@ -51,19 +53,35 @@
                 <td>@Html.DisplayFor(modelItem => item.Location)</td>
                 <td>@Html.DisplayFor(modelItem => item.Type)</td>
                 <td>@Html.DisplayFor(modelItem => item.Model)</td>
-                <td>@Html.DisplayFor(modelItem => item.State)</td>
-@*                <td>@Html.DisplayFor(modelItem => item.Created)</td>
-                <td>@Html.DisplayFor(modelItem => item.UserLoginNavigation.Login)</td>*@
+                <td>
+                    <span class="@(item.State == true ? "green" : "red")">
+                        @if (item.State == true)
+                            @Html.Raw("In order")
+                            else if (item.State == false)
+                                @Html.Raw("Out of order")
+                    </span>
+                </td>
                 <td>@Html.DisplayFor(modelItem => item.TargetGroup.Description)</td>
                 <td>
-
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info btn-sm">Edit</a> |
-                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="@("#createInspection-"+item.Id)" data-bs-url="@Url.Action($"CreateInspection/{item.Id}")">Inspect</button>
-                    @await Html.PartialAsync("_CreatePartialView", new Inspection{ObjectId = item.Id}) | 
-                    @* <a asp-action="Details" asp-route-id="@item.Id">Details</a> | *@
+                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
+                            data-bs-target="@("#editObject-"+item.Id)"
+                            data-bs-url="@Url.Action($"Edit/{item.Id}")">
+                        Edit
+                    </button>
+                    @await Html.PartialAsync("_EditPartialView", item) |
+                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
+                            data-bs-target="@("#createInspection-"+item.Id)"
+                            data-bs-url="@Url.Action($"CreateInspection/{item.Id}")">
+                        Inspect
+                    </button>
+                    @await Html.PartialAsync("_CreatePartialView", new Inspection { ObjectId = item.Id }) |
                     <a asp-action="Index" asp-controller="AuditingLogs" asp-route-id="@item.Id" class="btn btn-info btn-sm">Audit</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
-
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                            data-bs-target="@("#deleteObject-"+item.Id)"
+                            data-bs-url="@Url.Action($"Delete/{item.Id}")">
+                        Delete
+                    </button>
+                    @await Html.PartialAsync("_DeletePartialView", item)
                 </td>
             </tr>
         }

@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<FFMP.Data.AuditingForm>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "AuditForms";
 }
 
 @section Scripts {
@@ -15,7 +15,7 @@
     <br />
 
     <form asp-action="Create">
-        <input type="submit" value="Create New" class="btn btn-info" formmethod="get" />
+        <input type="submit" value="Create Form" class="btn btn-info" formmethod="get" />
     </form>
     <br />
     <script>
@@ -41,7 +41,7 @@
             <th>
                 Target group
             </th>
-            <th></th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>

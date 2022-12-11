@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<FFMP.Data.AuditingLog>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "AuditLogs";
 }
 @section Scripts {
     @{
@@ -9,7 +9,7 @@
     }
     }
 
-<h1>Auditings</h1>
+    <h1 class="text-center">List Of Completed Auditings</h1>
 <hr />
 <br />
 @if (Model.FirstOrDefault().ObjectId != 0)
