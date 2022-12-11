@@ -12,13 +12,6 @@
     <h1 class="text-center">List Of Completed Auditings</h1>
 <hr />
 <br />
-@if (Model.FirstOrDefault().ObjectId != 0)
-{
-    <form asp-action="Create" asp-route-id="@Model.FirstOrDefault().ObjectId">
-        <input type="submit" value="Create New" class="btn btn-primary" formmethod="get" />
-    </form>
-    <br/>
-}
 <script>
     $(document).ready(function () {
         
@@ -27,6 +20,13 @@
         });
     });
 </script>
+@if (Model.Any() && Model.FirstOrDefault().ObjectId != 0)
+{
+    <form asp-action="Create" asp-route-id="@Model.FirstOrDefault().ObjectId">
+        <input type="submit" value="Create New" class="btn btn-primary" formmethod="get" />
+    </form>
+    <br/>
+}
 <table class="table table-striped" id="table">
     <thead>
         <tr>
@@ -51,7 +51,9 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+    @foreach (var item in Model) {
+            if (item.Created != null)
+            {
         <tr>
             <td>
                 @item.Created.Value.ToString("yyyy.MM.dd HH.mm.ss")
@@ -74,6 +76,7 @@
 
             </td>
         </tr>
-}
+            }
+        }
     </tbody>
 </table>
