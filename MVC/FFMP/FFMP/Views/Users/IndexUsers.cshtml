@@ -51,8 +51,8 @@
             <tr>
                 <td>@Html.DisplayFor(modelItem => item.Name)</td>
                 <td>@Html.DisplayFor(modelItem => item.Login)</td>
-                <td>@Html.DisplayFor(modelItem => item.Created)</td>
-                <td>@Html.DisplayFor(modelItem => item.LastLogin)</td>
+                <td>@item.Created.Value.ToString("yyyy.MM.dd HH.mm.ss")</td>
+                <td>@(item.LastLogin != null ? item.LastLogin.Value.ToString("yyyy.MM.dd HH.mm.ss") : "")</td>
                 <td>
                     <span class="@(item.Active == true ? "green" : "red")">
                         @if (item.Active == true)

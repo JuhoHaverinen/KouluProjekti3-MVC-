@@ -77,7 +77,6 @@ namespace FFMP.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Edit", "AuditingForms", new { id = auditingForm.AuditingId });
         }
-
         // GET: AuditingForms/Edit/5
         public async Task<IActionResult> Edit(uint? id)
         {
@@ -104,7 +103,7 @@ namespace FFMP.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(uint id, [Bind("AuditingId,UserLogin,TargetGroupId,Created,Description")] AuditingForm auditingForm)
+        public async Task<IActionResult> Edit(uint id, string actionType, [Bind("AuditingId,UserLogin,TargetGroupId,Created,Description")] AuditingForm auditingForm)
         {
             if (id != auditingForm.AuditingId)
             {
@@ -114,8 +113,18 @@ namespace FFMP.Controllers
 
             try
             {
+                if (actionType != "Save")
+                {
+                    auditingForm.Requirements = _context.Requirements.Where(x => x.AuditingAuditingId == auditingForm.AuditingId).ToList();
+                    auditingForm.AuditingId = 0;
+                    auditingForm.Created = DateTime.Now;
+                    _context.Add(auditingForm);
+                    await _context.SaveChangesAsync();
+                }
+                else { 
                 _context.Update(auditingForm);
                 await _context.SaveChangesAsync();
+                }
             }
             catch (DbUpdateConcurrencyException)
             {

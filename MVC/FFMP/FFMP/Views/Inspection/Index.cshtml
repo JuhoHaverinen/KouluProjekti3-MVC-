@@ -55,7 +55,7 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>@Html.DisplayFor(modelItem => item.Timestamp)</td>
+                <td>@item.Timestamp.ToString("yyyy.MM.dd HH.mm.ss")</td>
                 <td>@Html.DisplayFor(modelItem => item.Reason)</td>
                 <td>@Html.DisplayFor(modelItem => item.Observations)</td>
                 <td>

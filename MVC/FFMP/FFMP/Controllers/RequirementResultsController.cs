@@ -128,6 +128,8 @@ namespace FFMP.Controllers
                 }
                 var a = _context.AuditingLogs.First(x => x.Id == requirementResult.AuditingLogsId);
                 a.Result = result == false ? "NOT OK" : result == true ? "OK" : "INCOMPLETE";
+                var o = _context.ObjectToChecks.First(x => x.Id == a.ObjectId);
+                o.State = a.Result == "NOT OK" ? false : a.Result == "OK" ? true : o.State;
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

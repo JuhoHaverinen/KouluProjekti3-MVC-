@@ -75,6 +75,7 @@ namespace FFMP.Controllers
 
             var a = new AuditingLog();
             a.ObjectId = id;
+            a.Result = "INCOMPLETE";
             a.Object = _context.ObjectToChecks.FirstOrDefault(x => x.Id == id);
             a.RequirementResults = new List<RequirementResult>();
             a.Created = DateTime.Now;
@@ -166,6 +167,9 @@ namespace FFMP.Controllers
                 }
 
                 _context.Update(auditingLog);
+                var o = _context.ObjectToChecks.First(x => x.Id == auditingLog.ObjectId);
+                o.State = auditingLog.Result == "NOT OK" ? false : auditingLog.Result == "OK" ? true : o.State;
+
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

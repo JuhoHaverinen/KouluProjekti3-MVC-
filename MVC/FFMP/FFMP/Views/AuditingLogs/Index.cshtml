@@ -17,6 +17,7 @@
     <form asp-action="Create" asp-route-id="@Model.FirstOrDefault().ObjectId">
         <input type="submit" value="Create New" class="btn btn-primary" formmethod="get" />
     </form>
+    <br/>
 }
 <script>
     $(document).ready(function () {
@@ -39,7 +40,7 @@
                 @Html.DisplayNameFor(model => model.Result)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UserLoginNavigation)
+                User
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Object)
@@ -53,7 +54,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Created)
+                @item.Created.Value.ToString("yyyy.MM.dd HH.mm.ss")
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
