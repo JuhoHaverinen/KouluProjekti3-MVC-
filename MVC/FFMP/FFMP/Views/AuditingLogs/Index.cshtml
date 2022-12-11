@@ -80,3 +80,11 @@
         }
     </tbody>
 </table>
+@if (Model.Any() && Model.FirstOrDefault().ObjectId != 0)
+{
+
+
+<form asp-action="Index" asp-controller="ObjectToCheck">
+    <input type="submit" value="Back" class="btn btn-info" formmethod="get" />
+</form>
+}

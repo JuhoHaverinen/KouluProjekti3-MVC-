@@ -210,9 +210,21 @@ namespace FFMP.Controllers
             {
                 return Problem("Entity set 'project_3Context.Objects'  is null.");
             }
-            var objectToCheck = await _context.ObjectToChecks.FindAsync(id);
+            var objectToCheck = await _context.ObjectToChecks.Include(x => x.AuditingLogs).Include(x => x.Inspections).FirstOrDefaultAsync(x => x.Id == id);
             if (objectToCheck != null)
             {
+                foreach (var a in objectToCheck.AuditingLogs)
+                {
+                    foreach (var r in _context.RequirementResults.Where(x => x.AuditingLogsId == a.Id).ToList())
+                    {
+                        _context.RequirementResults.Remove(r);
+                    }
+                    _context.AuditingLogs.Remove(a);
+                }
+                foreach (var i in objectToCheck.Inspections)
+                {
+                    _context.Inspections.Remove(i);
+                }
                 _context.ObjectToChecks.Remove(objectToCheck);
             }
 
