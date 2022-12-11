@@ -102,6 +102,13 @@ namespace FFMP.Controllers
         public async Task<IActionResult> ObjectsInspections(uint? id)
         {
             var objInspections = await _context.Inspections.Include(i => i.Object).Include(i => i.UserLoginNavigation).Where(x => x.ObjectId == id).ToListAsync();
+            if (!objInspections.Any())
+            {
+                var o = new Inspection();
+                o.ObjectId = id.Value;
+                objInspections.Add(o);
+            }
+
             return View("ObjectsInspections", objInspections);
         }
 
@@ -157,8 +164,8 @@ namespace FFMP.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(uint id, [Bind("Id,UserLogin,ObjectId,Timestamp,Reason,Observations,ChangeOfState,Inspectioncol")] Inspection inspection)
         {
-            var objectInspected = await _context.ObjectToChecks.FindAsync(inspection.ObjectId);
-            var insp = await _context.Inspections.FindAsync(id);
+            var objectInspected = _context.ObjectToChecks.Find(inspection.ObjectId);
+            var insp = _context.Inspections.Find(id);
             if (id != inspection.Id)
             {
                 return NotFound();
@@ -178,9 +185,12 @@ namespace FFMP.Controllers
 
             if (insp.ChangeOfState != objectInspected!.State)
             {
-                objectInspected.State = insp.ChangeOfState;
-                _context.Update(objectInspected);
-                await _context.SaveChangesAsync();
+                var lInst = _context.Inspections.Where(x => x.ObjectId == insp.ObjectId).OrderByDescending(x => x.Timestamp).First();
+
+                if (lInst.Id == insp.Id) { 
+                    objectInspected.State = insp.ChangeOfState == true ? true : false ;
+                    _context.Update(objectInspected);
+                }
             }
 
             _context.Update(insp);

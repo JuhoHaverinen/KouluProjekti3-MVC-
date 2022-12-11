@@ -95,7 +95,7 @@ namespace FFMP.Controllers
 
                 _context.Add(insp);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(InspectionController.Index), "Inspection");
+                return RedirectToAction(nameof(InspectionController.ObjectsInspections), "Inspection", new {id = insp.ObjectId});
             }
 
             return RedirectToAction(nameof(Index));

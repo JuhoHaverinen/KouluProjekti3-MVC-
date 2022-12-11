@@ -34,4 +34,10 @@
     <Folder Include="Views\Users\AdminLanding\" />
     <Folder Include="Views\Users\UserLanding\" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Update="Views\Inspection\_CreatePartialView.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
 </Project>
