@@ -126,10 +126,15 @@ namespace FFMP.Controllers
                         result = false;
                     }
                 }
-                var a = _context.AuditingLogs.First(x => x.Id == requirementResult.AuditingLogsId);
+                var a = _context.AuditingLogs.First(x => x.Id == requirementResult.AuditingLogsId);                               
                 a.Result = result == false ? "NOT OK" : result == true ? "OK" : "INCOMPLETE";
-                var o = _context.ObjectToChecks.First(x => x.Id == a.ObjectId);
-                o.State = a.Result == "NOT OK" ? false : a.Result == "OK" ? true : o.State;
+
+                // Object status is changed if latest auditing
+                var la = _context.AuditingLogs.Where(x => x.ObjectId == a.ObjectId).OrderByDescending(x => x.Created).First();
+                if (la.Id == a.Id) { 
+                    var o = _context.ObjectToChecks.First(x => x.Id == a.ObjectId);
+                    o.State = a.Result == "NOT OK" ? false : a.Result == "OK" ? true : o.State;
+                }
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

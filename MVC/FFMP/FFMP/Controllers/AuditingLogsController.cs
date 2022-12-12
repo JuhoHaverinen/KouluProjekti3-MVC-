@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FFMP.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 
 namespace FFMP.Controllers
@@ -21,9 +22,9 @@ namespace FFMP.Controllers
         }
 
         // GET: AuditingLogs       
-        public async Task<IActionResult> Index(uint? id)
+        public async Task<IActionResult> Index(uint? id, string? errorText)
         {
-
+            ViewBag.ErrorText = errorText;
             if (!UsersController.UserAuthenticated(_ctx))
                 return RedirectToAction("Login", "Users");
 
@@ -62,8 +63,7 @@ namespace FFMP.Controllers
             if (auditingLog == null)
             {
                 return NotFound();
-            }
-
+            }            
             return View(auditingLog);
         }
 
@@ -72,7 +72,7 @@ namespace FFMP.Controllers
         {
             if (!UsersController.UserAuthenticated(_ctx))
                 return RedirectToAction("Login", "Users");
-
+          
             var a = new AuditingLog();
             a.ObjectId = id;
             a.Result = "INCOMPLETE";
@@ -83,8 +83,18 @@ namespace FFMP.Controllers
             a.UserLoginNavigation = _context.Users.FirstOrDefault(x => x.Name == u);
 
             var af = _context.AuditingForms.Where(x => x.TargetGroupId == a.Object.TargetGroupId).OrderByDescending(x => x.Created).FirstOrDefault();
+            if (af == null)
+            {
+                ViewBag.ErrorText = "No auditing forms for this target group";
+                return RedirectToAction("Index", "AuditingLogs", new { id = id, errorText = "No auditing forms for this target group" });
+            }
             var reqs = _context.Requirements.Where(x => x.AuditingAuditingId == af.AuditingId);
-
+            if (reqs == null || !reqs.Any())
+            {
+                ViewBag.ErrorText = "No auditing requirements for this target group"; 
+                return RedirectToAction("Index", "AuditingLogs", new { id = id, errorText = "No auditing requirements for this target group" });
+            }
+            a.Description = af.Description;
             foreach (var r in reqs)
             {
                 var rr = new RequirementResult();
@@ -94,7 +104,6 @@ namespace FFMP.Controllers
             }
             _context.Add(a);
             _context.SaveChanges();
-
             return RedirectToAction("Edit", "AuditingLogs", new { id = a.Id });
         }
 
@@ -121,7 +130,7 @@ namespace FFMP.Controllers
 
         // GET: AuditingLogs/Edit/5
         public async Task<IActionResult> Edit(uint? id)
-        {
+        {            
             if (!UsersController.UserAuthenticated(_ctx))
                 return RedirectToAction("Login", "Users");
 
@@ -130,11 +139,12 @@ namespace FFMP.Controllers
                 return NotFound();
             }
 
-            var auditingLog = await _context.AuditingLogs.Include(x => x.RequirementResults).FirstOrDefaultAsync(x => x.Id == id);
+            var auditingLog = await _context.AuditingLogs.Include(x => x.Object).Include(x => x.RequirementResults).FirstOrDefaultAsync(x => x.Id == id);
             if (auditingLog == null)
             {
                 return NotFound();
             }
+            ViewBag.AuditingText = "'" + auditingLog.Description + "' for " + auditingLog.Object.Name;
             ViewData["ObjectId"] = new SelectList(_context.ObjectToChecks, "Id", "Id", auditingLog.ObjectId);
             ViewData["UserLogin"] = new SelectList(_context.Users, "Login", "Login", auditingLog.UserLogin);
             return View(auditingLog);
@@ -167,8 +177,13 @@ namespace FFMP.Controllers
                 }
 
                 _context.Update(auditingLog);
-                var o = _context.ObjectToChecks.First(x => x.Id == auditingLog.ObjectId);
-                o.State = auditingLog.Result == "NOT OK" ? false : auditingLog.Result == "OK" ? true : o.State;
+                // Object status is changed if latest auditing
+                var la = _context.AuditingLogs.Where(x => x.ObjectId == auditingLog.ObjectId).OrderByDescending(x => x.Created).First();
+                if (la.Id == auditingLog.Id)
+                {
+                    var o = _context.ObjectToChecks.First(x => x.Id == auditingLog.ObjectId);
+                    o.State = auditingLog.Result == "NOT OK" ? false : auditingLog.Result == "OK" ? true : o.State;
+                }
 
                 await _context.SaveChangesAsync();
             }
@@ -210,7 +225,7 @@ namespace FFMP.Controllers
         }
 
         // POST: AuditingLogs/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(uint id)
         {
@@ -229,7 +244,8 @@ namespace FFMP.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "AuditingLogs", new { id = auditingLog.ObjectId });
+
         }
 
         private bool AuditingLogExists(uint id)

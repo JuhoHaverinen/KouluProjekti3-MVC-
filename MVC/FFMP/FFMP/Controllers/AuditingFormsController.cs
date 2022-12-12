@@ -115,10 +115,18 @@ namespace FFMP.Controllers
             {
                 if (actionType != "Save")
                 {
-                    auditingForm.Requirements = _context.Requirements.Where(x => x.AuditingAuditingId == auditingForm.AuditingId).ToList();
+                    var req = _context.Requirements.Where(x => x.AuditingAuditingId == auditingForm.AuditingId).ToList();
                     auditingForm.AuditingId = 0;
                     auditingForm.Created = DateTime.Now;
+                    auditingForm.Requirements = null;
                     _context.Add(auditingForm);
+                    await _context.SaveChangesAsync();
+
+                    foreach (var r in req) {
+                        r.AuditingAuditingId = auditingForm.AuditingId;
+                        r.ReqId = 0;
+                        _context.Requirements.Add(r);
+                    }
                     await _context.SaveChangesAsync();
                 }
                 else { 
