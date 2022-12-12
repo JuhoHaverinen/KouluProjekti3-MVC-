@@ -40,10 +40,21 @@
              border-color: #007bff;
          }
     </style>
-<h1>Edit</h1>
 
-<h4>Auditing log</h4>
+@{
+    if(Model.Description == null)
+    {
+        <h1 class="text-center">Create Auditing</h1>
+    }
+    else
+    {
+        <h1 class="text-center">Edit Auditing</h1>
+    }
+}
+
 <hr />
+
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">

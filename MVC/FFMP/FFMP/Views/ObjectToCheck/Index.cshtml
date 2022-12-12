@@ -11,12 +11,17 @@
     @{await Html.RenderPartialAsync("_Navbar");}
 }
 
-<h1 class="text-center">Service Object Management</h1>
+<h1 class="text-center">Service Objects</h1>
 <hr />
+
+    <br />
+    <span class="label label-primary mytooltip" title="Creating a new inspection or auditing for a certain service object can be accessed from it's action buttons 'inspections' and 'auditings' which can be seen on the list. Those will first take you to a list of already performed inspections and auditings for that particular service object"><img src="~/images/information.png" /></span>
+    
+<br />
 <br />
 
     <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="@("#createObject")" data-bs-url="@Url.Action($"Create")">
-        Create Service Object
+        Create Object
     </button>
     @await Html.PartialAsync("_CreateObjectPartialView", new ObjectToCheck())
 
