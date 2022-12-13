@@ -73,6 +73,8 @@ namespace FFMP.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("AuditingId,UserLogin,TargetGroupId,Created,Description")] AuditingForm auditingForm)
         {
+            auditingForm.Created = DateTime.Now;
+
             _context.Add(auditingForm);
             await _context.SaveChangesAsync();
             return RedirectToAction("Edit", "AuditingForms", new { id = auditingForm.AuditingId });
