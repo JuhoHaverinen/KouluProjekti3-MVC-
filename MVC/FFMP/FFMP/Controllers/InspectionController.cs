@@ -162,10 +162,22 @@ namespace FFMP.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(uint id, [Bind("Id,UserLogin,ObjectId,Timestamp,Reason,Observations,ChangeOfState,Inspectioncol")] Inspection inspection)
+        public async Task<IActionResult> Edit(uint id, [Bind("Id,UserLogin,ObjectId,Timestamp,Reason,Observations,ChangeOfState,Inspectioncol")] Inspection inspection, List<IFormFile> files)
         {
             var objectInspected = _context.ObjectToChecks.Find(inspection.ObjectId);
             var insp = _context.Inspections.Find(id);
+
+            List<string> fileNames = new List<string>();
+            foreach (IFormFile file in files)
+            {
+                if (file.Length < 5097152)
+                {
+                    await _blobStorage.UploadBlobFileAsync(file);
+                    fileNames.Add(file.FileName);
+                }
+            }
+            string combinedString = string.Join(",", fileNames);
+
             if (id != inspection.Id)
             {
                 return NotFound();
@@ -181,7 +193,8 @@ namespace FFMP.Controllers
             insp.Reason = inspection.Reason;
             insp.Observations = inspection.Observations;
             insp.ChangeOfState = inspection.ChangeOfState;
-            insp.Inspectioncol = inspection.Inspectioncol;
+            //insp.Inspectioncol = inspection.Inspectioncol;
+            insp.Inspectioncol = combinedString;
 
             if (insp.ChangeOfState != objectInspected!.State)
             {
