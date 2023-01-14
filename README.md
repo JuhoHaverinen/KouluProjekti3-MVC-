@@ -20,7 +20,7 @@ User login: TwitterFan password: 1User3 <br />
 <br />
 
 The meaning of the program is that you can perform either scheduled periodic maintenances to a service object or perform a quick random inspection. <br />
-Whenever you perform either one the above mentioned, the state of the service object targeted for the inspection/maintenance will change according to the outcome. <br />
+Whenever you perform either one of those mentioned above, the state of the service object targeted for the inspection/maintenance will change according to the outcome. <br />
 You can also of course make your own periodic maintenance forms where you can add tests and define which tests should be passed in order to grant 'In Order' state. <br />
 Obviously new service objects can also be made. <br />
 It's possible to attach for example an image of the inspected object's problem when creating an inspection and when editing one. <br />
