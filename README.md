@@ -24,6 +24,7 @@ Whenever you perform either one the above mentioned, the state of the service ob
 You can also of course make your own periodic maintenance forms where you can add tests and define which tests should be passed in order to grant 'In Order' state. <br />
 Obviously new service objects can also be made. <br />
 It's possible to attach for example an image of the inspected object's problem when creating an inspection and when editing one. <br />
-The image can be downloaded when clicking on the details button of the certain inspection. Image will load to temp folder if on Windows and to desktop if on Mac. <br />
+The image can be downloaded when clicking on the details button of the certain inspection. Or from the Files part of the program which just lists all the files uploaded to the program is kind of like an extra feature which wasn't asked in the given task. <br />
+Image will load to temp folder if on Windows and to desktop if on Mac. <br />
 <br />
 It is highly recommended to move your mouse cursor on top of the info icons found on the site to get more guidance about the program.
